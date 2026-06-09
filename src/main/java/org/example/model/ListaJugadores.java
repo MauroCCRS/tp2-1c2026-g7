@@ -1,7 +1,7 @@
 package org.example.model;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class ListaJugadores {
     private List<Jugador> jugadores;
@@ -19,17 +19,31 @@ public class ListaJugadores {
         this.jugadores.remove(jugador);
     }
 
-    public List<Jugador> obtenerMafiosos() {
-        return jugadores.stream()
-                .filter(jugador ->
-                        jugador.devolverRol().bando() instanceof BandoMafia)
-                .collect(Collectors.toList());
+    public List<Jugador> obtenerMafiosos(){
+        List<Jugador> mafiosos = new ArrayList<>();
+
+        for (Jugador jugador : this.jugadores) {
+            Rol rol = jugador.devolverRol(jugador);
+
+            if (rol.devolverBando() instanceof BandoMafia) {
+                mafiosos.add(jugador);
+            }
+        }
+
+        return mafiosos;
     }
 
-    public List<Jugador> obtenerCiudadanos() {
-        return jugadores.stream()
-                .filter(jugador ->
-                        jugador.devolverRol().bando() instanceof BandoCiudadano)
-                .collect(Collectors.toList());
+    public List<Jugador> obtenerCiudadanos(){
+        List<Jugador> ciudadanos = new ArrayList<>();
+
+        for (Jugador jugador : this.jugadores) {
+            Rol rol = jugador.devolverRol(jugador);
+
+            if (rol.devolverBando() instanceof BandoCiudadano) {
+                ciudadanos.add(jugador);
+            }
+        }
+
+        return ciudadanos;
     }
 }

@@ -1,9 +1,13 @@
 package org.example.model;
 
 public abstract class Rol {
-    protected Bando bando;
+    private Bando bando;
 
-    public Bando bando() {
+    public Bando devolverBando() {
         return bando;
+    };
+
+    public void ingresarBando(Bando bando) {
+        this.bando = bando;
     };
 }

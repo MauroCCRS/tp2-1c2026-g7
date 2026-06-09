@@ -1,10 +1,12 @@
 package org.example.model;
 
-public class BandoCiudadano implements Bando {
-    public boolean ganoSegun(ListaJugadores jugadores) {
-        int mafiososVivos = jugadores.obtenerMafiosos().size();
-        int ciudadanosVivos = jugadores.obtenerCiudadanos().size();
+import java.util.List;
 
-        return mafiososVivos <= ciudadanosVivos;
-    };
+public class BandoCiudadano implements Bando {
+    @Override
+    public List<Jugador> complices(ListaJugadores listaJugadores){
+        return listaJugadores.obtenerCiudadanos();
+    }
+
+
 }
