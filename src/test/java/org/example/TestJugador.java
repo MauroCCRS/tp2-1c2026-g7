@@ -53,4 +53,17 @@ class TestJugador {
 
         assertEquals(2, cantidadDeComplices);
     }
+
+    @Test
+    void unJugadorRecienCreadoEstaVivo() {
+        Jugador jugador = new Jugador();
+        assertTrue(jugador.devolverEstado().estaVivo());
+    }
+
+    @Test
+    void unJugadorEliminadoDejaDeEstarVivo() {
+        Jugador jugador = new Jugador();
+        jugador.eliminar();
+        assertFalse(jugador.devolverEstado().estaVivo());
+    }
 }

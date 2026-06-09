@@ -2,23 +2,23 @@ package org.example.model;
 
 public class Jugador {
 
-
     private String nombre;
-    //private Rol rol;
-    private Estado estado;
+    private Estado estado = new Vivo();
     private Rol rol = new SinRol();
 
     public Estado devolverEstado(){
         return estado;
     }
 
-    public void eliminar(){}
+    public void eliminar(){
+        this.estado = new Eliminado();
+    }
 
     public Rol devolverRol(Jugador jugadorQuePregunta){
         if (this == jugadorQuePregunta) {
             return rol;
         }
-        return new RolOculto(); //podriamos ponerlo asi ?
+        return new RolOculto();
     }
 
     public void cambiarEstado(Estado estado){
