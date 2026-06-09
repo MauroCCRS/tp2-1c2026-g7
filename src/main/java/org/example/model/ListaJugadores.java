@@ -46,4 +46,16 @@ public class ListaJugadores {
 
         return ciudadanos;
     }
+    
+    public List<Jugador> obtenerVivos(){
+        List<Jugador> vivos = new ArrayList<>();
+
+        for (Jugador jugador : this.jugadores) {
+            if (jugador.devolverEstado().estaVivo()) {
+                vivos.add(jugador);
+            }
+        }
+
+        return vivos;
+    }
 }
