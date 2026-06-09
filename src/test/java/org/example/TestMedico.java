@@ -4,13 +4,16 @@ import org.example.model.Jugador;
 import org.example.model.Medico;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestMedico {
     @Test
-    public void unJugadorAlSerProtegidoYElegidoPorMafiaSigueVivo() {
-        Jugador medico = new Medico();
-        Jugador victima = new Jugador();
+    public void alProtegerAUnJugadorRegistraEsaProteccionComoLaUltima() {
+        Medico medico = new Medico();
+        Jugador objetivo = new Jugador();
 
-        medico.proteger(victima);
-        assertEquals(victima, medico.ultimaProteccion());
-    };
+        medico.proteger(objetivo);
+
+        assertEquals(objetivo, medico.obtenerUltimaProteccion());
+    }
 }

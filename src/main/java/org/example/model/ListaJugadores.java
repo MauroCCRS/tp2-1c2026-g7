@@ -25,7 +25,7 @@ public class ListaJugadores {
         for (Jugador jugador : this.jugadores) {
             Rol rol = jugador.devolverRol(jugador);
 
-            if (rol.devolverBando() instanceof BandoMafia) {
+            if (rol.bando() instanceof BandoMafia) {
                 mafiosos.add(jugador);
             }
         }
@@ -39,7 +39,7 @@ public class ListaJugadores {
         for (Jugador jugador : this.jugadores) {
             Rol rol = jugador.devolverRol(jugador);
 
-            if (rol.devolverBando() instanceof BandoCiudadano) {
+            if (rol.bando() instanceof BandoCiudadano) {
                 ciudadanos.add(jugador);
             }
         }

@@ -1,9 +1,6 @@
 package org.example;
 
-import org.example.model.BandoMafia;
-import org.example.model.Jugador;
-import org.example.model.ListaJugadores;
-import org.example.model.Rol;
+import org.example.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -34,38 +31,29 @@ class TestListaJugadores {
     void alEliminarUnJugadorDeLaListaDeberiaNoEstarEnLaLista() {
         ListaJugadores listaJugadores = new ListaJugadores();
         Jugador jugadorMock = mock(Jugador.class);
+
         listaJugadores.agregar(jugadorMock);
         listaJugadores.eliminar(jugadorMock);
-        assertTrue(!listaJugadores.obtenerListaCompleta().contains(jugadorMock));
+
+        assertFalse(listaJugadores.obtenerListaCompleta().contains(jugadorMock));
     }
 
     @Test
     void puedoObtenerLaListaDeMafiosos() {
         ListaJugadores listaJugadores = new ListaJugadores();
-        BandoMafia bandoMock = mock(BandoMafia.class);
 
-        Rol rolMafia = new Rol();
-        Rol rolCiudadano = new Rol();
+        Jugador ciudadano = new Jugador();
+        Jugador mafioso = new Jugador();
 
-        rolMafia.ingresarBando(bandoMock);
-        rolMafia.ingresarBando(bandoMock);
+        ciudadano.cambiarRol(new Ciudadano());
+        mafioso.cambiarRol(new Mafioso());
 
-        Jugador jugador1 = new Jugador();
-        Jugador jugador2 = new Jugador();
-
-
-        jugador1.cambiarRol(rolCiudadano);
-        jugador2.cambiarRol(rolMafia);
-
-
-        listaJugadores.agregar(jugador1);
-        listaJugadores.agregar(jugador2);
+        listaJugadores.agregar(ciudadano);
+        listaJugadores.agregar(mafioso);
 
         List<Jugador> mafiosos = listaJugadores.obtenerMafiosos();
 
         assertEquals(1, mafiosos.size());
-        assertEquals(jugador2, mafiosos.get(0));
+        assertEquals(mafioso, mafiosos.get(0));
     }
-
 }
-
