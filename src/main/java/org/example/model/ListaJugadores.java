@@ -18,4 +18,20 @@ public class ListaJugadores {
     public void eliminar(Jugador jugador) {
         this.jugadores.remove(jugador);
     }
+
+    public List<Jugador> obtenerMafiosos(){
+        List<Jugador> mafiosos = new ArrayList<>();
+
+        for (Jugador jugador : this.jugadores) {
+            Rol rol = jugador.devolverRol(jugador);
+
+            if (rol.devolverBando() instanceof BandoMafia) {
+                mafiosos.add(jugador);
+            }
+        }
+
+        return mafiosos;
+    }
+
+    public List<Jugador> obtenerCiudadanos(){return null;}
 }

@@ -14,8 +14,11 @@ public class Jugador {
 
     public void eliminar(){}
 
-    public Rol devolverRol(){
-        return rol;
+    public Rol devolverRol(Jugador jugadorQuePregunta){
+        if (this == jugadorQuePregunta) {
+            return rol;
+        }
+        return null;
     }
 
     public void cambiarEstado(Estado estado){
