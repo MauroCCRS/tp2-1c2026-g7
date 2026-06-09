@@ -1,7 +1,7 @@
 package org.example.model;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 public class ListaJugadores {
     private List<Jugador> jugadores;
@@ -17,5 +17,19 @@ public class ListaJugadores {
     }
     public void eliminar(Jugador jugador) {
         this.jugadores.remove(jugador);
+    }
+
+    public List<Jugador> obtenerMafiosos() {
+        return jugadores.stream()
+                .filter(jugador ->
+                        jugador.devolverRol().bando() instanceof BandoMafia)
+                .collect(Collectors.toList());
+    }
+
+    public List<Jugador> obtenerCiudadanos() {
+        return jugadores.stream()
+                .filter(jugador ->
+                        jugador.devolverRol().bando() instanceof BandoCiudadano)
+                .collect(Collectors.toList());
     }
 }
