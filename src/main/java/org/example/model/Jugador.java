@@ -4,9 +4,9 @@ public class Jugador {
 
 
     private String nombre;
-    private Rol rol;
+    //private Rol rol;
     private Estado estado;
-
+    private Rol rol = new SinRol();
 
     public Estado devolverEstado(){
         return estado;
@@ -18,7 +18,7 @@ public class Jugador {
         if (this == jugadorQuePregunta) {
             return rol;
         }
-        return null;
+        return new RolOculto(); //podriamos ponerlo asi ?
     }
 
     public void cambiarEstado(Estado estado){
@@ -28,4 +28,6 @@ public class Jugador {
     public void cambiarRol(Rol rol){
         this.rol = rol;
     }
+
+    public boolean tieneRolAsignado() {return rol.esRolAsignado(); }
 }

@@ -10,4 +10,8 @@ public abstract class Rol {
     public void ingresarBando(Bando bando) {
         this.bando = bando;
     };
+
+    public boolean esRolAsignado() {return true;}
+
+    public boolean esVisible(){return true;}
 }
