@@ -1,19 +1,22 @@
 package org.example;
 
-import org.example.model.Jugador;
-import org.example.model.Medico;
+import org.example.model.*;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMedico {
+
     @Test
-    public void alProtegerAUnJugadorRegistraEsaProteccionComoLaUltima() {
+    public void siElMedicoProtegeALaVictimaEstaSobreviveALaNoche() {
+        Jugador victima = new Jugador("Ana", new Ciudadano());
         Medico medico = new Medico();
-        Jugador objetivo = new Jugador();
+        medico.elegirProteger(victima);
 
-        medico.proteger(objetivo);
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+        resolucion.registrarAtaque(victima);
+        medico.actuarEnNoche(resolucion);
+        resolucion.resolver();
 
-        assertEquals(objetivo, medico.obtenerUltimaProteccion());
+        assertTrue(victima.estaVivo());
     }
 }

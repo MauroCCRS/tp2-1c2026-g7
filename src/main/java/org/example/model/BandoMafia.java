@@ -4,7 +4,17 @@ import java.util.List;
 
 public class BandoMafia implements Bando {
     @Override
-    public List<Jugador> complices(ListaJugadores listaJugadores){
-        return listaJugadores.obtenerMafiosos();
+    public List<Jugador> complices(ListaJugadores listaJugadores) {
+        return listaJugadores.delBando(this);
+    }
+
+    @Override
+    public boolean esMismoBando(Bando otro) {
+        return otro.esMafia();
+    }
+
+    @Override
+    public boolean esMafia() {
+        return true;
     }
 }

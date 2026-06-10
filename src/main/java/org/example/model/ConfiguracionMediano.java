@@ -1,45 +1,20 @@
 package org.example.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ConfiguracionMediano extends Configuracion{
+public class ConfiguracionMediano extends Configuracion {
     private final Random random = new Random();
+
     @Override
     public List<Rol> armarRoles() {
-        int cantidadJugadores = random.nextInt(3) + 7; // 7 o 8 o 9
-        List<Rol> rolesArmados = new ArrayList<>();
-        agregarRolesEspeciales(rolesArmados);
-        agregarMafiosos(rolesArmados, cantidadJugadores);
-        agregarCiudadanos(rolesArmados, cantidadJugadores);
-
-        Collections.shuffle(rolesArmados);
-
-        return rolesArmados;
-    };
-
-    private void agregarRolesEspeciales(List<Rol> roles) {
+        int cantidadJugadores = random.nextInt(3) + 7;
+        List<Rol> roles = new ArrayList<>();
         roles.add(new Detective());
         roles.add(new Medico());
-    }
-
-    private void agregarMafiosos(List<Rol> roles, int cantidadJugadores) {
-        int cantidadMafiosos = calcularCantidadMafiosos(cantidadJugadores);
-
-        for (int i = 0; i < cantidadMafiosos; i++) {
-            roles.add(new Mafioso());
-        }
-    }
-
-    private int calcularCantidadMafiosos(int cantidadJugadores) {
-        return cantidadJugadores == 8 ? 2 : 3;
-    }
-
-    private void agregarCiudadanos(List<Rol> roles, int cantidadJugadores) {
-        while (roles.size() < cantidadJugadores) {
-            roles.add(new Ciudadano());
-        }
+        agregarMafiosos(roles, cantidadJugadores == 8 ? 2 : 3);
+        completarConCiudadanos(roles, cantidadJugadores);
+        return roles;
     }
 }

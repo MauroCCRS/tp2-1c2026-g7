@@ -2,32 +2,24 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestJugadorPuedeVerSuRol {
 
     @Test
     void unJugadorPuedePedirSuPropioRol() {
-        Jugador jugador = new Jugador();
         Rol rol = new Ciudadano();
+        Jugador jugador = new Jugador("Ana", rol);
 
-        jugador.cambiarRol(rol);
-
-        assertSame(rol, jugador.devolverRol(jugador));
-        assertTrue(jugador.devolverRol(jugador).esVisible());
+        assertSame(rol, jugador.rolVistoPor(jugador));
+        assertTrue(jugador.rolVistoPor(jugador).esVisible());
     }
 
     @Test
     void unJugadorNoPuedePedirElRolDeOtroJugador() {
-        Jugador ana = new Jugador();
-        Jugador beto = new Jugador();
+        Jugador ana = new Jugador("Ana", new Mafioso());
+        Jugador beto = new Jugador("Beto", new Ciudadano());
 
-        Rol rolDeAna = new Mafioso();
-        ana.cambiarRol(rolDeAna);
-
-        Rol rolQueVeBeto = ana.devolverRol(beto);
-
-        assertFalse(rolQueVeBeto.esVisible());
+        assertFalse(ana.rolVistoPor(beto).esVisible());
     }
 }

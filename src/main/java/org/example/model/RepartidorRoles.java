@@ -4,23 +4,21 @@ import java.util.List;
 
 public class RepartidorRoles {
 
-    private MezcladorDeRoles mezclador;
+    private final MezcladorDeRoles mezclador;
 
     public RepartidorRoles(MezcladorDeRoles mezclador) {
         this.mezclador = mezclador;
     }
 
-    public void repartir(ListaJugadores jugadores, List<Rol> roles) {
-        List<Jugador> listaJugadores = jugadores.obtenerListaCompleta();
-
-        if (listaJugadores.size() != roles.size()) {
+    public ListaJugadores repartir(List<String> nombres, List<Rol> roles) {
+        if (nombres.size() != roles.size()) {
             throw new IllegalArgumentException("Debe haber exactamente un rol por jugador");
         }
-
         mezclador.mezclar(roles);
-
-        for (int i = 0; i < listaJugadores.size(); i++) {
-            listaJugadores.get(i).cambiarRol(roles.get(i));
+        ListaJugadores jugadores = new ListaJugadores();
+        for (int i = 0; i < nombres.size(); i++) {
+            jugadores.agregar(new Jugador(nombres.get(i), roles.get(i)));
         }
+        return jugadores;
     }
 }

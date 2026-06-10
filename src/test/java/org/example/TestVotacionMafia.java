@@ -2,17 +2,14 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TestVotacionMafia {
 
     @Test
     void laMafiaPuedeElegirComoVictimaAUnCiudadanoVivo() {
         ListaJugadores jugadores = new ListaJugadores();
-        Jugador ciudadano = new Jugador();
-        ciudadano.cambiarRol(new Ciudadano());
+        Jugador ciudadano = new Jugador("Ana", new Ciudadano());
         jugadores.agregar(ciudadano);
 
         VotacionMafia votacion = new VotacionMafia(jugadores);
@@ -24,8 +21,7 @@ class TestVotacionMafia {
     @Test
     void laMafiaNoPuedeElegirComoVictimaAOtroMafioso() {
         ListaJugadores jugadores = new ListaJugadores();
-        Jugador mafioso = new Jugador();
-        mafioso.cambiarRol(new Mafioso());
+        Jugador mafioso = new Jugador("Beto", new Mafioso());
         jugadores.agregar(mafioso);
 
         VotacionMafia votacion = new VotacionMafia(jugadores);
@@ -36,8 +32,7 @@ class TestVotacionMafia {
     @Test
     void laMafiaNoPuedeElegirComoVictimaAUnJugadorEliminado() {
         ListaJugadores jugadores = new ListaJugadores();
-        Jugador eliminado = new Jugador();
-        eliminado.cambiarRol(new Ciudadano());
+        Jugador eliminado = new Jugador("Caro", new Ciudadano());
         eliminado.eliminar();
         jugadores.agregar(eliminado);
 

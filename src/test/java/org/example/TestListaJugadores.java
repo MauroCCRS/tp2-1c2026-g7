@@ -2,51 +2,37 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class TestListaJugadores {
 
     @Test
-    void alCrearListaDeJugadoresDeberiaExistir() {
-        ListaJugadores listaJugadores = new ListaJugadores();
-
-        assertNotNull(listaJugadores);
-    }
-
-    @Test
     void alAgregarUnJugadorALaListaDeberiaEstarEnLaLista() {
         ListaJugadores listaJugadores = new ListaJugadores();
-        Jugador jugadorMock = mock(Jugador.class);
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
 
-        listaJugadores.agregar(jugadorMock);
+        listaJugadores.agregar(jugador);
 
-        assertTrue(listaJugadores.obtenerListaCompleta().contains(jugadorMock));
+        assertTrue(listaJugadores.obtenerListaCompleta().contains(jugador));
     }
 
     @Test
     void alEliminarUnJugadorDeLaListaDeberiaNoEstarEnLaLista() {
         ListaJugadores listaJugadores = new ListaJugadores();
-        Jugador jugadorMock = mock(Jugador.class);
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
 
-        listaJugadores.agregar(jugadorMock);
-        listaJugadores.eliminar(jugadorMock);
+        listaJugadores.agregar(jugador);
+        listaJugadores.eliminar(jugador);
 
-        assertFalse(listaJugadores.obtenerListaCompleta().contains(jugadorMock));
+        assertFalse(listaJugadores.obtenerListaCompleta().contains(jugador));
     }
 
     @Test
     void puedoObtenerLaListaDeMafiosos() {
         ListaJugadores listaJugadores = new ListaJugadores();
-
-        Jugador ciudadano = new Jugador();
-        Jugador mafioso = new Jugador();
-
-        ciudadano.cambiarRol(new Ciudadano());
-        mafioso.cambiarRol(new Mafioso());
+        Jugador ciudadano = new Jugador("Ana", new Ciudadano());
+        Jugador mafioso = new Jugador("Beto", new Mafioso());
 
         listaJugadores.agregar(ciudadano);
         listaJugadores.agregar(mafioso);

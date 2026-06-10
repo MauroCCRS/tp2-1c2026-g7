@@ -2,93 +2,42 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestConfiguracion {
+
+    private long contarDelBando(List<Rol> roles, Bando bando) {
+        return roles.stream().filter(rol -> rol.bando().esMismoBando(bando)).count();
+    }
+
     @Test
-    void configuracionChicoTieneComposicionCorrecta() {
+    void configuracionChicoTieneBalanceDeBandosCorrecto() {
         List<Rol> roles = new ConfiguracionChico().armarRoles();
-        long cantidadMafiosos =
-                roles.stream()
-                        .filter(rol -> rol.bando() instanceof BandoMafia)
-                        .count();
+        long mafia = contarDelBando(roles, new BandoMafia());
 
-        long cantidadEspeciales =
-                roles.stream()
-                        .filter(rol ->
-                                rol instanceof Detective ||
-                                        rol instanceof Medico)
-                        .count();
-        long cantidadCiudadanos =
-                roles.stream()
-                        .filter(rol ->
-                                rol instanceof Ciudadano)
-                        .count();
-        assertEquals(1, cantidadEspeciales);
-        assertTrue(cantidadMafiosos >= 1 && cantidadMafiosos <= 2);
-        assertEquals(
-                roles.size(),
-                cantidadMafiosos + cantidadCiudadanos + cantidadEspeciales
-        );
+        assertTrue(roles.size() == 5 || roles.size() == 6);
+        assertTrue(mafia >= 1 && mafia <= 2);
+        assertEquals(roles.size(), mafia + contarDelBando(roles, new BandoCiudadano()));
     }
+
     @Test
-    void configuracionMedianoTieneComposicionCorrecta() {
+    void configuracionMedianoTieneBalanceDeBandosCorrecto() {
         List<Rol> roles = new ConfiguracionMediano().armarRoles();
-        long cantidadMafiosos =
-                roles.stream()
-                        .filter(rol -> rol.bando() instanceof BandoMafia)
-                        .count();
+        long mafia = contarDelBando(roles, new BandoMafia());
 
-        long cantidadEspeciales =
-                roles.stream()
-                        .filter(rol ->
-                                rol instanceof Detective ||
-                                        rol instanceof Medico)
-                        .count();
-        long cantidadCiudadanos =
-                roles.stream()
-                        .filter(rol ->
-                                rol instanceof Ciudadano)
-                        .count();
-        assertEquals(2, cantidadEspeciales);
-        assertTrue(cantidadMafiosos >= 2 && cantidadMafiosos <= 3);
-        assertEquals(
-                roles.size(),
-                cantidadMafiosos + cantidadCiudadanos + cantidadEspeciales
-        );
+        assertTrue(roles.size() >= 7 && roles.size() <= 9);
+        assertTrue(mafia >= 2 && mafia <= 3);
+        assertEquals(roles.size(), mafia + contarDelBando(roles, new BandoCiudadano()));
     }
+
     @Test
-    void configuracionGrandeTieneComposicionCorrecta() {
+    void configuracionGrandeTieneTresDeBandoMafia() {
         List<Rol> roles = new ConfiguracionGrande().armarRoles();
-        long cantidadMafiosos =
-                roles.stream()
-                        .filter(rol -> rol.bando() instanceof BandoMafia)
-                        .count();
+        long mafia = contarDelBando(roles, new BandoMafia());
 
-        long cantidadEspeciales =
-                roles.stream()
-                        .filter(rol ->
-                                rol instanceof Detective ||
-                                        rol instanceof Medico ||
-                                            rol instanceof Padrino ||
-                                                rol instanceof Sheriff)
-                        .count();
-        long cantidadCiudadanos =
-                roles.stream()
-                        .filter(rol ->
-                                rol instanceof Ciudadano)
-                        .count();
-        assertEquals(4, cantidadEspeciales);
-        assertEquals(3, cantidadMafiosos);
-        assertEquals(
-                roles.size(),
-                cantidadMafiosos + cantidadCiudadanos + cantidadEspeciales - 1
-        );
+        assertTrue(roles.size() >= 10 && roles.size() <= 12);
+        assertEquals(3, mafia);
+        assertEquals(roles.size(), mafia + contarDelBando(roles, new BandoCiudadano()));
     }
-
 }

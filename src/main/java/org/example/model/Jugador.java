@@ -2,32 +2,48 @@ package org.example.model;
 
 public class Jugador {
 
-    private String nombre;
-    private Estado estado = new Vivo();
-    private Rol rol = new SinRol();
+    private final String nombre;
+    private final Rol rol;
+    private Estado estado;
 
-    public Estado devolverEstado(){
-        return estado;
+    public Jugador(String nombre, Rol rol) {
+        this.nombre = nombre;
+        this.rol = rol;
+        this.estado = new Vivo();
     }
 
-    public void eliminar(){
+    public String nombre() {
+        return nombre;
+    }
+
+    public boolean estaVivo() {
+        return estado.estaVivo();
+    }
+
+    public void eliminar() {
         this.estado = new Eliminado();
     }
 
-    public Rol devolverRol(Jugador jugadorQuePregunta){
+    public Bando bando() {
+        return rol.bando();
+    }
+
+    public Bando resultadoAlSerInvestigado() {
+        return rol.resultadoAlSerInvestigado();
+    }
+
+    public void actuarEnNoche(ResolucionNocturna resolucion) {
+        estado.actuarEnNoche(this, resolucion);
+    }
+
+    void ejecutarAccionNocturna(ResolucionNocturna resolucion) {
+        rol.actuarEnNoche(resolucion);
+    }
+
+    public Rol rolVistoPor(Jugador jugadorQuePregunta) {
         if (this == jugadorQuePregunta) {
             return rol;
         }
         return new RolOculto();
     }
-
-    public void cambiarEstado(Estado estado){
-        this.estado = estado;
-    }
-
-    public void cambiarRol(Rol rol){
-        this.rol = rol;
-    }
-
-    public boolean tieneRolAsignado() {return rol.esRolAsignado(); }
 }

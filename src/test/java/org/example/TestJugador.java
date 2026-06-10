@@ -2,68 +2,41 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class TestJugador {
 
     @Test
-    void alCrearJugadorDeberiaExistir() {
-        Jugador jugador = new Jugador();
-        assertNotNull(jugador);
-    }
-
-    @Test
-    void alCrearUnJugadorSePuedeCambiarSuEstado() {
-        Jugador jugador = new Jugador();
-        Estado estadoMock = mock(Estado.class);
-        jugador.cambiarEstado(estadoMock);
-        assertEquals(estadoMock, jugador.devolverEstado());
-    }
-
-    @Test
     void unJugadorPuedeSaberSuBando() {
-        Jugador jugador = new Jugador();
-        jugador.cambiarRol(new Mafioso());
-
-        Bando bando = jugador.devolverRol(jugador).bando();
-
-        assertTrue(bando instanceof BandoMafia);
+        Jugador jugador = new Jugador("Ana", new Mafioso());
+        assertTrue(jugador.bando() instanceof BandoMafia);
     }
 
     @Test
     void unJugadorMafiosoConoceATodosLosMafiosos() {
         ListaJugadores listaJugadores = new ListaJugadores();
-
-        Jugador mafioso1 = new Jugador();
-        Jugador mafioso2 = new Jugador();
-        Jugador ciudadano = new Jugador();
-
-        mafioso1.cambiarRol(new Mafioso());
-        mafioso2.cambiarRol(new Mafioso());
-        ciudadano.cambiarRol(new Ciudadano());
-
+        Jugador mafioso1 = new Jugador("M1", new Mafioso());
+        Jugador mafioso2 = new Jugador("M2", new Mafioso());
+        Jugador ciudadano = new Jugador("C1", new Ciudadano());
         listaJugadores.agregar(ciudadano);
         listaJugadores.agregar(mafioso2);
         listaJugadores.agregar(mafioso1);
 
-        int cantidadDeComplices =
-                mafioso1.devolverRol(mafioso1).bando().complices(listaJugadores).size();
+        int cantidadDeComplices = mafioso1.bando().complices(listaJugadores).size();
 
         assertEquals(2, cantidadDeComplices);
     }
 
     @Test
     void unJugadorRecienCreadoEstaVivo() {
-        Jugador jugador = new Jugador();
-        assertTrue(jugador.devolverEstado().estaVivo());
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
+        assertTrue(jugador.estaVivo());
     }
 
     @Test
     void unJugadorEliminadoDejaDeEstarVivo() {
-        Jugador jugador = new Jugador();
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
         jugador.eliminar();
-        assertFalse(jugador.devolverEstado().estaVivo());
+        assertFalse(jugador.estaVivo());
     }
 }

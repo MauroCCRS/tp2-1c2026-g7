@@ -1,61 +1,48 @@
 package org.example.model;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ListaJugadores {
-    private List<Jugador> jugadores;
+    private final List<Jugador> jugadores = new ArrayList<>();
 
-    public ListaJugadores() {
-        this.jugadores = new ArrayList<>();
-    }
-    public List<Jugador> obtenerListaCompleta() {
-        return this.jugadores;
-    }
     public void agregar(Jugador jugador) {
         this.jugadores.add(jugador);
     }
+
     public void eliminar(Jugador jugador) {
         this.jugadores.remove(jugador);
     }
 
-    public List<Jugador> obtenerMafiosos(){
-        List<Jugador> mafiosos = new ArrayList<>();
-
-        for (Jugador jugador : this.jugadores) {
-            Rol rol = jugador.devolverRol(jugador);
-
-            if (rol.bando() instanceof BandoMafia) {
-                mafiosos.add(jugador);
-            }
-        }
-
-        return mafiosos;
+    public List<Jugador> obtenerListaCompleta() {
+        return new ArrayList<>(this.jugadores);
     }
 
-    public List<Jugador> obtenerCiudadanos(){
-        List<Jugador> ciudadanos = new ArrayList<>();
-
-        for (Jugador jugador : this.jugadores) {
-            Rol rol = jugador.devolverRol(jugador);
-
-            if (rol.bando() instanceof BandoCiudadano) {
-                ciudadanos.add(jugador);
-            }
-        }
-
-        return ciudadanos;
-    }
-    
-    public List<Jugador> obtenerVivos(){
+    public List<Jugador> obtenerVivos() {
         List<Jugador> vivos = new ArrayList<>();
-
         for (Jugador jugador : this.jugadores) {
-            if (jugador.devolverEstado().estaVivo()) {
+            if (jugador.estaVivo()) {
                 vivos.add(jugador);
             }
         }
-
         return vivos;
+    }
+
+    public List<Jugador> delBando(Bando bando) {
+        List<Jugador> delBando = new ArrayList<>();
+        for (Jugador jugador : this.jugadores) {
+            if (jugador.bando().esMismoBando(bando)) {
+                delBando.add(jugador);
+            }
+        }
+        return delBando;
+    }
+
+    public List<Jugador> obtenerMafiosos() {
+        return delBando(new BandoMafia());
+    }
+
+    public List<Jugador> obtenerCiudadanos() {
+        return delBando(new BandoCiudadano());
     }
 }
