@@ -2,6 +2,7 @@ package org.example.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Jugadores {
     private final List<Jugador> jugadores = new ArrayList<>();
@@ -10,49 +11,22 @@ public class Jugadores {
         this.jugadores.add(jugador);
     }
 
-    public void eliminar(Jugador jugador) {
-        this.jugadores.remove(jugador);
+    public int cantidadDeVivos() {
+        return (int) jugadores.stream()
+                .filter(Jugador::estaVivo)
+                .count();
     }
 
-    public List<Jugador> obtenerListaCompleta() {
-        return new ArrayList<>(this.jugadores);
+    public int cantidadVivosDelBando(Bando bando) {
+        return (int) jugadores.stream()
+                .filter(Jugador::estaVivo)
+                .filter(jugador -> jugador.perteneceA(bando))
+                .count();
     }
 
-    public List<Jugador> obtenerVivos() {
-        List<Jugador> vivos = new ArrayList<>();
-        for (Jugador jugador : this.jugadores) {
-            if (jugador.estaVivo()) {
-                vivos.add(jugador);
-            }
-        }
-        return vivos;
-    }
-
-    public List<Jugador> delBando(Bando bando) {
-        List<Jugador> delBando = new ArrayList<>();
-        for (Jugador jugador : this.jugadores) {
-            if (jugador.bando().esMismoBando(bando)) {
-                delBando.add(jugador);
-            }
-        }
-        return delBando;
-    }
-
-    public List<Jugador> vivosDelBando(Bando bando) {
-        List<Jugador> resultado = new ArrayList<>();
-        for (Jugador jugador : delBando(bando)) {
-            if (jugador.estaVivo()) {
-                resultado.add(jugador);
-            }
-        }
-        return resultado;
-    }
-
-    public List<Jugador> obtenerMafiosos() {
-        return delBando(new BandoMafia());
-    }
-
-    public List<Jugador> obtenerCiudadanos() {
-        return delBando(new BandoCiudadano());
+    public void porCadaVivo(Consumer<Jugador> accion) {
+        jugadores.stream()
+                .filter(Jugador::estaVivo)
+                .forEach(accion);
     }
 }

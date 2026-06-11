@@ -46,4 +46,12 @@ public class Jugador {
         }
         return new RolOculto();
     }
+
+    public boolean perteneceA(Bando otroBando) {
+        return bando().esMismoBando(otroBando);
+    }
+
+    public boolean esMafioso() {
+        return bando().esMismoBando(new BandoMafia());
+    }
 }

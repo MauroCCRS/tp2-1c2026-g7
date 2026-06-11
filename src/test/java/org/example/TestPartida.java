@@ -31,12 +31,13 @@ public class TestPartida {
     public void resolverLaNocheHaceAvanzarALaFaseDiurna() {
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
-        jugadores.agregar(ciudadano("C1"));
+        Jugador c1 = ciudadano("C1");
+        jugadores.agregar(c1);
         jugadores.agregar(ciudadano("C2"));
         jugadores.agregar(ciudadano("C3"));
 
         Partida partida = new Partida(jugadores);
-        ((FaseNocturna) partida.faseActual()).votarVictima(jugadores.obtenerCiudadanos().get(0));
+        ((FaseNocturna) partida.faseActual()).votarVictima(c1);
         partida.resolverFaseActual();
 
         assertTrue(partida.faseActual() instanceof FaseDiurna);
@@ -69,7 +70,7 @@ public class TestPartida {
         partida.resolverFaseActual();
 
         assertTrue(partida.resultado().isPresent());
-        assertTrue(partida.resultado().get().esMafia());
+        assertTrue(partida.resultado().get().esMismoBando(new BandoMafia()));
     }
 
     @Test

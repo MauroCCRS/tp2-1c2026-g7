@@ -31,10 +31,12 @@ class TestRepartidorDeRoles {
         List<Rol> roles = Arrays.asList(rolAna, rolBeto);
 
         Jugadores jugadores = repartidor.repartir(nombres, roles);
-        List<Jugador> lista = jugadores.obtenerListaCompleta();
 
-        Jugador ana = lista.get(0);
-        Jugador beto = lista.get(1);
+        List<Jugador> capturados = new ArrayList<>();
+        jugadores.porCadaVivo(capturados::add);
+
+        Jugador ana = capturados.get(0);
+        Jugador beto = capturados.get(1);
         assertSame(rolAna, ana.rolVistoPor(ana));
         assertSame(rolBeto, beto.rolVistoPor(beto));
     }

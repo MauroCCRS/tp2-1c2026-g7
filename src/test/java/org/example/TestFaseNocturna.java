@@ -62,6 +62,6 @@ public class TestFaseNocturna {
 
         fase.resolver();
 
-        assertTrue(detectiveRol.resultadoInvestigacion().esMafia());
+        assertTrue(detectiveRol.resultadoInvestigacion().esMismoBando(new BandoMafia()));
     }
 }

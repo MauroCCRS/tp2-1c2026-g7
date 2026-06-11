@@ -3,13 +3,12 @@ package org.example.model;
 public class FaseNocturna extends Fase {
 
     private final Jugadores jugadores;
-    private final VotacionMafia votacionMafia;
+    private final VotacionMafia votacionMafia = new VotacionMafia();
     private final ResolucionNocturna resolucion = new ResolucionNocturna();
 
     public FaseNocturna(int numeroRonda, Jugadores jugadores) {
         super(numeroRonda);
         this.jugadores = jugadores;
-        this.votacionMafia = new VotacionMafia(jugadores);
     }
 
     public void votarVictima(Jugador objetivo) {
@@ -19,9 +18,7 @@ public class FaseNocturna extends Fase {
     @Override
     public RegistroRonda resolver() {
         resolucion.registrarAtaque(votacionMafia.victimaElegida());
-        for (Jugador jugador : jugadores.obtenerVivos()) {
-            jugador.actuarEnNoche(resolucion);
-        }
+        jugadores.porCadaVivo(jugador -> jugador.actuarEnNoche(resolucion));
         return resolucion.resolver()
                 .<RegistroRonda>map(victima -> new RegistroNocturno(numeroRonda, victima))
                 .orElseGet(() -> new RegistroNocheTranquila(numeroRonda));
