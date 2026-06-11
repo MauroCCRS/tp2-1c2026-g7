@@ -1,0 +1,66 @@
+@startuml ModeloMafiaRoles
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 65
+
+abstract class Rol {
+  + {abstract} bando() : Bando
+  + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(resolucion : ResolucionNocturna)
+  + esVisible() : boolean
+}
+
+together {
+  class Mafioso {
+    + bando() : Bando
+  }
+  class Ciudadano {
+    + bando() : Bando
+  }
+  class Detective {
+    - objetivoAInvestigar : Jugador
+    - resultadoInvestigacion : Bando
+    + bando() : Bando
+    + elegirInvestigar(objetivo : Jugador)
+    + actuarEnNoche(resolucion : ResolucionNocturna)
+    + resultadoInvestigacion() : Bando
+  }
+  class Medico {
+    - objetivoAProteger : Jugador
+    + bando() : Bando
+    + elegirProteger(objetivo : Jugador)
+    + actuarEnNoche(resolucion : ResolucionNocturna)
+  }
+  class RolOculto {
+    + esVisible() : boolean
+  }
+}
+
+interface Bando {
+  + esMismoBando(otro : Bando) : boolean
+  + esMismoBandoQueMafia(mafia : BandoMafia) : boolean
+  + esMismoBandoQueCiudadano(ciudadano : BandoCiudadano) : boolean
+  + ganoSegun(jugadores : Jugadores) : boolean
+}
+together {
+  class BandoMafia
+  class BandoCiudadano
+}
+
+class ResolucionNocturna
+class Jugador
+
+Rol <|-- Mafioso
+Rol <|-- Ciudadano
+Rol <|-- Detective
+Rol <|-- Medico
+Rol <|-- RolOculto
+
+Bando <|.. BandoMafia
+Bando <|.. BandoCiudadano
+
+Rol ..> Bando
+Rol ..> ResolucionNocturna
+Detective ..> Jugador
+@enduml
