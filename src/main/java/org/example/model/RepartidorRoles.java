@@ -10,12 +10,12 @@ public class RepartidorRoles {
         this.mezclador = mezclador;
     }
 
-    public ListaJugadores repartir(List<String> nombres, List<Rol> roles) {
+    public Jugadores repartir(List<String> nombres, List<Rol> roles) {
         if (nombres.size() != roles.size()) {
             throw new IllegalArgumentException("Debe haber exactamente un rol por jugador");
         }
         mezclador.mezclar(roles);
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         for (int i = 0; i < nombres.size(); i++) {
             jugadores.agregar(new Jugador(nombres.get(i), roles.get(i)));
         }

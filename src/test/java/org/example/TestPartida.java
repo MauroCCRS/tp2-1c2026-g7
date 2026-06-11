@@ -17,7 +17,7 @@ public class TestPartida {
 
     @Test
     public void laPartidaArrancaEnFaseNocturna() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(ciudadano("C1"));
         jugadores.agregar(ciudadano("C2"));
@@ -29,7 +29,7 @@ public class TestPartida {
 
     @Test
     public void resolverLaNocheHaceAvanzarALaFaseDiurna() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(ciudadano("C1"));
         jugadores.agregar(ciudadano("C2"));
@@ -44,7 +44,7 @@ public class TestPartida {
 
     @Test
     public void noHayGanadorMientrasAmbosBandosSiguenEnJuego() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(ciudadano("C1"));
         jugadores.agregar(ciudadano("C2"));
@@ -57,7 +57,7 @@ public class TestPartida {
 
     @Test
     public void laMafiaGanaCuandoIgualaEnNumeroTrasEliminaciones() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         Jugador c1 = ciudadano("C1");
         Jugador c2 = ciudadano("C2");
@@ -74,7 +74,7 @@ public class TestPartida {
 
     @Test
     public void elResumenAcumulaLasRondasJugadas() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         Jugador victima = ciudadano("Ana");
         jugadores.agregar(victima);

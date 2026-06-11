@@ -8,7 +8,7 @@ class TestVotacionMafia {
 
     @Test
     void laMafiaPuedeElegirComoVictimaAUnCiudadanoVivo() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         Jugador ciudadano = new Jugador("Ana", new Ciudadano());
         jugadores.agregar(ciudadano);
 
@@ -20,7 +20,7 @@ class TestVotacionMafia {
 
     @Test
     void laMafiaNoPuedeElegirComoVictimaAOtroMafioso() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         Jugador mafioso = new Jugador("Beto", new Mafioso());
         jugadores.agregar(mafioso);
 
@@ -31,7 +31,7 @@ class TestVotacionMafia {
 
     @Test
     void laMafiaNoPuedeElegirComoVictimaAUnJugadorEliminado() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         Jugador eliminado = new Jugador("Caro", new Ciudadano());
         eliminado.eliminar();
         jugadores.agregar(eliminado);

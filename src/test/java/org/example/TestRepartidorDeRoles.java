@@ -30,7 +30,7 @@ class TestRepartidorDeRoles {
         Rol rolBeto = new Mafioso();
         List<Rol> roles = Arrays.asList(rolAna, rolBeto);
 
-        ListaJugadores jugadores = repartidor.repartir(nombres, roles);
+        Jugadores jugadores = repartidor.repartir(nombres, roles);
         List<Jugador> lista = jugadores.obtenerListaCompleta();
 
         Jugador ana = lista.get(0);

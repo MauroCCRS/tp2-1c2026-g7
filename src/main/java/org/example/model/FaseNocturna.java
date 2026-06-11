@@ -2,11 +2,11 @@ package org.example.model;
 
 public class FaseNocturna extends Fase {
 
-    private final ListaJugadores jugadores;
+    private final Jugadores jugadores;
     private final VotacionMafia votacionMafia;
     private final ResolucionNocturna resolucion = new ResolucionNocturna();
 
-    public FaseNocturna(int numeroRonda, ListaJugadores jugadores) {
+    public FaseNocturna(int numeroRonda, Jugadores jugadores) {
         super(numeroRonda);
         this.jugadores = jugadores;
         this.votacionMafia = new VotacionMafia(jugadores);

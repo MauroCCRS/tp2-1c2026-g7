@@ -11,7 +11,7 @@ public class TestFaseNocturna {
     public void laVictimaSinProteccionEsEliminadaYQuedaRegistrada() {
         Jugador mafioso = new Jugador("M1", new Mafioso());
         Jugador victima = new Jugador("Ana", new Ciudadano());
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victima);
 
@@ -30,7 +30,7 @@ public class TestFaseNocturna {
         Jugador victima = new Jugador("Ana", new Ciudadano());
         Medico medicoRol = new Medico();
         Jugador medico = new Jugador("Doc", medicoRol);
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victima);
         jugadores.agregar(medico);
@@ -51,7 +51,7 @@ public class TestFaseNocturna {
         Jugador victima = new Jugador("Ana", new Ciudadano());
         Detective detectiveRol = new Detective();
         Jugador detective = new Jugador("Sherlock", detectiveRol);
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victima);
         jugadores.agregar(detective);

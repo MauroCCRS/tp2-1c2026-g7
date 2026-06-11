@@ -2,10 +2,10 @@ package org.example.model;
 
 public class VotacionMafia {
 
-    private final ListaJugadores jugadores;
+    private final Jugadores jugadores;
     private Jugador victimaElegida;
 
-    public VotacionMafia(ListaJugadores jugadores) {
+    public VotacionMafia(Jugadores jugadores) {
         this.jugadores = jugadores;
     }
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class BandoCiudadano implements Bando {
     @Override
-    public List<Jugador> complices(ListaJugadores listaJugadores) {
+    public List<Jugador> complices(Jugadores listaJugadores) {
         return listaJugadores.delBando(this);
     }
 
@@ -19,7 +19,7 @@ public class BandoCiudadano implements Bando {
     }
 
     @Override
-    public boolean ganoSegun(ListaJugadores jugadores) {
+    public boolean ganoSegun(Jugadores jugadores) {
         int ciudadanosVivos = jugadores.vivosDelBando(this).size();
         return ciudadanosVivos == jugadores.obtenerVivos().size();
     }

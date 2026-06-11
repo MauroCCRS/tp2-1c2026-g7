@@ -9,7 +9,7 @@ class TestListaJugadores {
 
     @Test
     void alAgregarUnJugadorALaListaDeberiaEstarEnLaLista() {
-        ListaJugadores listaJugadores = new ListaJugadores();
+        Jugadores listaJugadores = new Jugadores();
         Jugador jugador = new Jugador("Ana", new Ciudadano());
 
         listaJugadores.agregar(jugador);
@@ -19,7 +19,7 @@ class TestListaJugadores {
 
     @Test
     void alEliminarUnJugadorDeLaListaDeberiaNoEstarEnLaLista() {
-        ListaJugadores listaJugadores = new ListaJugadores();
+        Jugadores listaJugadores = new Jugadores();
         Jugador jugador = new Jugador("Ana", new Ciudadano());
 
         listaJugadores.agregar(jugador);
@@ -30,7 +30,7 @@ class TestListaJugadores {
 
     @Test
     void puedoObtenerLaListaDeMafiosos() {
-        ListaJugadores listaJugadores = new ListaJugadores();
+        Jugadores listaJugadores = new Jugadores();
         Jugador ciudadano = new Jugador("Ana", new Ciudadano());
         Jugador mafioso = new Jugador("Beto", new Mafioso());
 

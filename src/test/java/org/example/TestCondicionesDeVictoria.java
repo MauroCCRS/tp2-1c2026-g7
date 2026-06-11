@@ -17,7 +17,7 @@ public class TestCondicionesDeVictoria {
 
     @Test
     public void laMafiaGanaCuandoIgualaEnNumeroALosCiudadanos() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(ciudadano("C1"));
 
@@ -28,7 +28,7 @@ public class TestCondicionesDeVictoria {
 
     @Test
     public void laMafiaNoGanaSiHayMasCiudadanosVivos() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(ciudadano("C1"));
         jugadores.agregar(ciudadano("C2"));
@@ -40,7 +40,7 @@ public class TestCondicionesDeVictoria {
 
     @Test
     public void laMafiaGanaAlSuperarEnNumeroTrasUnaEliminacion() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(mafioso("M2"));
         Jugador ciudadano1 = ciudadano("C1");
@@ -55,7 +55,7 @@ public class TestCondicionesDeVictoria {
 
     @Test
     public void losCiudadanosGananCuandoNoQuedanMafiososVivos() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         Jugador mafioso = mafioso("M1");
         jugadores.agregar(mafioso);
         jugadores.agregar(ciudadano("C1"));
@@ -68,7 +68,7 @@ public class TestCondicionesDeVictoria {
 
     @Test
     public void losCiudadanosNoGananSiQuedaUnMafiosoVivo() {
-        ListaJugadores jugadores = new ListaJugadores();
+        Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso("M1"));
         jugadores.agregar(ciudadano("C1"));
 

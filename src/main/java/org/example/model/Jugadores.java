@@ -3,7 +3,7 @@ package org.example.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaJugadores {
+public class Jugadores {
     private final List<Jugador> jugadores = new ArrayList<>();
 
     public void agregar(Jugador jugador) {

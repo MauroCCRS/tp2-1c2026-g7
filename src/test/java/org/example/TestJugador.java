@@ -14,7 +14,7 @@ class TestJugador {
 
     @Test
     void unJugadorMafiosoConoceATodosLosMafiosos() {
-        ListaJugadores listaJugadores = new ListaJugadores();
+        Jugadores listaJugadores = new Jugadores();
         Jugador mafioso1 = new Jugador("M1", new Mafioso());
         Jugador mafioso2 = new Jugador("M2", new Mafioso());
         Jugador ciudadano = new Jugador("C1", new Ciudadano());
