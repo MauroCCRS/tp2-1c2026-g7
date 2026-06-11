@@ -38,6 +38,16 @@ public class ListaJugadores {
         return delBando;
     }
 
+    public List<Jugador> vivosDelBando(Bando bando) {
+        List<Jugador> resultado = new ArrayList<>();
+        for (Jugador jugador : delBando(bando)) {
+            if (jugador.estaVivo()) {
+                resultado.add(jugador);
+            }
+        }
+        return resultado;
+    }
+
     public List<Jugador> obtenerMafiosos() {
         return delBando(new BandoMafia());
     }

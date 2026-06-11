@@ -2,6 +2,7 @@ package org.example.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ResolucionNocturna {
 
@@ -16,13 +17,14 @@ public class ResolucionNocturna {
         this.protegidos.add(objetivo);
     }
 
-    public void resolver() {
+    public Optional<Jugador> resolver() {
         if (atacado == null) {
-            return;
+            return Optional.empty();
         }
         if (protegidos.contains(atacado)) {
-            return;
+            return Optional.empty();
         }
         atacado.eliminar();
+        return Optional.of(atacado);
     }
 }

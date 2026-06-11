@@ -17,4 +17,11 @@ public class BandoMafia implements Bando {
     public boolean esMafia() {
         return true;
     }
+
+    @Override
+    public boolean ganoSegun(ListaJugadores jugadores) {
+        int mafiososVivos = jugadores.vivosDelBando(this).size();
+        int totalVivos = jugadores.obtenerVivos().size();
+        return mafiososVivos >= totalVivos - mafiososVivos;
+    }
 }
