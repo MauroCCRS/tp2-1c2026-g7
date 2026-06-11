@@ -1,0 +1,183 @@
+@startuml ModeloMafiaNucleo
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+class Partida {
+  - jugadores : ListaJugadores
+  - faseActual : Fase
+  - registro : RegistroPartida
+  - configuracion : Configuracion
+  + iniciar()
+  + ejecutarFaseActual()
+  + avanzarFase()
+  + verificarVictoria() : Bando
+}
+
+class ListaJugadores {
+  - jugadores : List<Jugador>
+  + obtenerListaCompleta() : List<Jugador>
+  + obtenerVivos() : List<Jugador>
+  + obtenerMafiosos() : List<Jugador>
+  + obtenerCiudadanos() : List<Jugador>
+  + eliminar(j : Jugador)
+}
+
+class Jugador {
+  - nombre : String
+  + estaVivo() : boolean
+  + eliminar()
+  + bando() : Bando
+  + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(resolucion : ResolucionNocturna)
+  + actuarEnDia(votacion : VotacionDiurna)
+}
+
+abstract class EstadoJugador {
+  + estaVivo() : boolean
+  + actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+  + actuarEnDia(jugador : Jugador, votacion : VotacionDiurna)
+}
+class Vivo {
+  + estaVivo() : boolean
+  + actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+  + actuarEnDia(jugador : Jugador, votacion : VotacionDiurna)
+}
+class Eliminado {
+  + estaVivo() : boolean
+  + actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+  + actuarEnDia(jugador : Jugador, votacion : VotacionDiurna)
+}
+
+abstract class Rol {
+  # bando : Bando
+  + bando() : Bando
+  + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+  + actuarEnDia(jugador : Jugador, votacion : VotacionDiurna)
+}
+
+interface Bando {
+  + ganoSegun(jugadores : ListaJugadores) : boolean
+}
+class BandoMafia {
+  + ganoSegun(jugadores : ListaJugadores) : boolean
+}
+class BandoCiudadanos {
+  + ganoSegun(jugadores : ListaJugadores) : boolean
+}
+
+abstract class Fase {
+  + ejecutar(partida : Partida) : RegistroRonda
+  + siguiente() : Fase
+}
+class FaseNocturna {
+  + ejecutar(partida : Partida) : RegistroRonda
+}
+class FaseDiurna {
+  + ejecutar(partida : Partida) : RegistroRonda
+}
+
+class ResolucionNocturna {
+  - votacionMafia : VotacionMafia
+  - protegidos : List<Jugador>
+  + votarVictima(votante : Jugador, objetivo : Jugador)
+  + registrarProteccion(objetivo : Jugador)
+  + registrarInvestigacion(detective : Jugador, objetivo : Jugador)
+  + resolver() : RegistroNocturno
+}
+
+abstract class Votacion {
+  - votos : Map<Jugador, Jugador>
+  + votar(votante : Jugador, objetivo : Jugador)
+  + resolver() : Jugador
+}
+class VotacionMafia {
+  + resolver() : Jugador
+}
+class VotacionDiurna {
+  - nominados : List<Jugador>
+  - criterio : CriterioEmpate
+  + nominar(j : Jugador)
+  + resolver() : Jugador
+}
+
+interface CriterioEmpate {
+  + resolver(empatados : List<Jugador>) : Jugador
+}
+class Ballotage {
+  + resolver(empatados : List<Jugador>) : Jugador
+}
+class SinEliminacion {
+  + resolver(empatados : List<Jugador>) : Jugador
+}
+
+abstract class RegistroRonda {
+  - numeroRonda : int
+}
+class RegistroNocturno {
+  - victima : Jugador
+  - asesinatoExitoso : boolean
+}
+class RegistroDiurno {
+  - eliminado : Jugador
+}
+class RegistroPartida {
+  - registros : List<RegistroRonda>
+  + agregarRegistro(r : RegistroRonda)
+  + generarResumen() : String
+}
+
+abstract class Configuracion {
+  + armarRoles() : List<Rol>
+}
+class ConfiguracionChico {
+  + armarRoles() : List<Rol>
+}
+class ConfiguracionMediano {
+  + armarRoles() : List<Rol>
+}
+class ConfiguracionGrande {
+  + armarRoles() : List<Rol>
+}
+
+Partida *-- ListaJugadores
+Partida *-- RegistroPartida
+Partida --> Fase : faseActual
+Partida ..> Configuracion
+Partida ..> Bando
+
+ListaJugadores *-- "5..12" Jugador
+Jugador *-- Rol : rol
+Jugador *-- EstadoJugador : estado
+EstadoJugador <|-- Vivo
+EstadoJugador <|-- Eliminado
+EstadoJugador ..> Rol
+
+Rol --> Bando
+Bando <|.. BandoMafia
+Bando <|.. BandoCiudadanos
+
+Fase <|-- FaseNocturna
+Fase <|-- FaseDiurna
+FaseNocturna ..> ResolucionNocturna
+FaseDiurna ..> VotacionDiurna
+
+ResolucionNocturna *-- VotacionMafia
+ResolucionNocturna --> RegistroNocturno
+FaseDiurna ..> RegistroDiurno
+
+Votacion <|-- VotacionMafia
+Votacion <|-- VotacionDiurna
+VotacionDiurna --> CriterioEmpate : criterio
+CriterioEmpate <|.. Ballotage
+CriterioEmpate <|.. SinEliminacion
+
+RegistroRonda <|-- RegistroNocturno
+RegistroRonda <|-- RegistroDiurno
+RegistroPartida *-- "0..*" RegistroRonda
+
+Configuracion <|-- ConfiguracionChico
+Configuracion <|-- ConfiguracionMediano
+Configuracion <|-- ConfiguracionGrande
+Configuracion ..> Rol
+@enduml
