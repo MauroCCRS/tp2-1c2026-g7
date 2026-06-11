@@ -1,26 +1,24 @@
 package org.example.model;
 
-import java.util.List;
-
 public class BandoCiudadano implements Bando {
     @Override
-    public List<Jugador> complices(ListaJugadores listaJugadores) {
-        return listaJugadores.delBando(this);
-    }
-
-    @Override
     public boolean esMismoBando(Bando otro) {
-        return !otro.esMafia();
+        return otro.esMismoBandoQueCiudadano(this);
     }
 
     @Override
-    public boolean esMafia() {
+    public boolean esMismoBandoQueMafia(BandoMafia mafia) {
         return false;
     }
 
     @Override
-    public boolean ganoSegun(ListaJugadores jugadores) {
-        int ciudadanosVivos = jugadores.vivosDelBando(this).size();
-        return ciudadanosVivos == jugadores.obtenerVivos().size();
+    public boolean esMismoBandoQueCiudadano(BandoCiudadano ciudadano) {
+        return true;
+    }
+
+    @Override
+    public boolean ganoSegun(Jugadores jugadores) {
+        int ciudadanosVivos = jugadores.cantidadVivosDelBando(this);
+        return ciudadanosVivos == jugadores.cantidadDeVivos();
     }
 }

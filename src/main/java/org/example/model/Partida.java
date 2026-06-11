@@ -6,12 +6,12 @@ import java.util.Optional;
 
 public class Partida {
 
-    private final ListaJugadores jugadores;
+    private final Jugadores jugadores;
     private final RegistroPartida registro = new RegistroPartida();
     private final List<Bando> bandos = Arrays.asList(new BandoMafia(), new BandoCiudadano());
     private Fase faseActual;
 
-    public Partida(ListaJugadores jugadores) {
+    public Partida(Jugadores jugadores) {
         this.jugadores = jugadores;
         this.faseActual = new FaseNocturna(1, jugadores);
     }

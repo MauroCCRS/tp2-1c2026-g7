@@ -1,0 +1,198 @@
+@startuml ModeloMafiaNucleo
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 60
+
+class Partida {
+  - jugadores : Jugadores
+  - registro : RegistroPartida
+  - bandos : List<Bando>
+  - faseActual : Fase
+  + faseActual() : Fase
+  + resolverFaseActual()
+  + crearFaseNocturna(numeroRonda : int) : FaseNocturna
+  + crearFaseDiurna(numeroRonda : int) : FaseDiurna
+  + resultado() : Optional<Bando>
+  + resumen() : String
+}
+
+abstract class Fase {
+  # numeroRonda : int
+  + {abstract} resolver() : RegistroRonda
+  + {abstract} siguiente(partida : Partida) : Fase
+}
+together {
+  class FaseNocturna {
+    - jugadores : Jugadores
+    - votacionMafia : VotacionMafia
+    - resolucion : ResolucionNocturna
+    + votarVictima(objetivo : Jugador)
+    + resolver() : RegistroRonda
+    + siguiente(partida : Partida) : Fase
+  }
+  class FaseDiurna {
+    - votacion : VotacionDiurna
+    + nominar(j : Jugador)
+    + votar(votante : Jugador, objetivo : Jugador)
+    + resolver() : RegistroRonda
+    + siguiente(partida : Partida) : Fase
+  }
+}
+
+class RegistroPartida {
+  - registros : List<RegistroRonda>
+  + agregarRegistro(r : RegistroRonda)
+  + generarResumen() : String
+}
+abstract class RegistroRonda {
+  # numeroRonda : int
+  + {abstract} describir() : String
+}
+together {
+  class RegistroNocturno {
+    - victima : Jugador
+  }
+  class RegistroNocheTranquila
+  class RegistroDiurno {
+    - eliminado : Jugador
+  }
+  class RegistroSinEliminacionDiurna
+}
+
+class ResolucionNocturna {
+  - atacado : Jugador
+  - protegidos : List<Jugador>
+  + registrarAtaque(objetivo : Jugador)
+  + registrarProteccion(objetivo : Jugador)
+  + resolver() : Optional<Jugador>
+}
+class VotacionMafia {
+  - victimaElegida : Jugador
+  + votar(objetivo : Jugador)
+  + victimaElegida() : Jugador
+}
+class VotacionDiurna {
+  - criterio : CriterioEmpate
+  - nominados : Set<Jugador>
+  - votos : Map<Jugador, Jugador>
+  + nominar(j : Jugador)
+  + votar(votante : Jugador, objetivo : Jugador)
+  + ganadoresPorMayoria() : List<Jugador>
+  + resolver() : Optional<Jugador>
+}
+interface CriterioEmpate {
+  + desempatar(empatados : List<Jugador>) : List<Jugador>
+}
+class SinEliminacion
+
+class Jugadores {
+  - jugadores : List<Jugador>
+  + agregar(j : Jugador)
+  + cantidadDeVivos() : int
+  + cantidadVivosDelBando(bando : Bando) : int
+  + porCadaVivo(accion : Consumer<Jugador>)
+}
+class Jugador {
+  - nombre : String
+  + nombre() : String
+  + estaVivo() : boolean
+  + eliminar()
+  + bando() : Bando
+  + perteneceA(otroBando : Bando) : boolean
+  + esMafioso() : boolean
+  + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(resolucion : ResolucionNocturna)
+  ~ ejecutarAccionNocturna(resolucion : ResolucionNocturna)
+  + rolVistoPor(jugadorQuePregunta : Jugador) : Rol
+}
+
+abstract class Estado {
+  + {abstract} estaVivo() : boolean
+  + {abstract} actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+}
+together {
+  class Vivo
+  class Eliminado
+}
+
+abstract class Rol {
+  + {abstract} bando() : Bando
+  + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(resolucion : ResolucionNocturna)
+  + esVisible() : boolean
+}
+
+interface Bando {
+  + esMismoBando(otro : Bando) : boolean
+  + esMismoBandoQueMafia(mafia : BandoMafia) : boolean
+  + esMismoBandoQueCiudadano(ciudadano : BandoCiudadano) : boolean
+  + ganoSegun(jugadores : Jugadores) : boolean
+}
+together {
+  class BandoMafia
+  class BandoCiudadano
+}
+
+abstract class Configuracion {
+  + {abstract} armarRoles() : List<Rol>
+  # agregarMafiosos(roles : List<Rol>, cantidad : int)
+  # completarConCiudadanos(roles : List<Rol>, total : int)
+}
+together {
+  class ConfiguracionChico
+  class ConfiguracionMediano
+  class ConfiguracionGrande
+}
+
+class RepartidorRoles {
+  + repartir(nombres : List<String>, roles : List<Rol>) : Jugadores
+}
+interface MezcladorDeRoles {
+  + mezclar(roles : List<Rol>)
+}
+class MezcladorAleatorioRoles
+
+Partida *-- Jugadores
+Partida *-- RegistroPartida
+Partida --> Fase : faseActual
+
+Fase <|-- FaseNocturna
+Fase <|-- FaseDiurna
+FaseNocturna *-- ResolucionNocturna
+FaseNocturna *-- VotacionMafia
+FaseDiurna *-- VotacionDiurna
+
+RegistroPartida *-- "0..*" RegistroRonda
+RegistroRonda <|-- RegistroNocturno
+RegistroRonda <|-- RegistroNocheTranquila
+RegistroRonda <|-- RegistroDiurno
+RegistroRonda <|-- RegistroSinEliminacionDiurna
+
+VotacionDiurna --> CriterioEmpate : criterio
+CriterioEmpate <|.. SinEliminacion
+ResolucionNocturna o-- "0..*" Jugador
+
+Jugadores o-- "5..12" Jugador
+Jugador *-- Estado : estado
+Jugador *-- Rol : rol
+Estado <|-- Vivo
+Estado <|-- Eliminado
+
+Rol ..> Bando
+Bando <|.. BandoMafia
+Bando <|.. BandoCiudadano
+
+Configuracion <|-- ConfiguracionChico
+Configuracion <|-- ConfiguracionMediano
+Configuracion <|-- ConfiguracionGrande
+Configuracion ..> Rol
+
+RepartidorRoles --> MezcladorDeRoles : mezclador
+RepartidorRoles ..> Jugadores
+MezcladorDeRoles <|.. MezcladorAleatorioRoles
+
+FaseNocturna -[hidden]down- RegistroRonda
+RegistroRonda -[hidden]down- ResolucionNocturna
+Fase -[hidden]right- RegistroPartida
+@enduml
