@@ -29,6 +29,10 @@ public class Jugador {
     }
 
     public Bando resultadoAlSerInvestigado() {
+
+        if(!this.estaVivo()){
+            throw new InvestigacionInvalidaException("No se puede investigar a un jugador eliminado");
+        }
         return rol.resultadoAlSerInvestigado();
     }
 

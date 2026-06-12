@@ -2,6 +2,7 @@ package org.example.model;
 
 public class Detective extends Rol {
     private Jugador objetivoAInvestigar;
+    private Jugador ultimoInvestigado;
     private Bando resultadoInvestigacion;
 
     @Override
@@ -10,12 +11,16 @@ public class Detective extends Rol {
     }
 
     public void elegirInvestigar(Jugador objetivo) {
+        if (objetivo == ultimoInvestigado) {
+            throw new VictimaInvalidaException("No puede investigar al mismo jugador dos noches seguidas");
+        }
         this.objetivoAInvestigar = objetivo;
     }
 
     @Override
     public void actuarEnNoche(ResolucionNocturna resolucion) {
         this.resultadoInvestigacion = objetivoAInvestigar.resultadoAlSerInvestigado();
+        this.ultimoInvestigado = objetivoAInvestigar;
     }
 
     public Bando resultadoInvestigacion() {
