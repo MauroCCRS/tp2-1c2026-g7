@@ -19,4 +19,22 @@ public class TestMedico {
 
         assertTrue(victima.estaVivo());
     }
+
+    @Test
+    public void noPuedeProtegerAlMismoJugador() {
+        Jugador protegido = new Jugador("Ana", new Ciudadano());
+        Medico medico = new Medico();
+        medico.elegirProteger(protegido);
+
+        assertThrows(ProtegidoInvalidoException.class, () -> medico.elegirProteger(protegido));
+    }
+
+    @Test
+    public void noPuedeProtegerAUnJugadorNoVivo() {
+        Jugador protegido = new Jugador("Ana", new Ciudadano());
+        Medico medico = new Medico();
+        protegido.eliminar();
+
+        assertThrows(ProtegidoInvalidoException.class, () -> medico.elegirProteger(protegido));
+    }
 }

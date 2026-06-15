@@ -95,4 +95,13 @@ public class TestVotacionDiurna {
 
         assertFalse(votacion.resolver().isPresent());
     }
+
+    @Test
+    public void noPuedeNominarAlJugadorNoVivo() {
+        Jugador nominado = ciudadano("Ana");
+        nominado.eliminar();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        assertThrow(NominadoInvalidoException.class, () -> votacion.nominar(nominado));
+    }
 }
