@@ -6,7 +6,4 @@ public abstract class Rol {
         return bando();
     }
     public void actuarEnNoche(ResolucionNocturna resolucion) { }
-    public boolean esVisible() {
-        return true;
-    }
 }
