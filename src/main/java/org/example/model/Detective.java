@@ -21,4 +21,9 @@ public class Detective extends Rol {
     public Bando resultadoInvestigacion() {
         return resultadoInvestigacion;
     }
+    
+    @Override
+    public String nombre() {
+        return "Detective";
+    }
 }

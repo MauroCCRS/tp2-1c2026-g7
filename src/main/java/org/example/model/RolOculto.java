@@ -9,4 +9,9 @@ public class RolOculto extends Rol {
 
     @Override
     public boolean esVisible() {return false;}
+
+    @Override
+    public String nombre() {
+        throw new UnsupportedOperationException("Un rol oculto no expone su nombre");
+    }
 }
