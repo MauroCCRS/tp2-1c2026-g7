@@ -5,21 +5,27 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestJugadorPuedeVerSuRol {
-
     @Test
-    void unJugadorPuedePedirSuPropioRol() {
-        Rol rol = new Ciudadano();
-        Jugador jugador = new Jugador("Ana", rol);
+    void unJugadorVeElRolEnSuPropiaCarta() {
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
 
-        assertSame(rol, jugador.rolVistoPor(jugador));
-        assertTrue(jugador.rolVistoPor(jugador).esVisible());
+        assertEquals("Ciudadano", jugador.cartaVistaPor(jugador).descripcion());
     }
 
     @Test
-    void unJugadorNoPuedePedirElRolDeOtroJugador() {
+    void unJugadorNoVeElRolEnLaCartaDeOtroJugadorVivo() {
         Jugador ana = new Jugador("Ana", new Mafioso());
         Jugador beto = new Jugador("Beto", new Ciudadano());
 
-        assertFalse(ana.rolVistoPor(beto).esVisible());
+        assertEquals("Carta oculta", ana.cartaVistaPor(beto).descripcion());
+    }
+
+    @Test
+    void laCartaDeUnJugadorEliminadoQuedaReveladaParaLosDemas() {
+        Jugador ana = new Jugador("Ana", new Mafioso());
+        Jugador beto = new Jugador("Beto", new Ciudadano());
+        beto.eliminar();
+
+        assertEquals("Ciudadano", beto.cartaVistaPor(ana).descripcion());
     }
 }
