@@ -16,6 +16,10 @@ public class Jugador {
         return nombre;
     }
 
+    public String descripcionDeCarta() {
+        return carta.descripcion();
+    }
+
     public boolean estaVivo() {
         return estado.estaVivo();
     }

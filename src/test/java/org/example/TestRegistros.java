@@ -35,4 +35,22 @@ public class TestRegistros {
         assertTrue(resumen.contains("Ana"));
         assertTrue(resumen.contains("Beto"));
     }
+
+    @Test
+    public void elRegistroNocturnoRevelaElRolDeLaVictimaEliminada() {
+        Jugador victima = new Jugador("Ana", new Mafioso());
+        victima.eliminar();
+        RegistroNocturno registro = new RegistroNocturno(1, victima);
+
+        assertTrue(registro.describir().contains("Mafioso"));
+    }
+
+    @Test
+    public void elRegistroDiurnoRevelaElRolDelEliminado() {
+        Jugador eliminado = new Jugador("Beto", new Detective());
+        eliminado.eliminar();
+        RegistroDiurno registro = new RegistroDiurno(2, eliminado);
+
+        assertTrue(registro.describir().contains("Detective"));
+    }
 }

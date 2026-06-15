@@ -10,6 +10,7 @@ public class RegistroNocturno extends RegistroRonda {
 
     @Override
     public String describir() {
-        return "Ronda " + numeroRonda + " (Noche): " + victima.nombre() + " fue eliminado.";
+        return "Ronda " + numeroRonda + " (Noche): " + victima.nombre()
+                + " fue eliminado. Era " + victima.descripcionDeCarta() + ".";
     }
 }
