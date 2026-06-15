@@ -16,4 +16,9 @@ public class Medico extends Rol {
     public void actuarEnNoche(ResolucionNocturna resolucion) {
         resolucion.registrarProteccion(objetivoAProteger);
     }
+    
+    @Override
+    public String nombre() {
+        return "Medico";
+    }
 }

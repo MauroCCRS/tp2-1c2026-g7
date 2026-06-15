@@ -104,7 +104,8 @@ class Jugador {
   + resultadoAlSerInvestigado() : Bando
   + actuarEnNoche(resolucion : ResolucionNocturna)
   ~ ejecutarAccionNocturna(resolucion : ResolucionNocturna)
-  + rolVistoPor(jugadorQuePregunta : Jugador) : Rol
+  + cartaVistaPor(jugadorQuePregunta : Jugador) : Carta
+  + descripcionDeCarta() : String
 }
 
 abstract class Estado {
@@ -118,9 +119,14 @@ together {
 
 abstract class Rol {
   + {abstract} bando() : Bando
+  + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
   + actuarEnNoche(resolucion : ResolucionNocturna)
-  + esVisible() : boolean
+}
+
+class Carta {
+  + revelar()
+  + descripcion() : String
 }
 
 interface Bando {
@@ -176,6 +182,7 @@ ResolucionNocturna o-- "0..*" Jugador
 Jugadores o-- "5..12" Jugador
 Jugador *-- Estado : estado
 Jugador *-- Rol : rol
+Jugador *-- Carta : carta
 Estado <|-- Vivo
 Estado <|-- Eliminado
 
