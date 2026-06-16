@@ -10,6 +10,7 @@ class Partida {
   - bandos : List<Bando>
   - faseActual : Fase
   + faseActual() : Fase
+  + registrarVotoMafia(objetivo : Jugador)
   + resolverFaseActual()
   + crearFaseNocturna(numeroRonda : int) : FaseNocturna
   + crearFaseDiurna(numeroRonda : int) : FaseDiurna
@@ -21,13 +22,14 @@ abstract class Fase {
   # numeroRonda : int
   + {abstract} resolver() : RegistroRonda
   + {abstract} siguiente(partida : Partida) : Fase
+  + registrarVotoMafia(objetivo : Jugador)
 }
 together {
   class FaseNocturna {
     - jugadores : Jugadores
     - votacionMafia : VotacionMafia
     - resolucion : ResolucionNocturna
-    + votarVictima(objetivo : Jugador)
+    + registrarVotoMafia(objetivo : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
   }
@@ -140,16 +142,23 @@ together {
   class BandoCiudadano
 }
 
-abstract class Configuracion {
-  + {abstract} armarRoles() : List<Rol>
-  # agregarMafiosos(roles : List<Rol>, cantidad : int)
-  # completarConCiudadanos(roles : List<Rol>, total : int)
+class Configuracion {
+  - mezclador : MezcladorDeRoles
+  - tramos : List<Tramo>
+  + armarRoles(cantidadJugadores : int) : List<Rol>
+  - tramoPara(cantidadJugadores : int) : Tramo
 }
-together {
-  class ConfiguracionChico
-  class ConfiguracionMediano
-  class ConfiguracionGrande
+class Tramo {
+  - minimo : int
+  - maximo : int
+  - cantidadMafiosos : int
+  - especialesFijos : List<Supplier<Rol>>
+  - especialesCandidatos : List<Supplier<Rol>>
+  - cantidadEspecialesAElegir : int
+  + contiene(cantidadJugadores : int) : boolean
+  + armarRoles(cantidadJugadores : int, mezclador : MezcladorDeRoles) : List<Rol>
 }
+class CantidadDeJugadoresInvalidaException
 
 class RepartidorRoles {
   + repartir(nombres : List<String>, roles : List<Rol>) : Jugadores
@@ -190,10 +199,10 @@ Rol ..> Bando
 Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 
-Configuracion <|-- ConfiguracionChico
-Configuracion <|-- ConfiguracionMediano
-Configuracion <|-- ConfiguracionGrande
-Configuracion ..> Rol
+Configuracion *-- "3" Tramo
+Configuracion --> MezcladorDeRoles : mezclador
+Configuracion ..> CantidadDeJugadoresInvalidaException
+Tramo ..> Rol
 
 RepartidorRoles --> MezcladorDeRoles : mezclador
 RepartidorRoles ..> Jugadores
