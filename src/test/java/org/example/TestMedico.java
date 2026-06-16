@@ -3,6 +3,7 @@ package org.example;
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class TestMedico {
 
@@ -18,5 +19,20 @@ public class TestMedico {
         resolucion.resolver();
 
         assertTrue(victima.estaVivo());
+    }
+
+    @Test
+    public void elMedicoNoPuedeProtegerAlMismoJugadorDosNochesSeguidas(){
+        Medico medico = new Medico();
+        Jugador jugadorVictima = new Jugador("Jugador victima", new Ciudadano());
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+
+        medico.elegirProteger(jugadorVictima);
+        medico.actuarEnNoche(resolucion);
+
+
+        assertThrows(VictimaInvalidaException.class, () -> {
+            medico.elegirProteger(jugadorVictima);
+        });
     }
 }
