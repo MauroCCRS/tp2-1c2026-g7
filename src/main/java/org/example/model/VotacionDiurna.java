@@ -20,7 +20,12 @@ public class VotacionDiurna {
     }
 
     public void nominar(Jugador jugador) {
-        this.nominados.add(jugador);
+        if (jugador.estaVivo()) {
+            this.nominados.add(jugador);
+        }
+        if (!jugador.estaVivo()) {
+            throw new NominadoInvalidoException("El nominado tiene que esta vivo.");
+        }
     }
 
     public void votar(Jugador votante, Jugador objetivo) {
