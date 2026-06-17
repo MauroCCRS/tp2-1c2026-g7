@@ -14,10 +14,10 @@ public class Medico extends Rol {
     public void elegirProteger(Jugador objetivo) {
 
         if (ultimoProtegido == objetivo) {
-            throw new ProtegidoInvalidoException("No se puede proteger al mismo jugador");
+            throw new ProteccionInvalidaException("No se puede proteger al mismo jugador");
         }
         if (!objetivo.estaVivo()) {
-            throw new ProtegidoInvalidoException("El objetivo debe ser un jugador vivo");
+            throw new ProteccionInvalidaException("El objetivo debe ser un jugador vivo");
         }
 
         this.objetivoAProteger = objetivo;

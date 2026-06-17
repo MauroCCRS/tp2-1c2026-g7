@@ -22,7 +22,7 @@ class TestVotacionMafia {
 
         VotacionMafia votacion = new VotacionMafia();
 
-        assertThrows(VictimaInvalidaException.class, () -> votacion.votar(mafioso));
+        assertThrows(VotacionInvalidaException.class, () -> votacion.votar(mafioso));
     }
 
     @Test
@@ -32,6 +32,6 @@ class TestVotacionMafia {
 
         VotacionMafia votacion = new VotacionMafia();
 
-        assertThrows(VictimaInvalidaException.class, () -> votacion.votar(eliminado));
+        assertThrows(VotacionInvalidaException.class, () -> votacion.votar(eliminado));
     }
 }
