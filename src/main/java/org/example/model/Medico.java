@@ -20,7 +20,6 @@ public class Medico extends Rol {
             throw new ProtegidoInvalidoException("El objetivo debe ser un jugador vivo");
         }
 
-        this.objetivoProtegido = this.objetivoAProteger;
         this.objetivoAProteger = objetivo;
     }
 

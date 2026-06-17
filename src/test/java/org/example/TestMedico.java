@@ -23,7 +23,7 @@ public class TestMedico {
 
     @Test
 
-    public void elMedicoNoPuedeProtegerAlMismoJugadorDosNochesSeguidas(){
+    public void elMedicoNoPuedeProtegerAlMismoJugadorDosNochesSeguidas() {
         Medico medico = new Medico();
         Jugador jugadorVictima = new Jugador("Jugador victima", new Ciudadano());
         ResolucionNocturna resolucion = new ResolucionNocturna();
@@ -35,12 +35,15 @@ public class TestMedico {
         assertThrows(ProtegidoInvalidoException.class, () -> {
             medico.elegirProteger(jugadorVictima);
         });
+    }
 
 
     @Test
     public void noPuedeProtegerAUnJugadorNoVivo() {
         Jugador protegido = new Jugador("Ana", new Ciudadano());
+
         Medico medico = new Medico();
+
         protegido.eliminar();
 
         assertThrows(ProtegidoInvalidoException.class, () -> medico.elegirProteger(protegido));
