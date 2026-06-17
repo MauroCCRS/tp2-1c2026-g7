@@ -12,7 +12,7 @@ public class RepartidorRoles {
 
     public Jugadores repartir(List<String> nombres, List<Rol> roles) {
         if (nombres.size() != roles.size()) {
-            throw new IllegalArgumentException("Debe haber exactamente un rol por jugador");
+            throw new RepartoRolesInvalidoException("Debe haber exactamente un rol por jugador");
         }
         mezclador.mezclar(roles);
         Jugadores jugadores = new Jugadores();

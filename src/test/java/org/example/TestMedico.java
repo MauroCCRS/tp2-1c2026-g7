@@ -3,7 +3,6 @@ package org.example;
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 public class TestMedico {
 
@@ -32,7 +31,7 @@ public class TestMedico {
         medico.actuarEnNoche(resolucion);
 
 
-        assertThrows(ProtegidoInvalidoException.class, () -> {
+        assertThrows(ProteccionInvalidaException.class, () -> {
             medico.elegirProteger(jugadorVictima);
         });
     }
@@ -46,6 +45,6 @@ public class TestMedico {
 
         protegido.eliminar();
 
-        assertThrows(ProtegidoInvalidoException.class, () -> medico.elegirProteger(protegido));
+        assertThrows(ProteccionInvalidaException.class, () -> medico.elegirProteger(protegido));
     }
 }

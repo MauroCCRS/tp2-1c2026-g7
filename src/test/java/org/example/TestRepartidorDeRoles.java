@@ -45,7 +45,7 @@ class TestRepartidorDeRoles {
         List<String> nombres = Arrays.asList("Ana", "Beto");
         List<Rol> roles = List.of(new Ciudadano());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(RepartoRolesInvalidoException.class,
                 () -> repartidor.repartir(nombres, roles));
     }
 }

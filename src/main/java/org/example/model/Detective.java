@@ -12,7 +12,7 @@ public class Detective extends Rol {
 
     public void elegirInvestigar(Jugador objetivo) {
         if (objetivo == ultimoInvestigado) {
-            throw new VictimaInvalidaException("No puede investigar al mismo jugador dos noches seguidas");
+            throw new InvestigacionInvalidaException("No puede investigar al mismo jugador dos noches seguidas");
         }
         this.objetivoAInvestigar = objetivo;
     }
@@ -26,7 +26,7 @@ public class Detective extends Rol {
     public Bando resultadoInvestigacion() {
         return resultadoInvestigacion;
     }
-    
+
     @Override
     public String nombre() {
         return "Detective";

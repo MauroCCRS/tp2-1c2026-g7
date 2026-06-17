@@ -3,8 +3,6 @@ package org.example;
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 public class TestDetective {
@@ -52,7 +50,7 @@ public class TestDetective {
         detective.elegirInvestigar(jugadorInvestigado);
         detective.actuarEnNoche(resolucion);
 
-        assertThrows(VictimaInvalidaException.class, () -> {
+        assertThrows(InvestigacionInvalidaException.class, () -> {
             detective.elegirInvestigar(jugadorInvestigado);
         });
     }
@@ -63,14 +61,13 @@ public class TestDetective {
         Detective detective = new Detective();
         ResolucionNocturna resolucion = new ResolucionNocturna();
 
-        Jugador jugadorEliminadoMock = mock(Jugador.class);
-        when(jugadorEliminadoMock.estaVivo()).thenReturn(false);
+        Jugador jugadorEliminado = new Jugador("Jugador eliminado", new Ciudadano());
+        jugadorEliminado.eliminar();
 
-        detective.elegirInvestigar(jugadorEliminadoMock);
-        detective.actuarEnNoche(resolucion);
+        detective.elegirInvestigar(jugadorEliminado);
 
-        assertThrows(VictimaInvalidaException.class, () -> {
-            detective.elegirInvestigar(jugadorEliminadoMock);
+        assertThrows(InvestigacionInvalidaException.class, () -> {
+            detective.actuarEnNoche(resolucion);
         });
 
     }
