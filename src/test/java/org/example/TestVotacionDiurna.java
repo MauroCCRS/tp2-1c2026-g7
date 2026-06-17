@@ -4,8 +4,15 @@ import org.example.model.*;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
+<<<<<<< HEAD
 
 import static org.junit.jupiter.api.Assertions.*;
+=======
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+>>>>>>> origin/master
 
 public class TestVotacionDiurna {
 
@@ -94,10 +101,11 @@ public class TestVotacionDiurna {
 
         assertFalse(votacion.resolver().isPresent());
     }
+
     @Test
     public void resolverSoloConJugadoresVivos() {
         Jugador ana = ciudadano("Ana");
-        Jugador beto = ciudadano("Beto");
+
         VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
         ana.eliminar();
@@ -106,5 +114,4 @@ public class TestVotacionDiurna {
             votacion.votar(ana, beto);
         });
 
-    }
 }

@@ -20,6 +20,10 @@ public class Partida {
         return faseActual;
     }
 
+    public void registrarVotoMafia(Jugador objetivo) {
+        faseActual.registrarVotoMafia(objetivo);
+    }
+
     public void resolverFaseActual() {
         registro.agregarRegistro(faseActual.resolver());
         this.faseActual = faseActual.siguiente(this);

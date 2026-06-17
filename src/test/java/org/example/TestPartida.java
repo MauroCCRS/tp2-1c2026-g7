@@ -37,7 +37,7 @@ public class TestPartida {
         jugadores.agregar(ciudadano("C3"));
 
         Partida partida = new Partida(jugadores);
-        ((FaseNocturna) partida.faseActual()).votarVictima(c1);
+        partida.registrarVotoMafia(c1);
         partida.resolverFaseActual();
 
         assertTrue(partida.faseActual() instanceof FaseDiurna);
@@ -66,7 +66,7 @@ public class TestPartida {
         jugadores.agregar(c2);
 
         Partida partida = new Partida(jugadores);
-        ((FaseNocturna) partida.faseActual()).votarVictima(c1);
+        partida.registrarVotoMafia(c1);
         partida.resolverFaseActual();
 
         assertTrue(partida.resultado().isPresent());
@@ -83,7 +83,7 @@ public class TestPartida {
         jugadores.agregar(ciudadano("C3"));
 
         Partida partida = new Partida(jugadores);
-        ((FaseNocturna) partida.faseActual()).votarVictima(victima);
+        partida.registrarVotoMafia(victima);
         partida.resolverFaseActual();
 
         assertTrue(partida.resumen().contains("Ana"));

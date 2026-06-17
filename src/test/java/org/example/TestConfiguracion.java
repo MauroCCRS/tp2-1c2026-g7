@@ -7,37 +7,70 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestConfiguracion {
 
+    private final MezcladorDeRoles sinMezclar = roles -> {};
+
     private long contarDelBando(List<Rol> roles, Bando bando) {
         return roles.stream().filter(rol -> rol.bando().esMismoBando(bando)).count();
     }
 
-    @Test
-    void configuracionChicoTieneBalanceDeBandosCorrecto() {
-        List<Rol> roles = new ConfiguracionChico().armarRoles();
-        long mafia = contarDelBando(roles, new BandoMafia());
-
-        assertTrue(roles.size() == 5 || roles.size() == 6);
-        assertTrue(mafia >= 1 && mafia <= 2);
-        assertEquals(roles.size(), mafia + contarDelBando(roles, new BandoCiudadano()));
+    private long contarEspecie(List<Rol> roles, String nombre) {
+        return roles.stream().filter(rol -> rol.nombre().equals(nombre)).count();
     }
 
     @Test
-    void configuracionMedianoTieneBalanceDeBandosCorrecto() {
-        List<Rol> roles = new ConfiguracionMediano().armarRoles();
-        long mafia = contarDelBando(roles, new BandoMafia());
+    void partidaChicaDeCincoTieneUnMafiosoUnEspecialYTresCiudadanos() {
+        List<Rol> roles = new Configuracion(sinMezclar).armarRoles(5);
 
-        assertTrue(roles.size() >= 7 && roles.size() <= 9);
-        assertTrue(mafia >= 2 && mafia <= 3);
-        assertEquals(roles.size(), mafia + contarDelBando(roles, new BandoCiudadano()));
+        assertEquals(5, roles.size());
+        assertEquals(1, contarDelBando(roles, new BandoMafia()));
+        assertEquals(3, contarEspecie(roles, "Ciudadano"));
     }
 
     @Test
-    void configuracionGrandeTieneTresDeBandoMafia() {
-        List<Rol> roles = new ConfiguracionGrande().armarRoles();
-        long mafia = contarDelBando(roles, new BandoMafia());
+    void partidaChicaDeSeisTieneUnMafiosoUnEspecialYCuatroCiudadanos() {
+        List<Rol> roles = new Configuracion(sinMezclar).armarRoles(6);
 
-        assertTrue(roles.size() >= 10 && roles.size() <= 12);
-        assertEquals(3, mafia);
-        assertEquals(roles.size(), mafia + contarDelBando(roles, new BandoCiudadano()));
+        assertEquals(6, roles.size());
+        assertEquals(1, contarDelBando(roles, new BandoMafia()));
+        assertEquals(1, contarEspecie(roles, "Detective"));
+        assertEquals(4, contarEspecie(roles, "Ciudadano"));
+    }
+
+    @Test
+    void partidaMedianaDeOchoTieneDosMafiososDetectiveYMedico() {
+        List<Rol> roles = new Configuracion(sinMezclar).armarRoles(8);
+
+        assertEquals(8, roles.size());
+        assertEquals(2, contarDelBando(roles, new BandoMafia()));
+        assertEquals(1, contarEspecie(roles, "Detective"));
+        assertEquals(1, contarEspecie(roles, "Medico"));
+    }
+
+    @Test
+    void partidaGrandeDeDoceTieneTodosLosRolesEspecialesIncluidoPadrino() {
+        List<Rol> roles = new Configuracion(sinMezclar).armarRoles(12);
+
+        assertEquals(12, roles.size());
+        assertEquals(3, contarDelBando(roles, new BandoMafia()));
+        assertEquals(1, contarEspecie(roles, "Detective"));
+        assertEquals(1, contarEspecie(roles, "Medico"));
+        assertEquals(1, contarEspecie(roles, "Sheriff"));
+        assertEquals(1, contarEspecie(roles, "Padrino"));
+    }
+
+    @Test
+    void elRolEspecialDePartidaChicaDependeDelMezclador() {
+        MezcladorDeRoles ponerMedicoPrimero = roles ->
+                roles.sort((a, b) -> a.nombre().equals("Medico") ? -1 : 1);
+        List<Rol> roles = new Configuracion(ponerMedicoPrimero).armarRoles(6);
+
+        assertEquals(1, contarEspecie(roles, "Medico"));
+        assertEquals(0, contarEspecie(roles, "Detective"));
+    }
+
+    @Test
+    void unaCantidadFueraDeRangoEsRechazada() {
+        assertThrows(CantidadDeJugadoresInvalidaException.class,
+                () -> new Configuracion(sinMezclar).armarRoles(4));
     }
 }

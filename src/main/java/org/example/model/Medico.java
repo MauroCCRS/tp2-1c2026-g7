@@ -1,8 +1,10 @@
 package org.example.model;
 
 public class Medico extends Rol {
+
     private Jugador objetivoAProteger;
     private Jugador ultimoProtegido;
+
 
     @Override
     public Bando bando() {
@@ -10,9 +12,15 @@ public class Medico extends Rol {
     }
 
     public void elegirProteger(Jugador objetivo) {
-        if (objetivo == ultimoProtegido) {
-            throw new VictimaInvalidaException("No puede proteger al mismo jugador dos noches seguidas");
+
+        if (ultimoProtegido == objetivo) {
+            throw new ProtegidoInvalidoException("No se puede proteger al mismo jugador");
         }
+        if (!objetivo.estaVivo()) {
+            throw new ProtegidoInvalidoException("El objetivo debe ser un jugador vivo");
+        }
+
+        this.objetivoProtegido = this.objetivoAProteger;
         this.objetivoAProteger = objetivo;
     }
 
@@ -21,5 +29,10 @@ public class Medico extends Rol {
 
         resolucion.registrarProteccion(objetivoAProteger);
         this.ultimoProtegido = objetivoAProteger;
+    }
+    
+    @Override
+    public String nombre() {
+        return "Medico";
     }
 }

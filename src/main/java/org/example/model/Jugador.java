@@ -1,19 +1,23 @@
 package org.example.model;
-
 public class Jugador {
-
     private final String nombre;
     private final Rol rol;
+    private final Carta carta;
     private Estado estado;
 
     public Jugador(String nombre, Rol rol) {
         this.nombre = nombre;
         this.rol = rol;
+        this.carta = new Carta(rol);
         this.estado = new Vivo();
     }
 
     public String nombre() {
         return nombre;
+    }
+
+    public String descripcionDeCarta() {
+        return carta.descripcion();
     }
 
     public boolean estaVivo() {
@@ -22,6 +26,7 @@ public class Jugador {
 
     public void eliminar() {
         this.estado = new Eliminado();
+        this.carta.revelar();
     }
 
     public Bando bando() {
@@ -44,11 +49,13 @@ public class Jugador {
         rol.actuarEnNoche(resolucion);
     }
 
-    public Rol rolVistoPor(Jugador jugadorQuePregunta) {
+    public Carta cartaVistaPor(Jugador jugadorQuePregunta) {
         if (this == jugadorQuePregunta) {
-            return rol;
+            Carta propia = new Carta(rol);
+            propia.revelar();
+            return propia;
         }
-        return new RolOculto();
+        return carta;
     }
 
     public boolean perteneceA(Bando otroBando) {

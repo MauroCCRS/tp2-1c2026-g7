@@ -16,7 +16,7 @@ public class TestFaseNocturna {
         jugadores.agregar(victima);
 
         FaseNocturna fase = new FaseNocturna(1, jugadores);
-        fase.votarVictima(victima);
+        fase.registrarVotoMafia(victima);
 
         RegistroRonda registro = fase.resolver();
 
@@ -36,7 +36,7 @@ public class TestFaseNocturna {
         jugadores.agregar(medico);
 
         FaseNocturna fase = new FaseNocturna(1, jugadores);
-        fase.votarVictima(victima);
+        fase.registrarVotoMafia(victima);
         medicoRol.elegirProteger(victima);
 
         RegistroRonda registro = fase.resolver();
@@ -57,7 +57,7 @@ public class TestFaseNocturna {
         jugadores.agregar(detective);
 
         FaseNocturna fase = new FaseNocturna(1, jugadores);
-        fase.votarVictima(victima);
+        fase.registrarVotoMafia(victima);
         detectiveRol.elegirInvestigar(mafioso);
 
         fase.resolver();

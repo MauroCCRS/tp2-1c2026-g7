@@ -11,4 +11,7 @@ public abstract class Fase {
     public abstract RegistroRonda resolver();
 
     public abstract Fase siguiente(Partida partida);
+
+    public void registrarVotoMafia(Jugador objetivo) {
+    }
 }
