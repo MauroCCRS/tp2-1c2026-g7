@@ -8,6 +8,8 @@ abstract class Rol {
   + {abstract} bando() : Bando
   + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
 }
 
@@ -26,6 +28,7 @@ together {
   }
   class Detective {
     - objetivoAInvestigar : Jugador
+    - ultimoInvestigado : Jugador
     - resultadoInvestigacion : Bando
     + bando() : Bando
     + nombre() : String
@@ -35,6 +38,7 @@ together {
   }
   class Medico {
     - objetivoAProteger : Jugador
+    - ultimoProtegido : Jugador
     + bando() : Bando
     + nombre() : String
     + elegirProteger(objetivo : Jugador)
@@ -91,5 +95,6 @@ Bando <|.. BandoCiudadano
 
 Rol ..> Bando
 Rol ..> ResolucionNocturna
+Rol ..> Jugador
 Detective ..> Jugador
 @enduml

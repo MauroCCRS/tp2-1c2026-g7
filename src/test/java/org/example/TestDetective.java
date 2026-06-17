@@ -4,7 +4,6 @@ import org.example.model.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class TestDetective {
 
     @Test
@@ -28,7 +27,7 @@ public class TestDetective {
     }
 
     @Test
-    public void elDetectiveRecibeCiudadanoAlInvestigarAlPadrino(){
+    public void elDetectiveRecibeCiudadanoAlInvestigarAlPadrino() {
         Detective detective = new Detective();
 
         Jugador padrino = new Jugador("Padrino", new Padrino());
@@ -42,7 +41,7 @@ public class TestDetective {
     }
 
     @Test
-    public void elDetectiveNoPuedeInvestigarAlMismoJugadorDosNochesSeguidas(){
+    public void elDetectiveNoPuedeInvestigarAlMismoJugadorDosNochesSeguidas() {
         Detective detective = new Detective();
         Jugador jugadorInvestigado = new Jugador("Jugador investigado", new Ciudadano());
         ResolucionNocturna resolucion = new ResolucionNocturna();
@@ -56,18 +55,15 @@ public class TestDetective {
     }
 
     @Test
-    public void alInvestigarUnJugadorEliminadoDaError(){
+    public void alInvestigarUnJugadorEliminadoDaError() {
 
         Detective detective = new Detective();
-        ResolucionNocturna resolucion = new ResolucionNocturna();
 
         Jugador jugadorEliminado = new Jugador("Jugador eliminado", new Ciudadano());
         jugadorEliminado.eliminar();
 
-        detective.elegirInvestigar(jugadorEliminado);
-
         assertThrows(InvestigacionInvalidaException.class, () -> {
-            detective.actuarEnNoche(resolucion);
+            detective.elegirInvestigar(jugadorEliminado);
         });
 
     }

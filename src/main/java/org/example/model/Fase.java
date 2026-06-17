@@ -12,6 +12,23 @@ public abstract class Fase {
 
     public abstract Fase siguiente(Partida partida);
 
-    public void registrarVotoMafia(Jugador objetivo) {
+    void registrarVotoMafia(Jugador objetivo) {
+        throw new VotacionInvalidaException("La mafia solo puede votar durante la fase nocturna");
+    }
+
+    void nominar(Jugador jugador) {
+        throw new NominacionInvalidaException("Solo se puede nominar durante la fase diurna");
+    }
+
+    void votar(Jugador votante, Jugador objetivo) {
+        throw new VotacionInvalidaException("Solo se puede votar durante la fase diurna");
+    }
+
+    void elegirInvestigar(Jugador detective, Jugador objetivo) {
+        throw new InvestigacionInvalidaException("Solo se puede investigar durante la fase nocturna");
+    }
+
+    void elegirProteger(Jugador medico, Jugador objetivo) {
+        throw new ProteccionInvalidaException("Solo se puede proteger durante la fase nocturna");
     }
 }

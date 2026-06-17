@@ -11,6 +11,10 @@ class Partida {
   - faseActual : Fase
   + faseActual() : Fase
   + registrarVotoMafia(objetivo : Jugador)
+  + elegirInvestigar(detective : Jugador, objetivo : Jugador)
+  + elegirProteger(medico : Jugador, objetivo : Jugador)
+  + nominar(j : Jugador)
+  + votar(votante : Jugador, objetivo : Jugador)
   + resolverFaseActual()
   + crearFaseNocturna(numeroRonda : int) : FaseNocturna
   + crearFaseDiurna(numeroRonda : int) : FaseDiurna
@@ -22,21 +26,27 @@ abstract class Fase {
   # numeroRonda : int
   + {abstract} resolver() : RegistroRonda
   + {abstract} siguiente(partida : Partida) : Fase
-  + registrarVotoMafia(objetivo : Jugador)
+  ~ registrarVotoMafia(objetivo : Jugador)
+  ~ nominar(j : Jugador)
+  ~ votar(votante : Jugador, objetivo : Jugador)
+  ~ elegirInvestigar(detective : Jugador, objetivo : Jugador)
+  ~ elegirProteger(medico : Jugador, objetivo : Jugador)
 }
 together {
   class FaseNocturna {
     - jugadores : Jugadores
     - votacionMafia : VotacionMafia
     - resolucion : ResolucionNocturna
-    + registrarVotoMafia(objetivo : Jugador)
+    ~ registrarVotoMafia(objetivo : Jugador)
+    ~ elegirInvestigar(detective : Jugador, objetivo : Jugador)
+    ~ elegirProteger(medico : Jugador, objetivo : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
   }
   class FaseDiurna {
     - votacion : VotacionDiurna
-    + nominar(j : Jugador)
-    + votar(votante : Jugador, objetivo : Jugador)
+    ~ nominar(j : Jugador)
+    ~ votar(votante : Jugador, objetivo : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
   }
@@ -104,6 +114,8 @@ class Jugador {
   + perteneceA(otroBando : Bando) : boolean
   + esMafioso() : boolean
   + resultadoAlSerInvestigado() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
   ~ ejecutarAccionNocturna(resolucion : ResolucionNocturna)
   + cartaVistaPor(jugadorQuePregunta : Jugador) : Carta
@@ -123,6 +135,8 @@ abstract class Rol {
   + {abstract} bando() : Bando
   + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
 }
 
@@ -176,6 +190,7 @@ Fase <|-- FaseNocturna
 Fase <|-- FaseDiurna
 FaseNocturna *-- ResolucionNocturna
 FaseNocturna *-- VotacionMafia
+FaseNocturna ..> Jugador
 FaseDiurna *-- VotacionDiurna
 
 RegistroPartida *-- "0..*" RegistroRonda

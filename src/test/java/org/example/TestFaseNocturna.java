@@ -15,52 +15,48 @@ public class TestFaseNocturna {
         jugadores.agregar(mafioso);
         jugadores.agregar(victima);
 
-        FaseNocturna fase = new FaseNocturna(1, jugadores);
-        fase.registrarVotoMafia(victima);
-
-        RegistroRonda registro = fase.resolver();
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(victima);
+        partida.resolverFaseActual();
 
         assertFalse(victima.estaVivo());
-        assertTrue(registro.describir().contains("Ana"));
+        assertTrue(partida.resumen().contains("Ana"));
     }
 
     @Test
     public void siElMedicoProtegeALaVictimaNadieMuere() {
         Jugador mafioso = new Jugador("M1", new Mafioso());
         Jugador victima = new Jugador("Ana", new Ciudadano());
-        Medico medicoRol = new Medico();
-        Jugador medico = new Jugador("Doc", medicoRol);
+        Jugador medico = new Jugador("Doc", new Medico());
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victima);
         jugadores.agregar(medico);
 
-        FaseNocturna fase = new FaseNocturna(1, jugadores);
-        fase.registrarVotoMafia(victima);
-        medicoRol.elegirProteger(victima);
-
-        RegistroRonda registro = fase.resolver();
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(victima);
+        partida.elegirProteger(medico, victima);
+        partida.resolverFaseActual();
 
         assertTrue(victima.estaVivo());
-        assertTrue(registro.describir().toLowerCase().contains("nadie"));
+        assertTrue(partida.resumen().toLowerCase().contains("nadie"));
     }
 
     @Test
     public void elDetectiveInvestigaDuranteLaNocheYRecibeElBandoReal() {
+        Detective detectiveRol = new Detective();
         Jugador mafioso = new Jugador("M1", new Mafioso());
         Jugador victima = new Jugador("Ana", new Ciudadano());
-        Detective detectiveRol = new Detective();
         Jugador detective = new Jugador("Sherlock", detectiveRol);
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victima);
         jugadores.agregar(detective);
 
-        FaseNocturna fase = new FaseNocturna(1, jugadores);
-        fase.registrarVotoMafia(victima);
-        detectiveRol.elegirInvestigar(mafioso);
-
-        fase.resolver();
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(victima);
+        partida.elegirInvestigar(detective, mafioso);
+        partida.resolverFaseActual();
 
         assertTrue(detectiveRol.resultadoInvestigacion().esMismoBando(new BandoMafia()));
     }
