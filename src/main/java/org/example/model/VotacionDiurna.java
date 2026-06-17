@@ -29,6 +29,10 @@ public class VotacionDiurna {
     }
 
     public void votar(Jugador votante, Jugador objetivo) {
+        if(!votante.estaVivo()){
+            throw new VotacionInvalidaException("El votante debe ser un jugador vivo");
+        }
+
         this.votos.put(votante, objetivo);
     }
 

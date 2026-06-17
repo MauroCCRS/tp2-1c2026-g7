@@ -2,10 +2,13 @@ package org.example.model;
 
 public class VotacionMafia {
 
+
     private Jugador victimaElegida;
 
+
+
     public void votar(Jugador objetivo) {
-        if (!objetivo.estaVivo()) {
+        if (!objetivo.estaVivo()){
             throw new VictimaInvalidaException("La victima debe ser un jugador vivo");
         }
         if (objetivo.esMafioso()) {

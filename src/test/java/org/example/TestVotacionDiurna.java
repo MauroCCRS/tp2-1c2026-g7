@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
 public class TestVotacionDiurna {
 
     private Jugador ciudadano(String nombre) {
@@ -98,11 +99,16 @@ public class TestVotacionDiurna {
     }
 
     @Test
-    public void noPuedeNominarAlJugadorNoVivo() {
-        Jugador nominado = ciudadano("Ana");
-        nominado.eliminar();
+    public void resolverSoloConJugadoresVivos() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+
         VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
-        assertThrows(NominadoInvalidoException.class, () -> votacion.nominar(nominado));
+        ana.eliminar();
+
+        assertThrows(VotacionInvalidaException.class, () -> {
+            votacion.votar(ana, beto);
+        });
     }
 }
