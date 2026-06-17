@@ -11,8 +11,19 @@ public class FaseNocturna extends Fase {
         this.jugadores = jugadores;
     }
 
-    public void votarVictima(Jugador objetivo) {
+    @Override
+    void registrarVotoMafia(Jugador objetivo) {
         this.votacionMafia.votar(objetivo);
+    }
+
+    @Override
+    void elegirInvestigar(Jugador detective, Jugador objetivo) {
+        detective.elegirInvestigar(objetivo);
+    }
+
+    @Override
+    void elegirProteger(Jugador medico, Jugador objetivo) {
+        medico.elegirProteger(objetivo);
     }
 
     @Override

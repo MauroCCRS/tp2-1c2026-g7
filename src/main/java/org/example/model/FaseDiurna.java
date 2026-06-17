@@ -8,11 +8,13 @@ public class FaseDiurna extends Fase {
         super(numeroRonda);
     }
 
-    public void nominar(Jugador jugador) {
+    @Override
+    void nominar(Jugador jugador) {
         this.votacion.nominar(jugador);
     }
 
-    public void votar(Jugador votante, Jugador objetivo) {
+    @Override
+    void votar(Jugador votante, Jugador objetivo) {
         this.votacion.votar(votante, objetivo);
     }
 

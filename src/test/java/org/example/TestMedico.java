@@ -21,20 +21,30 @@ public class TestMedico {
     }
 
     @Test
-    public void noPuedeProtegerAlMismoJugador() {
-        Jugador protegido = new Jugador("Ana", new Ciudadano());
-        Medico medico = new Medico();
-        medico.elegirProteger(protegido);
 
-        assertThrows(ProtegidoInvalidoException.class, () -> medico.elegirProteger(protegido));
+    public void elMedicoNoPuedeProtegerAlMismoJugadorDosNochesSeguidas() {
+        Medico medico = new Medico();
+        Jugador jugadorVictima = new Jugador("Jugador victima", new Ciudadano());
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+
+        medico.elegirProteger(jugadorVictima);
+        medico.actuarEnNoche(resolucion);
+
+
+        assertThrows(ProteccionInvalidaException.class, () -> {
+            medico.elegirProteger(jugadorVictima);
+        });
     }
+
 
     @Test
     public void noPuedeProtegerAUnJugadorNoVivo() {
         Jugador protegido = new Jugador("Ana", new Ciudadano());
+
         Medico medico = new Medico();
+
         protegido.eliminar();
 
-        assertThrows(ProtegidoInvalidoException.class, () -> medico.elegirProteger(protegido));
+        assertThrows(ProteccionInvalidaException.class, () -> medico.elegirProteger(protegido));
     }
 }

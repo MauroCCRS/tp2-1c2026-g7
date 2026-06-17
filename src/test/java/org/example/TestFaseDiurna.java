@@ -13,47 +13,78 @@ public class TestFaseDiurna {
 
     @Test
     public void elMasVotadoEsEliminadoYQuedaRegistrado() {
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador descartable = ciudadano("Dummy");
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
         Jugador caro = ciudadano("Caro");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(descartable);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
+        jugadores.agregar(caro);
 
-        FaseDiurna fase = new FaseDiurna(1);
-        fase.nominar(ana);
-        fase.nominar(beto);
-        fase.votar(ana, beto);
-        fase.votar(caro, beto);
-        fase.votar(beto, ana);
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(descartable);
+        partida.resolverFaseActual();
 
-        RegistroRonda registro = fase.resolver();
+        partida.nominar(ana);
+        partida.nominar(beto);
+        partida.votar(ana, beto);
+        partida.votar(caro, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
 
         assertFalse(beto.estaVivo());
-        assertTrue(registro.describir().contains("Beto"));
+        assertTrue(partida.resumen().contains("Beto"));
     }
 
     @Test
     public void enEmpateConSinEliminacionNoMuereNadie() {
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador descartable = ciudadano("Dummy");
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(descartable);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
 
-        FaseDiurna fase = new FaseDiurna(1);
-        fase.nominar(ana);
-        fase.nominar(beto);
-        fase.votar(ana, beto);
-        fase.votar(beto, ana);
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(descartable);
+        partida.resolverFaseActual();
 
-        RegistroRonda registro = fase.resolver();
+        partida.nominar(ana);
+        partida.nominar(beto);
+        partida.votar(ana, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
 
         assertTrue(ana.estaVivo());
         assertTrue(beto.estaVivo());
-        assertTrue(registro.describir().toLowerCase().contains("nadie"));
+        assertTrue(partida.resumen().toLowerCase().contains("nadie"));
     }
 
     @Test
     public void sinVotosNoMuereNadie() {
-        FaseDiurna fase = new FaseDiurna(1);
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador descartable = ciudadano("Dummy");
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(descartable);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
 
-        RegistroRonda registro = fase.resolver();
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(descartable);
+        partida.resolverFaseActual();
 
-        assertTrue(registro.describir().toLowerCase().contains("nadie"));
+        partida.resolverFaseActual();
+
+        assertTrue(partida.resumen().toLowerCase().contains("nadie"));
     }
 }

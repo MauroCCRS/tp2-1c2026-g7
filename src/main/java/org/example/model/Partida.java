@@ -20,6 +20,26 @@ public class Partida {
         return faseActual;
     }
 
+    public void registrarVotoMafia(Jugador objetivo) {
+        faseActual.registrarVotoMafia(objetivo);
+    }
+
+    public void elegirInvestigar(Jugador detective, Jugador objetivo) {
+        faseActual.elegirInvestigar(detective, objetivo);
+    }
+
+    public void elegirProteger(Jugador medico, Jugador objetivo) {
+        faseActual.elegirProteger(medico, objetivo);
+    }
+
+    public void nominar(Jugador jugador) {
+        faseActual.nominar(jugador);
+    }
+
+    public void votar(Jugador votante, Jugador objetivo) {
+        faseActual.votar(votante, objetivo);
+    }
+
     public void resolverFaseActual() {
         registro.agregarRegistro(faseActual.resolver());
         this.faseActual = faseActual.siguiente(this);

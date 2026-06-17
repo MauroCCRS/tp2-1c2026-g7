@@ -1,26 +1,34 @@
 package org.example.model;
 
 public class Medico extends Rol {
+
     private Jugador objetivoAProteger;
-    private Jugador objetivoProtegido;
+    private Jugador ultimoProtegido;
+
     @Override
     public Bando bando() {
         return new BandoCiudadano();
     }
 
+    @Override
     public void elegirProteger(Jugador objetivo) {
-        if (objetivoAProteger == objetivo) {
-            throw new ProtegidoInvalidoException("No se puede proteger al mismo jugador");
+        if (ultimoProtegido == objetivo) {
+            throw new ProteccionInvalidaException("No se puede proteger al mismo jugador");
         }
         if (!objetivo.estaVivo()) {
-            throw new ProtegidoInvalidoException("El objetivo debe ser un jugador vivo");
+            throw new ProteccionInvalidaException("El objetivo debe ser un jugador vivo");
         }
-        this.objetivoProtegido = this.objetivoAProteger;
         this.objetivoAProteger = objetivo;
     }
 
     @Override
     public void actuarEnNoche(ResolucionNocturna resolucion) {
         resolucion.registrarProteccion(objetivoAProteger);
+        this.ultimoProtegido = objetivoAProteger;
+    }
+
+    @Override
+    public String nombre() {
+        return "Medico";
     }
 }

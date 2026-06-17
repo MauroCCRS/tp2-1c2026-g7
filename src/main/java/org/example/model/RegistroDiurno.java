@@ -10,6 +10,7 @@ public class RegistroDiurno extends RegistroRonda {
 
     @Override
     public String describir() {
-        return "Ronda " + numeroRonda + " (Dia): " + eliminado.nombre() + " fue eliminado por votacion.";
+        return "Ronda " + numeroRonda + " (Dia): " + eliminado.nombre()
+                + " fue eliminado por votacion. Era " + eliminado.descripcionDeCarta() + ".";
     }
 }

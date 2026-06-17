@@ -6,35 +6,62 @@ skinparam ranksep 65
 
 abstract class Rol {
   + {abstract} bando() : Bando
+  + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
-  + esVisible() : boolean
 }
 
 together {
   class Mafioso {
     + bando() : Bando
+    + nombre() : String
   }
   class Ciudadano {
     + bando() : Bando
+    + nombre() : String
+  }
+  class Padrino {
+    + resultadoAlSerInvestigado() : Bando
+    + nombre() : String
   }
   class Detective {
     - objetivoAInvestigar : Jugador
+    - ultimoInvestigado : Jugador
     - resultadoInvestigacion : Bando
     + bando() : Bando
+    + nombre() : String
     + elegirInvestigar(objetivo : Jugador)
     + actuarEnNoche(resolucion : ResolucionNocturna)
     + resultadoInvestigacion() : Bando
   }
   class Medico {
     - objetivoAProteger : Jugador
+    - ultimoProtegido : Jugador
     + bando() : Bando
+    + nombre() : String
     + elegirProteger(objetivo : Jugador)
     + actuarEnNoche(resolucion : ResolucionNocturna)
   }
-  class RolOculto {
-    + esVisible() : boolean
+  class Sheriff {
+    + bando() : Bando
+    + nombre() : String
   }
+}
+
+class Carta {
+  - rol : Rol
+  - estado : EstadoCarta
+  + revelar()
+  + descripcion() : String
+}
+interface EstadoCarta {
+  + describir(rol : Rol) : String
+}
+together {
+  class Oculta
+  class Revelada
 }
 
 interface Bando {
@@ -53,14 +80,21 @@ class Jugador
 
 Rol <|-- Mafioso
 Rol <|-- Ciudadano
+Mafioso <|-- Padrino
 Rol <|-- Detective
 Rol <|-- Medico
-Rol <|-- RolOculto
+Rol <|-- Sheriff
+
+Carta o-- Rol
+Carta --> EstadoCarta : estado
+EstadoCarta <|.. Oculta
+EstadoCarta <|.. Revelada
 
 Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 
 Rol ..> Bando
 Rol ..> ResolucionNocturna
+Rol ..> Jugador
 Detective ..> Jugador
 @enduml

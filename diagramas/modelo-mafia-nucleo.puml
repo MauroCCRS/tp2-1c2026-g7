@@ -10,6 +10,11 @@ class Partida {
   - bandos : List<Bando>
   - faseActual : Fase
   + faseActual() : Fase
+  + registrarVotoMafia(objetivo : Jugador)
+  + elegirInvestigar(detective : Jugador, objetivo : Jugador)
+  + elegirProteger(medico : Jugador, objetivo : Jugador)
+  + nominar(j : Jugador)
+  + votar(votante : Jugador, objetivo : Jugador)
   + resolverFaseActual()
   + crearFaseNocturna(numeroRonda : int) : FaseNocturna
   + crearFaseDiurna(numeroRonda : int) : FaseDiurna
@@ -21,20 +26,27 @@ abstract class Fase {
   # numeroRonda : int
   + {abstract} resolver() : RegistroRonda
   + {abstract} siguiente(partida : Partida) : Fase
+  ~ registrarVotoMafia(objetivo : Jugador)
+  ~ nominar(j : Jugador)
+  ~ votar(votante : Jugador, objetivo : Jugador)
+  ~ elegirInvestigar(detective : Jugador, objetivo : Jugador)
+  ~ elegirProteger(medico : Jugador, objetivo : Jugador)
 }
 together {
   class FaseNocturna {
     - jugadores : Jugadores
     - votacionMafia : VotacionMafia
     - resolucion : ResolucionNocturna
-    + votarVictima(objetivo : Jugador)
+    ~ registrarVotoMafia(objetivo : Jugador)
+    ~ elegirInvestigar(detective : Jugador, objetivo : Jugador)
+    ~ elegirProteger(medico : Jugador, objetivo : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
   }
   class FaseDiurna {
     - votacion : VotacionDiurna
-    + nominar(j : Jugador)
-    + votar(votante : Jugador, objetivo : Jugador)
+    ~ nominar(j : Jugador)
+    ~ votar(votante : Jugador, objetivo : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
   }
@@ -102,9 +114,12 @@ class Jugador {
   + perteneceA(otroBando : Bando) : boolean
   + esMafioso() : boolean
   + resultadoAlSerInvestigado() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
   ~ ejecutarAccionNocturna(resolucion : ResolucionNocturna)
-  + rolVistoPor(jugadorQuePregunta : Jugador) : Rol
+  + cartaVistaPor(jugadorQuePregunta : Jugador) : Carta
+  + descripcionDeCarta() : String
 }
 
 abstract class Estado {
@@ -118,9 +133,16 @@ together {
 
 abstract class Rol {
   + {abstract} bando() : Bando
+  + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
-  + esVisible() : boolean
+}
+
+class Carta {
+  + revelar()
+  + descripcion() : String
 }
 
 interface Bando {
@@ -134,16 +156,23 @@ together {
   class BandoCiudadano
 }
 
-abstract class Configuracion {
-  + {abstract} armarRoles() : List<Rol>
-  # agregarMafiosos(roles : List<Rol>, cantidad : int)
-  # completarConCiudadanos(roles : List<Rol>, total : int)
+class Configuracion {
+  - mezclador : MezcladorDeRoles
+  - tramos : List<Tramo>
+  + armarRoles(cantidadJugadores : int) : List<Rol>
+  - tramoPara(cantidadJugadores : int) : Tramo
 }
-together {
-  class ConfiguracionChico
-  class ConfiguracionMediano
-  class ConfiguracionGrande
+class Tramo {
+  - minimo : int
+  - maximo : int
+  - cantidadMafiosos : int
+  - especialesFijos : List<Supplier<Rol>>
+  - especialesCandidatos : List<Supplier<Rol>>
+  - cantidadEspecialesAElegir : int
+  + contiene(cantidadJugadores : int) : boolean
+  + armarRoles(cantidadJugadores : int, mezclador : MezcladorDeRoles) : List<Rol>
 }
+class CantidadDeJugadoresInvalidaException
 
 class RepartidorRoles {
   + repartir(nombres : List<String>, roles : List<Rol>) : Jugadores
@@ -161,6 +190,7 @@ Fase <|-- FaseNocturna
 Fase <|-- FaseDiurna
 FaseNocturna *-- ResolucionNocturna
 FaseNocturna *-- VotacionMafia
+FaseNocturna ..> Jugador
 FaseDiurna *-- VotacionDiurna
 
 RegistroPartida *-- "0..*" RegistroRonda
@@ -176,6 +206,7 @@ ResolucionNocturna o-- "0..*" Jugador
 Jugadores o-- "5..12" Jugador
 Jugador *-- Estado : estado
 Jugador *-- Rol : rol
+Jugador *-- Carta : carta
 Estado <|-- Vivo
 Estado <|-- Eliminado
 
@@ -183,10 +214,10 @@ Rol ..> Bando
 Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 
-Configuracion <|-- ConfiguracionChico
-Configuracion <|-- ConfiguracionMediano
-Configuracion <|-- ConfiguracionGrande
-Configuracion ..> Rol
+Configuracion *-- "3" Tramo
+Configuracion --> MezcladorDeRoles : mezclador
+Configuracion ..> CantidadDeJugadoresInvalidaException
+Tramo ..> Rol
 
 RepartidorRoles --> MezcladorDeRoles : mezclador
 RepartidorRoles ..> Jugadores
