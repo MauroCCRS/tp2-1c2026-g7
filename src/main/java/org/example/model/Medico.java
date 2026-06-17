@@ -9,7 +9,7 @@ public class Medico extends Rol {
     }
 
     public void elegirProteger(Jugador objetivo) {
-        if (objetivoProtegido == objetivo) {
+        if (objetivoAProteger == objetivo) {
             throw new ProtegidoInvalidoException("No se puede proteger al mismo jugador");
         }
         if (!objetivo.estaVivo()) {
