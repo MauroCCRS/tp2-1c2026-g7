@@ -24,6 +24,18 @@ public class Jugadores {
                 .count();
     }
 
+    public List<Jugador> complicesMafiososDe(Jugador jugador) {
+        if (!jugador.estaVivo() || !jugador.esMafioso()) {
+            throw new JugadoresException("El jugador debe ser vivo y mafioso");
+        }
+
+        return jugadores.stream()
+                .filter(Jugador::estaVivo)
+                .filter(Jugador::esMafioso)
+                .filter(complice -> complice != jugador)
+                .toList();
+    }
+
     public void porCadaVivo(Consumer<Jugador> accion) {
         jugadores.stream()
                 .filter(Jugador::estaVivo)

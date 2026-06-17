@@ -50,7 +50,7 @@ public class Jugador {
     }
 
     public Carta cartaVistaPor(Jugador jugadorQuePregunta) {
-        if (this == jugadorQuePregunta) {
+        if (this == jugadorQuePregunta || jugadorQuePregunta.esMafioso()) {
             Carta propia = new Carta(rol);
             propia.revelar();
             return propia;
