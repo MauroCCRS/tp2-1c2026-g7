@@ -9,10 +9,16 @@ public class Partida {
     private final Jugadores jugadores;
     private final RegistroPartida registro = new RegistroPartida();
     private final List<Bando> bandos = Arrays.asList(new BandoMafia(), new BandoCiudadano());
+    private final CriterioEmpate criterioEmpate;
     private Fase faseActual;
 
     public Partida(Jugadores jugadores) {
+        this(jugadores, new SinEliminacion());
+    }
+
+    public Partida(Jugadores jugadores, CriterioEmpate criterioEmpate) {
         this.jugadores = jugadores;
+        this.criterioEmpate = criterioEmpate;
         this.faseActual = new FaseNocturna(1, jugadores);
     }
 
@@ -50,7 +56,7 @@ public class Partida {
     }
 
     public FaseDiurna crearFaseDiurna(int numeroRonda) {
-        return new FaseDiurna(numeroRonda);
+        return new FaseDiurna(numeroRonda, criterioEmpate);
     }
 
     public Optional<Bando> resultado() {
