@@ -67,6 +67,8 @@ public class TestVotacionDiurna {
         Jugador caro = ciudadano("Caro");
         VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
+        votacion.nominar(ana);
+        votacion.nominar(beto);
         votacion.votar(ana, beto);
         votacion.votar(caro, beto);
         votacion.votar(beto, ana);
@@ -82,7 +84,8 @@ public class TestVotacionDiurna {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
         VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
-
+        votacion.nominar(ana);
+        votacion.nominar(beto);
         votacion.votar(ana, beto);
         votacion.votar(beto, ana);
 
@@ -110,5 +113,37 @@ public class TestVotacionDiurna {
         assertThrows(VotacionInvalidaException.class, () -> {
             votacion.votar(ana, beto);
         });
+    }
+
+    @Test
+    public void resolverSinObjetivoNominado() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        assertThrows(VotacionInvalidaException.class, () -> {
+            votacion.votar(ana, beto);
+        });
+    }
+
+    @Test
+    public void resolverSoloConObjetivoNominado() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        votacion.nominar(ana);
+        votacion.nominar(caro);
+        votacion.votar(ana, caro);
+        votacion.votar(beto, ana);
+        votacion.votar(caro, ana);
+
+        Optional<Jugador> resultado = votacion.resolver();
+
+        assertTrue(resultado.isPresent());
+        assertEquals(ana, resultado.get());
     }
 }
