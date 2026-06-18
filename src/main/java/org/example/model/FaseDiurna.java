@@ -2,10 +2,11 @@ package org.example.model;
 
 public class FaseDiurna extends Fase {
 
-    private final VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+    private final VotacionDiurna votacion;
 
-    public FaseDiurna(int numeroRonda) {
+    public FaseDiurna(int numeroRonda, CriterioEmpate criterio) {
         super(numeroRonda);
+        this.votacion = new VotacionDiurna(criterio);
     }
 
     @Override

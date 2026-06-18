@@ -68,6 +68,32 @@ public class TestFaseDiurna {
     }
 
     @Test
+    public void elCriterioDeEmpateConfiguradoEliminaAUnoDeLosEmpatados() {
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador descartable = ciudadano("Dummy");
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(descartable);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
+
+        CriterioEmpate eliminaAlPrimero = empatados -> java.util.List.of(empatados.get(0));
+        Partida partida = new Partida(jugadores, eliminaAlPrimero);
+        partida.registrarVotoMafia(descartable);
+        partida.resolverFaseActual();
+
+        partida.nominar(ana);
+        partida.nominar(beto);
+        partida.votar(ana, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
+
+        assertTrue(ana.estaVivo() ^ beto.estaVivo());
+    }
+
+    @Test
     public void sinVotosNoMuereNadie() {
         Jugador mafioso = new Jugador("M1", new Mafioso());
         Jugador descartable = ciudadano("Dummy");
