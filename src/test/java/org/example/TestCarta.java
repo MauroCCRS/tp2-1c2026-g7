@@ -47,6 +47,20 @@ class TestCarta {
 
         assertEquals("Carta oculta", mafioso.cartaVistaPor(ciudadano).descripcion());
     }
+    @Test
+    void unMafiosoNoPuedeVerLaCartaDeUnCidadano() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador ciudadano = new Jugador("Ciudadano", new Ciudadano());
+
+        assertEquals("Carta oculta", ciudadano.cartaVistaPor(mafioso).descripcion());
+    }
+    @Test
+    void unCiudadanoNoPuedeVerLaCartaDeOtroCiudadano() {
+        Jugador ciudadano = new Jugador("Ciudadano", new Ciudadano());
+        Jugador otroCiudadano = new Jugador("Otro ciudadano", new Ciudadano());
+
+        assertEquals("Carta oculta", otroCiudadano.cartaVistaPor(ciudadano).descripcion());
+    }
 
     @Test
     void unMafiosoPuedeConsultarSusComplicesYVerSusCartas() {
