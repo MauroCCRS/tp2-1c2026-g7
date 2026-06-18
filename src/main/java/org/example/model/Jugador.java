@@ -34,11 +34,15 @@ public class Jugador {
     }
 
     public Bando resultadoAlSerInvestigado() {
-
-        if(!this.estaVivo()){
-            throw new InvestigacionInvalidaException("No se puede investigar a un jugador eliminado");
-        }
         return rol.resultadoAlSerInvestigado();
+    }
+
+    public void elegirInvestigar(Jugador objetivo) {
+        rol.elegirInvestigar(objetivo);
+    }
+
+    public void elegirProteger(Jugador objetivo) {
+        rol.elegirProteger(objetivo);
     }
 
     public void actuarEnNoche(ResolucionNocturna resolucion) {
