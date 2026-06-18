@@ -81,4 +81,16 @@ class TestCarta {
         assertEquals("Mafioso", otroMafioso.cartaVistaPor(mafioso).descripcion());
         assertEquals("Padrino", padrino.cartaVistaPor(mafioso).descripcion());
     }
+
+    @Test
+    void laCartaDeUnJugadorEliminadoSeRevela() {
+        Jugador ana = new Jugador("Ana", new Mafioso());
+        Jugador beto = new Jugador("Beto", new Ciudadano());
+
+        assertEquals("Carta oculta", ana.cartaVistaPor(beto).descripcion());
+
+        ana.eliminar();
+
+        assertEquals("Mafioso", ana.cartaVistaPor(beto).descripcion());
+    }
 }
