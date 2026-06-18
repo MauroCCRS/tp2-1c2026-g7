@@ -55,4 +55,49 @@ class TestJugadores {
         assertEquals(1, recorridos.size());
         assertSame(viva, recorridos.get(0));
     }
+    @Test
+    void unMafiosoPuedeConocerASusComplicesMafiososVivos() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador padrino = new Jugador("Padrino", new Padrino());
+        Jugador ciudadano = new Jugador("Ana", new Ciudadano());
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(padrino);
+        jugadores.agregar(ciudadano);
+
+        List<Jugador> complices = jugadores.complicesMafiososDe(mafioso);
+
+        assertEquals(1, complices.size());
+        assertTrue(complices.contains(padrino));
+        assertFalse(complices.contains(mafioso));
+        assertFalse(complices.contains(ciudadano));
+    }
+
+    @Test
+    void unCiudadanoNoObtieneComplicesMafiosos() {
+        Jugador ciudadano = new Jugador("Ana", new Ciudadano());
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(ciudadano);
+        jugadores.agregar(mafioso);
+
+        assertThrows(JugadoresException.class, () -> {
+            jugadores.complicesMafiososDe(ciudadano);
+        });
+    }
+
+    @Test
+    void noSeDevuelvenMafiososEliminadosComoComplices() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador compliceEliminado = new Jugador("MafiosoEliminado", new Mafioso());
+        compliceEliminado.eliminar();
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(compliceEliminado);
+
+        assertTrue(jugadores.complicesMafiososDe(mafioso).isEmpty());
+    }
 }
