@@ -23,8 +23,11 @@ public class Medico extends Rol {
 
     @Override
     public void actuarEnNoche(ResolucionNocturna resolucion) {
-        resolucion.registrarProteccion(objetivoAProteger);
-        this.ultimoProtegido = objetivoAProteger;
+        if (objetivoAProteger != null) {
+            resolucion.registrarProteccion(objetivoAProteger);
+            this.ultimoProtegido = objetivoAProteger;
+        }
+        this.objetivoAProteger = null;
     }
 
     @Override
