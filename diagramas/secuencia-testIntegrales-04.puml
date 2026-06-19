@@ -1,0 +1,123 @@
+@startuml
+title jugadorNoPuedeVerRolAjenoLuegoDeUnRepartoYAntesDeJugarLaNoche
+
+actor "TestIntegrales" as Test
+
+participant ":RepartidorRoles" as Repartidor
+participant ":Jugadores" as Jugadores
+participant "Jugador\nMauro : Mafioso" as Mauro
+participant "Jugador\nAna : Ciudadano" as Ana
+participant "Jugador\nJose : Medico" as Jose
+participant "Carta\nAna" as CartaAna
+participant "Carta oculta" as CartaOculta
+
+== Preparación del reparto ==
+
+Test -> Repartidor : new RepartidorRoles(roles -> {})
+activate Repartidor
+
+Test -> Repartidor : repartir(nombres, roles)
+
+Repartidor -> Jugadores : new Jugadores()
+activate Jugadores
+
+Repartidor -> Mauro : new Jugador("Mauro", new Mafioso())
+activate Mauro
+Mauro --> Repartidor : Mauro creado
+deactivate Mauro
+Repartidor -> Jugadores : agregar(Mauro)
+
+Repartidor -> Ana : new Jugador("Ana", new Ciudadano())
+activate Ana
+Ana --> Repartidor : Ana creada
+deactivate Ana
+Repartidor -> Jugadores : agregar(Ana)
+
+Repartidor -> Jose : new Jugador("Jose", new Medico())
+activate Jose
+Jose --> Repartidor : Jose creado
+deactivate Jose
+Repartidor -> Jugadores : agregar(Jose)
+
+Jugadores --> Repartidor : jugadores cargados
+deactivate Jugadores
+
+Repartidor --> Test : jugadores
+deactivate Repartidor
+
+== Obtener jugadores vivos ==
+
+Test -> Test : vivosDe(jugadores)
+
+Test -> Jugadores : porCadaVivo(vivos::add)
+activate Jugadores
+
+Jugadores -> Mauro : estaVivo()
+activate Mauro
+Mauro --> Jugadores : true
+deactivate Mauro
+Jugadores -> Test : vivos.add(Mauro)
+
+Jugadores -> Ana : estaVivo()
+activate Ana
+Ana --> Jugadores : true
+deactivate Ana
+Jugadores -> Test : vivos.add(Ana)
+
+Jugadores -> Jose : estaVivo()
+activate Jose
+Jose --> Jugadores : true
+deactivate Jose
+Jugadores -> Test : vivos.add(Jose)
+
+Jugadores --> Test : vivos = [Mauro, Ana, Jose]
+deactivate Jugadores
+
+Test -> Test : mauro = vivos.get(0)
+Test -> Test : ana = vivos.get(1)
+
+== Ana ve su propia carta ==
+
+Test -> Ana : cartaVistaPor(ana)
+activate Ana
+
+Ana -> Ana : esElMismoJugador(ana)
+Ana -> CartaAna : revelar / vista con rol
+activate CartaAna
+CartaAna --> Ana : carta revelada
+deactivate CartaAna
+
+Ana --> Test : carta visible de Ana
+deactivate Ana
+
+Test -> CartaAna : descripcion()
+activate CartaAna
+CartaAna --> Test : "Ciudadano"
+deactivate CartaAna
+
+== Mauro intenta ver la carta de Ana ==
+
+Test -> Ana : cartaVistaPor(mauro)
+activate Ana
+
+Ana -> Ana : esElMismoJugador(mauro)
+Ana -> CartaOculta : new CartaOculta()
+activate CartaOculta
+CartaOculta --> Ana : carta sin revelar
+deactivate CartaOculta
+
+Ana --> Test : carta oculta
+deactivate Ana
+
+Test -> CartaOculta : descripcion()
+activate CartaOculta
+CartaOculta --> Test : "Carta oculta"
+deactivate CartaOculta
+
+note right of Test
+Ana puede ver su propio rol,
+pero Mauro no puede ver el rol de Ana
+antes de jugar la noche.
+end note
+
+@enduml
