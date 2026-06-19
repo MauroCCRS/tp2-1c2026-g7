@@ -54,12 +54,16 @@ public class Jugador {
     }
 
     public Carta cartaVistaPor(Jugador jugadorQuePregunta) {
-        if (this == jugadorQuePregunta) {
+        if (this == jugadorQuePregunta || this.ambosSonMafiosos(jugadorQuePregunta)){
             Carta propia = new Carta(rol);
             propia.revelar();
             return propia;
         }
         return carta;
+    }
+
+    private boolean ambosSonMafiosos(Jugador otroJugador) {
+        return this.esMafioso() && otroJugador.esMafioso();
     }
 
     public boolean perteneceA(Bando otroBando) {
