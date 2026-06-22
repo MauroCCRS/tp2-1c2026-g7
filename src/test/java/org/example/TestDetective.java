@@ -7,24 +7,30 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDetective {
 
     @Test
-    public void elDetectivePuedeInvestigarAMafiosoYCiudadano() {
+    public void elDetectiveRecibeCiudadanoAlInvestigarAUnCiudadano() {
         Detective detective = new Detective();
-
-        Jugador jugadorCiudadano = new Jugador("Ciudadano", new Ciudadano());
-        Jugador jugadorMafioso = new Jugador("Mafioso", new Mafioso());
-
+        Jugador ciudadano = new Jugador("Ciudadano", new Ciudadano());
         ResolucionNocturna resolucion = new ResolucionNocturna();
 
-        detective.elegirInvestigar(jugadorCiudadano);
+        detective.elegirInvestigar(ciudadano);
         detective.actuarEnNoche(resolucion);
 
         assertTrue(detective.resultadoInvestigacion().esMismoBando(new BandoCiudadano()));
+    }
 
-        detective.elegirInvestigar(jugadorMafioso);
+
+    @Test
+    public void elDetectiveRecibeMafiaAlInvestigarAUnMafioso() {
+        Detective detective = new Detective();
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+
+        detective.elegirInvestigar(mafioso);
         detective.actuarEnNoche(resolucion);
 
         assertTrue(detective.resultadoInvestigacion().esMismoBando(new BandoMafia()));
     }
+
 
     @Test
     public void elDetectiveRecibeCiudadanoAlInvestigarAlPadrino() {

@@ -34,4 +34,12 @@ class TestVotacionMafia {
 
         assertThrows(VotacionInvalidaException.class, () -> votacion.votar(eliminado));
     }
+    @Test
+    void laMafiaNoPuedeElegirComoVictimaAUnPadrino() {
+        Jugador padrino = new Jugador("Don", new Padrino());
+
+        VotacionMafia votacion = new VotacionMafia();
+
+        assertThrows(VotacionInvalidaException.class, () -> votacion.votar(padrino));
+    }
 }
