@@ -76,4 +76,58 @@ public class TestCondicionesDeVictoria {
 
         assertFalse(gano);
     }
+
+    @Test
+    public void elPadrinoCuentaComoMafiaParaLaCondicionDeVictoria() {
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(new Jugador("Padrino", new Padrino()));
+        jugadores.agregar(ciudadano("C1"));
+
+        boolean gano = new BandoMafia().ganoSegun(jugadores);
+
+        assertTrue(gano);
+    }
+
+    @Test
+    public void losCiudadanosNoGananSiQuedaUnPadrinoVivo() {
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(new Jugador("Padrino", new Padrino()));
+        jugadores.agregar(ciudadano("C1"));
+
+        boolean gano = new BandoCiudadano().ganoSegun(jugadores);
+
+        assertFalse(gano);
+    }
+
+    @Test
+    public void losCiudadanosGananCuandoElPadrinoFueEliminado() {
+        Jugadores jugadores = new Jugadores();
+        Jugador padrino = new Jugador("Padrino", new Padrino());
+        jugadores.agregar(padrino);
+        jugadores.agregar(ciudadano("C1"));
+        jugadores.agregar(ciudadano("C2"));
+
+        padrino.eliminar();
+
+        boolean gano = new BandoCiudadano().ganoSegun(jugadores);
+
+        assertTrue(gano);
+    }
+
+    @Test
+    public void losMafiososEliminadosNoCuentanParaLaVictoriaDeLaMafia() {
+        Jugadores jugadores = new Jugadores();
+        Jugador mafiosoEliminado = mafioso("Mafioso");
+        jugadores.agregar(mafiosoEliminado);
+        jugadores.agregar(ciudadano("C1"));
+        jugadores.agregar(ciudadano("C2"));
+
+        mafiosoEliminado.eliminar();
+
+        boolean gano = new BandoMafia().ganoSegun(jugadores);
+
+        assertFalse(gano);
+    }
+
+
 }

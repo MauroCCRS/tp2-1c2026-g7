@@ -34,6 +34,10 @@ public class Partida {
         faseActual.elegirInvestigar(detective, objetivo);
     }
 
+    public void revelarSheriff(Jugador sheriff) {
+        faseActual.revelarSheriff(sheriff);
+    }
+
     public void elegirProteger(Jugador medico, Jugador objetivo) {
         faseActual.elegirProteger(medico, objetivo);
     }

@@ -29,6 +29,10 @@ public class FaseDiurna extends Fase {
                 .orElseGet(() -> new RegistroSinEliminacionDiurna(numeroRonda));
     }
 
+    void revelarSheriff(Jugador sheriff) {
+        sheriff.revelarseComoSheriff();
+    }
+
     @Override
     public Fase siguiente(Partida partida) {
         return partida.crearFaseNocturna(numeroRonda + 1);

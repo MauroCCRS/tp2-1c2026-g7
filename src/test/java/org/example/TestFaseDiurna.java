@@ -2,8 +2,8 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFaseDiurna {
 
@@ -112,5 +112,63 @@ public class TestFaseDiurna {
         partida.resolverFaseActual();
 
         assertTrue(partida.resumen().toLowerCase().contains("nadie"));
+    }
+
+    @Test
+    public void elSheriffPuedeRevelarseDuranteLaFaseDiurna() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
+        Jugador sheriff = new Jugador("Sheriff", new Sheriff());
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(victimaNocturna);
+        jugadores.agregar(sheriff);
+
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(victimaNocturna);
+        partida.resolverFaseActual();
+
+        partida.revelarSheriff(sheriff);
+
+        assertTrue( sheriff.estaRevelado() );
+    }
+
+
+    @Test
+    public void elSheriffNoPuedeRevelarseDuranteLaFaseNocturna() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador ciudadano = new Jugador("Ana", new Ciudadano());
+        Jugador sheriff = new Jugador("Sheriff", new Sheriff());
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(ciudadano);
+        jugadores.agregar(sheriff);
+
+        Partida partida = new Partida(jugadores);
+
+        assertThrows(RevelacionInvalidaException.class, () ->
+                partida.revelarSheriff(sheriff));
+    }
+
+
+    @Test
+    public void unJugadorQueNoEsSheriffNoPuedeRevelarseComoSheriffDuranteLaFaseDiurna() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
+        Jugador ciudadano = new Jugador("Beto", new Ciudadano());
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(victimaNocturna);
+        jugadores.agregar(ciudadano);
+
+        Partida partida = new Partida(jugadores);
+        partida.registrarVotoMafia(victimaNocturna);
+        partida.resolverFaseActual();
+
+        assertThrows(RevelacionInvalidaException.class, () ->
+                partida.revelarSheriff(ciudadano));
     }
 }
