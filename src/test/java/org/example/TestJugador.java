@@ -25,4 +25,13 @@ class TestJugador {
         jugador.eliminar();
         assertFalse(jugador.estaVivo());
     }
+    @Test
+    void eliminarDosVecesAUnJugadorNoRompeElEstado() {
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
+
+        jugador.eliminar();
+        jugador.eliminar();
+
+        assertFalse(jugador.estaVivo());
+    }
 }

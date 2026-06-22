@@ -36,9 +36,23 @@ public class TestMedico {
         });
     }
 
+    @Test
+    void elMedicoPuedeVolverAProtegerAUnJugadorSiAntesProtegioAOtro() {
+        Medico medico = new Medico();
+        Jugador ana = new Jugador("Ana", new Ciudadano());
+        Jugador beto = new Jugador("Beto", new Ciudadano());
+
+        medico.elegirProteger(ana);
+        medico.actuarEnNoche(new ResolucionNocturna());
+
+        medico.elegirProteger(beto);
+        medico.actuarEnNoche(new ResolucionNocturna());
+
+        assertDoesNotThrow(() -> medico.elegirProteger(ana));
+    }
 
     @Test
-    public void noPuedeProtegerAUnJugadorNoVivo() {
+    public void noPuedeProtegerAUnJugadorEliminado() {
         Jugador protegido = new Jugador("Ana", new Ciudadano());
 
         Medico medico = new Medico();
@@ -47,4 +61,6 @@ public class TestMedico {
 
         assertThrows(ProteccionInvalidaException.class, () -> medico.elegirProteger(protegido));
     }
+
+
 }

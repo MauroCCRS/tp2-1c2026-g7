@@ -28,4 +28,19 @@ class TestResolucionNocturna {
 
         assertFalse(victima.estaVivo());
     }
+
+    @Test
+    void siElMedicoProtegeAOtroJugadorLaVictimaMuere() {
+        Jugador victima = new Jugador("Ana", new Ciudadano());
+        Jugador protegido = new Jugador("Beto", new Ciudadano());
+
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+        resolucion.registrarAtaque(victima);
+        resolucion.registrarProteccion(protegido);
+
+        resolucion.resolver();
+
+        assertFalse(victima.estaVivo());
+        assertTrue(protegido.estaVivo());
+    }
 }
