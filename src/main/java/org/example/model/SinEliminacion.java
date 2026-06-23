@@ -1,10 +1,11 @@
 package org.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SinEliminacion implements CriterioEmpate {
     @Override
-    public Fase faseTrasEmpate(int numeroRonda, List<Jugador> empatados, Partida partida) {
-        return partida.crearFaseNocturna(numeroRonda + 1);
+    public List<Jugador> desempatar(List<Jugador> empatados) {
+        return new ArrayList<>();
     }
 }

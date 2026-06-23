@@ -79,10 +79,7 @@ public class TestFaseDiurna {
         jugadores.agregar(ana);
         jugadores.agregar(beto);
 
-        CriterioEmpate eliminaAlPrimero = (numeroRonda, empatados, partida) -> {
-            empatados.get(0).eliminar();
-            return partida.crearFaseNocturna(numeroRonda + 1);
-        };
+        CriterioEmpate eliminaAlPrimero = empatados -> java.util.List.of(empatados.get(0));
         Partida partida = new Partida(jugadores, eliminaAlPrimero);
         partida.registrarVotoMafia(descartable);
         partida.resolverFaseActual();
@@ -122,15 +119,11 @@ public class TestFaseDiurna {
         Jugador mafioso = new Jugador("Mafioso", new Mafioso());
         Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
         Jugador sheriff = new Jugador("Sheriff", new Sheriff());
-        Jugador relleno1 = new Jugador("Beto", new Ciudadano());
-        Jugador relleno2 = new Jugador("Caro", new Ciudadano());
 
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victimaNocturna);
         jugadores.agregar(sheriff);
-        jugadores.agregar(relleno1);
-        jugadores.agregar(relleno2);
 
         Partida partida = new Partida(jugadores);
         partida.registrarVotoMafia(victimaNocturna);

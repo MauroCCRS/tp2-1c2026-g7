@@ -21,7 +21,7 @@ public class TestVotacionDiurna {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
         Jugador caro = ciudadano("Caro");
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
         votacion.nominar(ana);
         votacion.nominar(beto);
 
@@ -39,7 +39,7 @@ public class TestVotacionDiurna {
     public void elEmpateDevuelveATodosLosEmpatados() {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
         votacion.nominar(ana);
         votacion.nominar(beto);
 
@@ -55,17 +55,17 @@ public class TestVotacionDiurna {
 
     @Test
     public void sinVotosNoHayGanadores() {
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
         assertTrue(votacion.ganadoresPorMayoria().isEmpty());
     }
 
     @Test
-    public void ganadorUnicoConGanadorClaroDevuelveEseJugador() {
+    public void resolverConGanadorClaroDevuelveEseJugador() {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
         Jugador caro = ciudadano("Caro");
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
         votacion.nominar(ana);
         votacion.nominar(beto);
@@ -73,40 +73,40 @@ public class TestVotacionDiurna {
         votacion.votar(caro, beto);
         votacion.votar(beto, ana);
 
-        Optional<Jugador> ganador = votacion.ganadorUnico();
+        Optional<Jugador> eliminado = votacion.resolver();
 
-        assertTrue(ganador.isPresent());
-        assertEquals(beto, ganador.get());
+        assertTrue(eliminado.isPresent());
+        assertEquals(beto, eliminado.get());
     }
 
     @Test
-    public void conEmpateNoHayGanadorUnicoYSeDetectaElEmpate() {
+    public void resolverConEmpateYCriterioSinEliminacionNoEliminaANadie() {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
         votacion.nominar(ana);
         votacion.nominar(beto);
         votacion.votar(ana, beto);
         votacion.votar(beto, ana);
 
-        assertFalse(votacion.ganadorUnico().isPresent());
-        assertTrue(votacion.hayEmpate());
-        assertEquals(2, votacion.empatados().size());
+        Optional<Jugador> eliminado = votacion.resolver();
+
+        assertFalse(eliminado.isPresent());
     }
 
     @Test
-    public void sinVotosNoHayGanadorUnico() {
-        VotacionDiurna votacion = new VotacionDiurna();
+    public void resolverSinVotosNoEliminaANadie() {
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
-        assertFalse(votacion.ganadorUnico().isPresent());
+        assertFalse(votacion.resolver().isPresent());
     }
 
     @Test
-    public void noSePuedeVotarConVotanteEliminado() {
+    public void resolverSoloConJugadoresVivos() {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
 
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
         ana.eliminar();
 
@@ -116,11 +116,11 @@ public class TestVotacionDiurna {
     }
 
     @Test
-    public void noSePuedeVotarAUnObjetivoNoNominado() {
+    public void resolverSinObjetivoNominado() {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
 
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
         assertThrows(VotacionInvalidaException.class, () -> {
             votacion.votar(ana, beto);
@@ -128,12 +128,12 @@ public class TestVotacionDiurna {
     }
 
     @Test
-    public void soloCuentanLosVotosAObjetivosNominados() {
+    public void resolverSoloConObjetivoNominado() {
         Jugador ana = ciudadano("Ana");
         Jugador beto = ciudadano("Beto");
         Jugador caro = ciudadano("Caro");
 
-        VotacionDiurna votacion = new VotacionDiurna();
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
         votacion.nominar(ana);
         votacion.nominar(caro);
@@ -141,9 +141,9 @@ public class TestVotacionDiurna {
         votacion.votar(beto, ana);
         votacion.votar(caro, ana);
 
-        Optional<Jugador> ganador = votacion.ganadorUnico();
+        Optional<Jugador> resultado = votacion.resolver();
 
-        assertTrue(ganador.isPresent());
-        assertEquals(ana, ganador.get());
+        assertTrue(resultado.isPresent());
+        assertEquals(ana, resultado.get());
     }
 }

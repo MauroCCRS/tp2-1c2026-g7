@@ -52,13 +52,7 @@ public class Partida {
 
     public void resolverFaseActual() {
         registro.agregarRegistro(faseActual.resolver());
-        if (resultado().isEmpty()) {
-            this.faseActual = faseActual.siguiente(this);
-        }
-    }
-
-    public boolean terminada() {
-        return resultado().isPresent();
+        this.faseActual = faseActual.siguiente(this);
     }
 
     public FaseNocturna crearFaseNocturna(int numeroRonda) {
@@ -77,9 +71,5 @@ public class Partida {
 
     public String resumen() {
         return registro.generarResumen();
-    }
-    
-    public FaseBallotage crearFaseBallotage(int numeroRonda, java.util.List<Jugador> empatados) {
-        return new FaseBallotage(numeroRonda, empatados);
     }
 }
