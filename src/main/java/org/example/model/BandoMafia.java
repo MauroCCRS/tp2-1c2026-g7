@@ -22,4 +22,9 @@ public class BandoMafia implements Bando {
         int totalVivos = jugadores.cantidadDeVivos();
         return mafiososVivos >= totalVivos - mafiososVivos;
     }
+
+    @Override
+    public String nombre() {
+        return "Mafia";
+    }
 }
