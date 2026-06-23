@@ -19,6 +19,11 @@ public class VotacionDiurna {
         this.criterio = criterio;
     }
 
+    public VotacionDiurna(CriterioEmpate criterio, List<Jugador> empatados) {
+        this.criterio = criterio;
+        this.nominados.addAll(empatados);
+    }
+
     public void nominar(Jugador jugador) {
         if (!jugador.estaVivo()) {
             throw new NominacionInvalidaException("El nominado tiene que estar vivo.");
@@ -51,12 +56,30 @@ public class VotacionDiurna {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
+    public Optional<Jugador> ganador() {
+        List<Jugador> ganadores = ganadoresPorMayoria();
+        if (ganadores.size() == 1) {
+            return Optional.of(ganadores.get(0));
+        }
+        return Optional.empty();
+    }
 
-    public Optional<Jugador> resolver() {
+    public Optional<VotacionDiurna> generarBallotage() {
         List<Jugador> ganadores = ganadoresPorMayoria();
         if (ganadores.size() > 1) {
-            ganadores = criterio.desempatar(ganadores);
+            return criterio.resolverEmpate(ganadores);
         }
-        return ganadores.stream().findFirst();
+        return Optional.empty();
     }
+    public List<Jugador> obtenerNominados() {
+        return new ArrayList<>(nominados);
+    }
+
+    //public Optional<Jugador> resolver() {
+    //    List<Jugador> ganadores = ganadoresPorMayoria();
+    //    if (ganadores.size() > 1) {
+    //        ganadores = criterio.desempatar(ganadores);
+    //    }
+    //    return ganadores.stream().findFirst();
+    //}
 }
