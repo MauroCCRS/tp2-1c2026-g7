@@ -56,30 +56,23 @@ public class VotacionDiurna {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
-    public Optional<Jugador> ganador() {
-        List<Jugador> ganadores = ganadoresPorMayoria();
-        if (ganadores.size() == 1) {
-            return Optional.of(ganadores.get(0));
-        }
-        return Optional.empty();
-    }
 
-    public Optional<VotacionDiurna> generarBallotage() {
-        List<Jugador> ganadores = ganadoresPorMayoria();
-        if (ganadores.size() > 1) {
-            return criterio.resolverEmpate(ganadores);
-        }
-        return Optional.empty();
-    }
     public List<Jugador> obtenerNominados() {
         return new ArrayList<>(nominados);
     }
 
-    //public Optional<Jugador> resolver() {
-    //    List<Jugador> ganadores = ganadoresPorMayoria();
-    //    if (ganadores.size() > 1) {
-    //        ganadores = criterio.desempatar(ganadores);
-    //    }
-    //    return ganadores.stream().findFirst();
-    //}
+    public Optional<Jugador> resolver() {
+        List<Jugador> ganadores = ganadoresPorMayoria();
+        if (ganadores.size() > 1) {
+            ganadores = criterio.desempatar(ganadores);
+        }
+        return ganadores.stream().findFirst();
+    }
+    public Optional<VotacionDiurna> generarBallotage() {
+        List<Jugador> ganadores = ganadoresPorMayoria();
+        if (ganadores.size() > 1) {
+            return criterio.generarBallotage(ganadores);
+        }
+        return Optional.empty();
+    }
 }

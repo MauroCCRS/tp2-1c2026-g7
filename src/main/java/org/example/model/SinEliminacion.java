@@ -6,7 +6,12 @@ import java.util.Optional;
 
 public class SinEliminacion implements CriterioEmpate {
     @Override
-    public Optional<VotacionDiurna> resolverEmpate(List<Jugador> empatados) {
+    public List<Jugador> desempatar(List<Jugador> empatados) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Optional<VotacionDiurna> generarBallotage(List<Jugador> empatados) {
         return Optional.empty();
     }
 }

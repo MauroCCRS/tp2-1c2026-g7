@@ -1,13 +1,16 @@
 package org.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Ballotage implements CriterioEmpate {
     @Override
-    public Optional<VotacionDiurna> resolverEmpate(List<Jugador> empatados) {
-        // Retorna una nueva votación restringida a los empatados,
-        // con un criterio estricto para evitar ballotages infinitos.
+    public List<Jugador> desempatar(List<Jugador> empatados) {
+        return new ArrayList<>();
+    }
+    @Override
+    public Optional<VotacionDiurna> generarBallotage(List<Jugador> empatados) {
         return Optional.of(new VotacionDiurna(new SinEliminacion(), empatados));
     }
 }
