@@ -11,13 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class VotacionDiurna {
-    private final CriterioEmpate criterio;
     private final Set<Jugador> nominados = new LinkedHashSet<>();
     private final Map<Jugador, Jugador> votos = new HashMap<>();
-
-    public VotacionDiurna(CriterioEmpate criterio) {
-        this.criterio = criterio;
-    }
 
     public void nominar(Jugador jugador) {
         if (!jugador.estaVivo()) {
@@ -52,11 +47,16 @@ public class VotacionDiurna {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Jugador> resolver() {
+    public Optional<Jugador> ganadorUnico() {
         List<Jugador> ganadores = ganadoresPorMayoria();
-        if (ganadores.size() > 1) {
-            ganadores = criterio.desempatar(ganadores);
-        }
-        return ganadores.stream().findFirst();
+        return ganadores.size() == 1 ? Optional.of(ganadores.get(0)) : Optional.empty();
+    }
+
+    public boolean hayEmpate() {
+        return ganadoresPorMayoria().size() > 1;
+    }
+
+    public List<Jugador> empatados() {
+        return ganadoresPorMayoria();
     }
 }

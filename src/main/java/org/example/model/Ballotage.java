@@ -2,9 +2,9 @@ package org.example.model;
 
 import java.util.List;
 
-public class SinEliminacion implements CriterioEmpate {
+public class Ballotage implements CriterioEmpate {
     @Override
     public Fase faseTrasEmpate(int numeroRonda, List<Jugador> empatados, Partida partida) {
-        return partida.crearFaseNocturna(numeroRonda + 1);
+        return partida.crearFaseBallotage(numeroRonda, empatados);
     }
 }
