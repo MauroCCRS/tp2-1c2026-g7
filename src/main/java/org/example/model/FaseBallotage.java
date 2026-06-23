@@ -1,19 +1,15 @@
 package org.example.model;
 
-public class FaseDiurna extends Fase {
+import java.util.List;
+
+public class FaseBallotage extends Fase {
 
     private final VotacionDiurna votacion = new VotacionDiurna();
     private final ResolucionVotacion resolucion = new ResolucionVotacion(votacion);
-    private final CriterioEmpate criterio;
 
-    public FaseDiurna(int numeroRonda, CriterioEmpate criterio) {
+    public FaseBallotage(int numeroRonda, List<Jugador> empatados) {
         super(numeroRonda);
-        this.criterio = criterio;
-    }
-
-    @Override
-    void nominar(Jugador jugador) {
-        this.votacion.nominar(jugador);
+        empatados.forEach(votacion::nominar);
     }
 
     @Override
@@ -27,15 +23,7 @@ public class FaseDiurna extends Fase {
     }
 
     @Override
-    void revelarSheriff(Jugador sheriff) {
-        sheriff.revelarseComoSheriff();
-    }
-
-    @Override
     public Fase siguiente(Partida partida) {
-        if (votacion.hayEmpate()) {
-            return criterio.faseTrasEmpate(numeroRonda, votacion.empatados(), partida);
-        }
         return partida.crearFaseNocturna(numeroRonda + 1);
     }
 }
