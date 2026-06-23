@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SinEliminacion implements CriterioEmpate {
+public class Ballotage implements CriterioEmpate {
     @Override
     public List<Jugador> desempatar(List<Jugador> empatados) {
         return new ArrayList<>();
     }
-
     @Override
     public Optional<VotacionDiurna> generarBallotage(List<Jugador> empatados) {
-        return Optional.empty();
+        return Optional.of(new VotacionDiurna(new SinEliminacion(), empatados));
     }
 }
