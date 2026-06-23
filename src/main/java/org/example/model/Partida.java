@@ -75,6 +75,10 @@ public class Partida {
                 .findFirst();
     }
 
+    public Optional<String> anuncio() {
+        return resultado().map(bando -> "Ganador: " + bando.nombre());
+    }
+
     public String resumen() {
         return registro.generarResumen();
     }

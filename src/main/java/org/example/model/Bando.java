@@ -6,4 +6,6 @@ public interface Bando {
 
     boolean esMismoBandoQueMafia(BandoMafia mafia);
     boolean esMismoBandoQueCiudadano(BandoCiudadano ciudadano);
+
+    String nombre();
 }

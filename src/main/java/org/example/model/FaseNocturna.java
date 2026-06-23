@@ -1,5 +1,7 @@
 package org.example.model;
 
+import java.util.Optional;
+
 public class FaseNocturna extends Fase {
 
     private final Jugadores jugadores;
@@ -30,9 +32,13 @@ public class FaseNocturna extends Fase {
     public RegistroRonda resolver() {
         resolucion.registrarAtaque(votacionMafia.victimaElegida());
         jugadores.porCadaVivo(jugador -> jugador.actuarEnNoche(resolucion));
-        return resolucion.resolver()
-                .<RegistroRonda>map(victima -> new RegistroNocturno(numeroRonda, victima))
-                .orElseGet(() -> new RegistroNocheTranquila(numeroRonda));
+
+        Optional<Jugador> victima = resolucion.resolver();
+        if (victima.isPresent()) {
+            victima.get().eliminar();
+            return new RegistroNocturno(numeroRonda, victima.get());
+        }
+        return new RegistroNocheTranquila(numeroRonda);
     }
 
     @Override

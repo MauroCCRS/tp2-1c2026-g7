@@ -114,7 +114,7 @@ public class TestFaseDiurna {
         assertTrue(partida.resumen().toLowerCase().contains("nadie"));
     }
 
-@Test
+    @Test
     public void elSheriffPuedeRevelarseDuranteLaFaseDiurna() {
         Jugador mafioso = new Jugador("Mafioso", new Mafioso());
         Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
@@ -135,9 +135,8 @@ public class TestFaseDiurna {
 
         partida.revelarSheriff(sheriff);
 
-        assertTrue( sheriff.estaRevelado() );
+        assertTrue(sheriff.estaRevelado());
     }
-
 
     @Test
     public void elSheriffNoPuedeRevelarseDuranteLaFaseNocturna() {
@@ -152,10 +151,8 @@ public class TestFaseDiurna {
 
         Partida partida = new Partida(jugadores);
 
-        assertThrows(RevelacionInvalidaException.class, () ->
-                partida.revelarSheriff(sheriff));
+        assertThrows(RevelacionInvalidaException.class, () -> partida.revelarSheriff(sheriff));
     }
-
 
     @Test
     public void unJugadorQueNoEsSheriffNoPuedeRevelarseComoSheriffDuranteLaFaseDiurna() {
@@ -172,7 +169,42 @@ public class TestFaseDiurna {
         partida.registrarVotoMafia(victimaNocturna);
         partida.resolverFaseActual();
 
-        assertThrows(RevelacionInvalidaException.class, () ->
-                partida.revelarSheriff(ciudadano));
+        assertThrows(RevelacionInvalidaException.class, () -> partida.revelarSheriff(ciudadano));
+    }
+
+    @Test
+    public void enBallotageSeRehaceLaVotacionYSeEliminaAlMasVotado() {
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador dummy = ciudadano("Dummy");
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+        Jugador dani = ciudadano("Dani");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(dummy);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
+        jugadores.agregar(caro);
+        jugadores.agregar(dani);
+
+        Partida partida = new Partida(jugadores, new Ballotage());
+        partida.registrarVotoMafia(dummy);
+        partida.resolverFaseActual();
+
+        partida.nominar(ana);
+        partida.nominar(beto);
+        partida.votar(ana, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
+
+        assertTrue(ana.estaVivo() && beto.estaVivo());
+
+        partida.votar(ana, beto);
+        partida.votar(caro, beto);
+        partida.votar(dani, beto);
+        partida.resolverFaseActual();
+
+        assertFalse(beto.estaVivo());
     }
 }
