@@ -2,10 +2,12 @@ package org.example.model;
 
 import java.util.Optional;
 
+import java.util.List;
+
 public class FaseDiurna extends Fase {
 
     private final VotacionDiurna votacion;
-    private Optional<VotacionDiurna> ballotage = Optional.empty();
+    private Optional<VotacionDiurna> revotacion = Optional.empty();
 
     public FaseDiurna(int numeroRonda, CriterioEmpate criterio) {
         this(numeroRonda, new VotacionDiurna(criterio));
@@ -26,18 +28,21 @@ public class FaseDiurna extends Fase {
         this.votacion.votar(votante, objetivo);
     }
 
-    @Override
-    public RegistroRonda resolver() {
-        Optional<Jugador> eliminado = votacion.resolver();
-        if (eliminado.isPresent()) {
-            eliminado.get().eliminar();
-            return new RegistroDiurno(numeroRonda, eliminado.get());
-        }
-        this.ballotage = votacion.generarBallotage();
-        return ballotage
-                .<RegistroRonda>map(nueva -> new RegistroBallotage(numeroRonda, nueva.obtenerNominados()))
-                .orElseGet(() -> new RegistroSinEliminacionDiurna(numeroRonda));
+@Override
+public RegistroRonda resolver() {
+    Optional<Jugador> resultado = votacion.resolver();
+    if (resultado.isPresent()) {
+        Jugador eliminado = resultado.get();
+        eliminado.eliminar();
+        return new RegistroDiurno(numeroRonda, eliminado);
     }
+    this.revotacion = votacion.generarBallotage();
+    if (revotacion.isPresent()) {
+        List<Jugador> nominadosARevotar = revotacion.get().obtenerNominados();
+        return new RegistroBallotage(numeroRonda, nominadosARevotar);
+    }
+    return new RegistroSinEliminacionDiurna(numeroRonda);
+}
 
     @Override
     void revelarSheriff(Jugador sheriff) {
@@ -46,7 +51,7 @@ public class FaseDiurna extends Fase {
 
     @Override
     public Fase siguiente(Partida partida) {
-        return ballotage
+        return revotacion
                 .<Fase>map(nueva -> new FaseDiurna(numeroRonda, nueva))
                 .orElseGet(() -> partida.crearFaseNocturna(numeroRonda + 1));
     }

@@ -41,7 +41,7 @@ public class VotacionDiurna {
         this.votos.put(votante, objetivo);
     }
 
-    public List<Jugador> ganadoresPorMayoria() {
+    public List<Jugador> masVotados() {
         Map<Jugador, Long> conteo = votos.values().stream()
                 .collect(Collectors.groupingBy(objetivo -> objetivo, Collectors.counting()));
 
@@ -62,16 +62,17 @@ public class VotacionDiurna {
     }
 
     public Optional<Jugador> resolver() {
-        List<Jugador> ganadores = ganadoresPorMayoria();
-        if (ganadores.size() > 1) {
-            ganadores = criterio.desempatar(ganadores);
+        List<Jugador> masVotados = masVotados();
+        if (masVotados.size() > 1) {
+            masVotados = criterio.desempatar(masVotados);
         }
-        return ganadores.stream().findFirst();
+        return masVotados.stream().findFirst();
     }
+
     public Optional<VotacionDiurna> generarBallotage() {
-        List<Jugador> ganadores = ganadoresPorMayoria();
-        if (ganadores.size() > 1) {
-            return criterio.generarBallotage(ganadores);
+        List<Jugador> masVotados = masVotados();
+        if (masVotados.size() > 1) {
+            return criterio.generarBallotage(masVotados);
         }
         return Optional.empty();
     }
