@@ -72,4 +72,6 @@ public class Partida {
     public String resumen() {
         return registro.generarResumen();
     }
+    // agrego para la  visualizacion del estado de la ronda actual.
+    public Jugadores jugadores() {return jugadores;}
 }

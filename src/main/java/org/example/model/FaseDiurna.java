@@ -33,8 +33,14 @@ public class FaseDiurna extends Fase {
         sheriff.revelarseComoSheriff();
     }
 
+
     @Override
     public Fase siguiente(Partida partida) {
         return partida.crearFaseNocturna(numeroRonda + 1);
     }
+
+    // agrego para la  visualizacion del estado de la ronda actual.
+    @Override
+    public String nombre() {return "Diurna";}
+
 }

@@ -39,4 +39,8 @@ public class FaseNocturna extends Fase {
     public Fase siguiente(Partida partida) {
         return partida.crearFaseDiurna(numeroRonda);
     }
+
+    // agrego para la  visualizacion del estado de la ronda actual.
+    @Override
+    public String nombre() {return "Nocturna";}
 }
