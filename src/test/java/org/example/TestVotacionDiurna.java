@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 public class TestVotacionDiurna {
 
     private Jugador ciudadano(String nombre) {
@@ -29,8 +28,7 @@ public class TestVotacionDiurna {
         votacion.votar(caro, beto);
         votacion.votar(beto, ana);
 
-        List<Jugador> ganadores = votacion.ganadoresPorMayoria();
-
+        List<Jugador> ganadores = votacion.masVotados();
         assertEquals(1, ganadores.size());
         assertTrue(ganadores.contains(beto));
     }
@@ -46,8 +44,7 @@ public class TestVotacionDiurna {
         votacion.votar(ana, beto);
         votacion.votar(beto, ana);
 
-        List<Jugador> ganadores = votacion.ganadoresPorMayoria();
-
+        List<Jugador> ganadores = votacion.masVotados();
         assertEquals(2, ganadores.size());
         assertTrue(ganadores.contains(ana));
         assertTrue(ganadores.contains(beto));
@@ -57,7 +54,7 @@ public class TestVotacionDiurna {
     public void sinVotosNoHayGanadores() {
         VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
-        assertTrue(votacion.ganadoresPorMayoria().isEmpty());
+        assertTrue(votacion.masVotados().isEmpty());
     }
 
     @Test
