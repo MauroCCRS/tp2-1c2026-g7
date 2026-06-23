@@ -1,21 +1,16 @@
 package org.example.model;
 
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 public class FaseDiurna extends Fase {
 
-    private final VotacionDiurna votacion;
-    private Optional<VotacionDiurna> revotacion = Optional.empty();
+    private VotacionDiurna votacion;
+    private boolean debeIrABallotage = false;
 
     public FaseDiurna(int numeroRonda, CriterioEmpate criterio) {
-        this(numeroRonda, new VotacionDiurna(criterio));
-    }
-
-    public FaseDiurna(int numeroRonda, VotacionDiurna votacion) {
         super(numeroRonda);
-        this.votacion = votacion;
+        this.votacion = new VotacionDiurna(criterio);
     }
 
     @Override
@@ -28,37 +23,37 @@ public class FaseDiurna extends Fase {
         this.votacion.votar(votante, objetivo);
     }
 
-@Override
-public RegistroRonda resolver() {
-    Optional<Jugador> resultado = votacion.resolver();
-    if (resultado.isPresent()) {
-        Jugador eliminado = resultado.get();
-        eliminado.eliminar();
-        return new RegistroDiurno(numeroRonda, eliminado);
-    }
-    this.revotacion = votacion.generarBallotage();
-    if (revotacion.isPresent()) {
-        List<Jugador> nominadosARevotar = revotacion.get().obtenerNominados();
-        return new RegistroBallotage(numeroRonda, nominadosARevotar);
-    }
-    return new RegistroSinEliminacionDiurna(numeroRonda);
-}
-
     @Override
-    void revelar(Jugador sheriff) {
-        sheriff.revelarse();
+    public RegistroRonda resolver() {
+        Optional<Jugador> eliminado = votacion.resolver();
+
+        if (eliminado.isPresent()) {
+            eliminado.get().eliminar();
+            return new RegistroDiurno(numeroRonda, eliminado.get());
+        }
+
+        List<Jugador> empatados = votacion.ganadoresPorMayoria();
+        Optional<VotacionDiurna> nuevaVotacion = votacion.generarBallotage();
+
+        if (nuevaVotacion.isPresent()) {
+            this.votacion = nuevaVotacion.get();
+            this.debeIrABallotage = true;
+
+            return new RegistroBallotage(numeroRonda, empatados);
+        }
+        return new RegistroSinEliminacionDiurna(numeroRonda);
     }
 
+    void revelarSheriff(Jugador sheriff) {
+        sheriff.revelarseComoSheriff();
+    }
 
     @Override
     public Fase siguiente(Partida partida) {
-        return revotacion
-                .<Fase>map(nueva -> new FaseDiurna(numeroRonda, nueva))
-                .orElseGet(() -> partida.crearFaseNocturna(numeroRonda + 1));
+        if (this.debeIrABallotage) {
+            this.debeIrABallotage = false;
+            return this;
+        }
+        return partida.crearFaseNocturna(numeroRonda + 1);
     }
-
-    // agrego para la  visualizacion del estado de la ronda actual.
-    @Override
-    public String nombre() {return "Diurna";}
-
 }

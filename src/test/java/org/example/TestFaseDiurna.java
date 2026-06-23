@@ -207,4 +207,71 @@ public class TestFaseDiurna {
 
         assertFalse(beto.estaVivo());
     }
+
+    @Test
+    public void enEmpateConCriterioBallotageSeVuelveAVotarYSeEliminaAlMasVotado() {
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador victima = ciudadano("victima");
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(victima);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
+        jugadores.agregar(caro);
+
+        Partida partida = new Partida(jugadores, new Ballotage());
+        partida.registrarVotoMafia(victima);
+        partida.resolverFaseActual();
+
+        partida.nominar(ana);
+        partida.nominar(beto);
+        partida.votar(ana, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
+
+        assertTrue(ana.estaVivo());
+        assertTrue(beto.estaVivo());
+
+        partida.votar(ana, beto);
+        partida.votar(caro, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
+
+        assertFalse(beto.estaVivo());
+        assertTrue(ana.estaVivo());
+    }
+
+    @Test
+    public void siElBallotageTerminaEnEmpateNoSeEliminaANadie() {
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugador victima = ciudadano("victima");
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(victima);
+        jugadores.agregar(ana);
+        jugadores.agregar(beto);
+
+        Partida partida = new Partida(jugadores, new Ballotage());
+        partida.registrarVotoMafia(victima);
+        partida.resolverFaseActual();
+
+        partida.nominar(ana);
+        partida.nominar(beto);
+        partida.votar(ana, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
+
+        partida.votar(ana, beto);
+        partida.votar(beto, ana);
+        partida.resolverFaseActual();
+
+        assertTrue(ana.estaVivo());
+        assertTrue(beto.estaVivo());
+        assertTrue(partida.resumen().toLowerCase().contains("nadie"));
+    }
 }
