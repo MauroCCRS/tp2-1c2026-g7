@@ -6,6 +6,8 @@ import java.util.Optional;
 public class FaseDiurna extends Fase {
 
     private VotacionDiurna votacion;
+    private boolean debeIrABallotage = false;
+
     public FaseDiurna(int numeroRonda, CriterioEmpate criterio) {
         super(numeroRonda);
         this.votacion = new VotacionDiurna(criterio);
@@ -23,8 +25,6 @@ public class FaseDiurna extends Fase {
 
     @Override
     public RegistroRonda resolver() {
-        List<Jugador> empatados = votacion.ganadoresPorMayoria();
-
         Optional<Jugador> eliminado = votacion.resolver();
 
         if (eliminado.isPresent()) {
@@ -32,12 +32,14 @@ public class FaseDiurna extends Fase {
             return new RegistroDiurno(numeroRonda, eliminado.get());
         }
 
-        if (empatados.size() > 1) {
-            Optional<VotacionDiurna> nuevaVotacion = votacion.generarBallotage();
-            if (nuevaVotacion.isPresent()) {
-                this.votacion = nuevaVotacion.get();
-                return new RegistroBallotage(numeroRonda, votacion.obtenerNominados());
-            }
+        List<Jugador> empatados = votacion.ganadoresPorMayoria();
+        Optional<VotacionDiurna> nuevaVotacion = votacion.generarBallotage();
+
+        if (nuevaVotacion.isPresent()) {
+            this.votacion = nuevaVotacion.get();
+            this.debeIrABallotage = true;
+
+            return new RegistroBallotage(numeroRonda, empatados);
         }
         return new RegistroSinEliminacionDiurna(numeroRonda);
     }
@@ -48,6 +50,10 @@ public class FaseDiurna extends Fase {
 
     @Override
     public Fase siguiente(Partida partida) {
+        if (this.debeIrABallotage) {
+            this.debeIrABallotage = false;
+            return this;
+        }
         return partida.crearFaseNocturna(numeroRonda + 1);
     }
 }

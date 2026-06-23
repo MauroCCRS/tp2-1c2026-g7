@@ -146,4 +146,6 @@ public class TestVotacionDiurna {
         assertTrue(resultado.isPresent());
         assertEquals(ana, resultado.get());
     }
+
+
 }
