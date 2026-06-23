@@ -114,16 +114,20 @@ public class TestFaseDiurna {
         assertTrue(partida.resumen().toLowerCase().contains("nadie"));
     }
 
-    @Test
+@Test
     public void elSheriffPuedeRevelarseDuranteLaFaseDiurna() {
         Jugador mafioso = new Jugador("Mafioso", new Mafioso());
         Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
         Jugador sheriff = new Jugador("Sheriff", new Sheriff());
+        Jugador relleno1 = new Jugador("Beto", new Ciudadano());
+        Jugador relleno2 = new Jugador("Caro", new Ciudadano());
 
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(mafioso);
         jugadores.agregar(victimaNocturna);
         jugadores.agregar(sheriff);
+        jugadores.agregar(relleno1);
+        jugadores.agregar(relleno2);
 
         Partida partida = new Partida(jugadores);
         partida.registrarVotoMafia(victimaNocturna);
