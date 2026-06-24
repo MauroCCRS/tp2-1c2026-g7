@@ -49,10 +49,16 @@ public RegistroRonda resolver() {
         sheriff.revelarseComoSheriff();
     }
 
+
     @Override
     public Fase siguiente(Partida partida) {
         return revotacion
                 .<Fase>map(nueva -> new FaseDiurna(numeroRonda, nueva))
                 .orElseGet(() -> partida.crearFaseNocturna(numeroRonda + 1));
     }
+
+    // agrego para la  visualizacion del estado de la ronda actual.
+    @Override
+    public String nombre() {return "Diurna";}
+
 }
