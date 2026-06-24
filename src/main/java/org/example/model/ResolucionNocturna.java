@@ -24,7 +24,6 @@ public class ResolucionNocturna {
         if (protegidos.contains(atacado)) {
             return Optional.empty();
         }
-        atacado.eliminar();
         return Optional.of(atacado);
     }
 }
