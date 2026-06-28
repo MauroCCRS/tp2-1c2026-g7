@@ -23,8 +23,10 @@ public class TestFaseNocturna {
         Jugador caro = new Jugador("Caro", new Ciudadano());
         Jugadores jugadores = conMafiosoY(ana, beto, caro);
 
+        Jugador mafiosoVotante = new Jugador("Mafioso", new Mafioso());
+        jugadores.agregar(mafiosoVotante);
         Partida partida = new Partida(jugadores);
-        partida.registrarVotoMafia(ana);
+        partida.registrarVotoMafia(mafiosoVotante, ana);
         partida.resolverFaseActual();
 
         assertFalse(ana.estaVivo());
@@ -37,8 +39,11 @@ public class TestFaseNocturna {
         Jugador caro = new Jugador("Caro", new Ciudadano());
         Jugadores jugadores = conMafiosoY(ana, medico, caro);
 
+        Jugador mafiosoVotante = new Jugador("Mafioso", new Mafioso());
+        jugadores.agregar(mafiosoVotante);
+
         Partida partida = new Partida(jugadores);
-        partida.registrarVotoMafia(ana);
+        partida.registrarVotoMafia(mafiosoVotante, ana);
         partida.elegirProteger(medico, ana);
         partida.resolverFaseActual();
 

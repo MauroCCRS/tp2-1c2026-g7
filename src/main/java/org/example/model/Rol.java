@@ -26,4 +26,7 @@ public abstract class Rol {
     public boolean estaRevelado(){
         throw new RevelacionInvalidaException("Solo el Sheriff puede mostrar que esta revelado");
     }
+    public  VotoMafia crearVotoMafia(Jugador objetivo) {
+        throw new VotacionInvalidaException("Solo el mafioso puede votar");
+    }
 }

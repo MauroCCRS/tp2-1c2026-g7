@@ -30,14 +30,15 @@ public class TestPartida {
     @Test
     public void resolverLaNocheHaceAvanzarALaFaseDiurna() {
         Jugadores jugadores = new Jugadores();
-        jugadores.agregar(mafioso("M1"));
+        Jugador m1 = mafioso("M1");
+        jugadores.agregar(m1);
         Jugador c1 = ciudadano("C1");
         jugadores.agregar(c1);
         jugadores.agregar(ciudadano("C2"));
         jugadores.agregar(ciudadano("C3"));
 
         Partida partida = new Partida(jugadores);
-        partida.registrarVotoMafia(c1);
+        partida.registrarVotoMafia(m1,c1);
         partida.resolverFaseActual();
 
         assertTrue(partida.faseActual() instanceof FaseDiurna);
@@ -59,14 +60,15 @@ public class TestPartida {
     @Test
     public void laMafiaGanaCuandoIgualaEnNumeroTrasEliminaciones() {
         Jugadores jugadores = new Jugadores();
-        jugadores.agregar(mafioso("M1"));
+        Jugador m1 = mafioso("M1");
+        jugadores.agregar(m1);
         Jugador c1 = ciudadano("C1");
         Jugador c2 = ciudadano("C2");
         jugadores.agregar(c1);
         jugadores.agregar(c2);
 
         Partida partida = new Partida(jugadores);
-        partida.registrarVotoMafia(c1);
+        partida.registrarVotoMafia(m1,c1);
         partida.resolverFaseActual();
 
         assertTrue(partida.resultado().isPresent());
@@ -76,14 +78,15 @@ public class TestPartida {
     @Test
     public void elResumenAcumulaLasRondasJugadas() {
         Jugadores jugadores = new Jugadores();
-        jugadores.agregar(mafioso("M1"));
+        Jugador m1 = mafioso("M1");
+        jugadores.agregar(m1);
         Jugador victima = ciudadano("Ana");
         jugadores.agregar(victima);
         jugadores.agregar(ciudadano("C2"));
         jugadores.agregar(ciudadano("C3"));
 
         Partida partida = new Partida(jugadores);
-        partida.registrarVotoMafia(victima);
+        partida.registrarVotoMafia(m1,victima);
         partida.resolverFaseActual();
 
         assertTrue(partida.resumen().contains("Ana"));

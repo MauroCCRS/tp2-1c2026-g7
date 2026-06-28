@@ -10,24 +10,26 @@ public class Partida {
     private final RegistroPartida registro = new RegistroPartida();
     private final List<Bando> bandos = Arrays.asList(new BandoMafia(), new BandoCiudadano());
     private final CriterioEmpate criterioEmpate;
+    private final CriterioConsenso criterioConsenso;
     private Fase faseActual;
 
     public Partida(Jugadores jugadores) {
-        this(jugadores, new SinEliminacion());
+        this(jugadores, new SinEliminacion(), new Mayoria());
     }
 
-    public Partida(Jugadores jugadores, CriterioEmpate criterioEmpate) {
+    public Partida(Jugadores jugadores, CriterioEmpate criterioEmpate, CriterioConsenso criterioConsenso) {
         this.jugadores = jugadores;
         this.criterioEmpate = criterioEmpate;
-        this.faseActual = new FaseNocturna(1, jugadores);
+        this.criterioConsenso = criterioConsenso;
+        this.faseActual = crearFaseNocturna(1);
     }
 
     public Fase faseActual() {
         return faseActual;
     }
 
-    public void registrarVotoMafia(Jugador objetivo) {
-        faseActual.registrarVotoMafia(objetivo);
+    public void registrarVotoMafia(Jugador votante, Jugador objetivo) {
+        faseActual.registrarVotoMafia(votante, objetivo);
     }
 
     public void elegirInvestigar(Jugador detective, Jugador objetivo) {
@@ -62,7 +64,7 @@ public class Partida {
     }
 
     public FaseNocturna crearFaseNocturna(int numeroRonda) {
-        return new FaseNocturna(numeroRonda, jugadores);
+        return new FaseNocturna(numeroRonda, jugadores, criterioConsenso);
     }
 
     public FaseDiurna crearFaseDiurna(int numeroRonda) {
