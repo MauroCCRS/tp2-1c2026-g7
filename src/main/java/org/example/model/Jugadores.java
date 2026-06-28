@@ -41,4 +41,9 @@ public class Jugadores {
                 .filter(Jugador::estaVivo)
                 .forEach(accion);
     }
+
+    //copia de lista de jugadores para usarlo en vista reparto de roles
+    public List<Jugador> todos() {
+        return new ArrayList<>(jugadores);
+    }
 }

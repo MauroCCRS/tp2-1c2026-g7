@@ -21,4 +21,9 @@ public class BandoCiudadano implements Bando {
         int ciudadanosVivos = jugadores.cantidadVivosDelBando(this);
         return ciudadanosVivos == jugadores.cantidadDeVivos();
     }
+
+    @Override
+    public String nombre() {
+        return "Ciudadanos";
+    }
 }

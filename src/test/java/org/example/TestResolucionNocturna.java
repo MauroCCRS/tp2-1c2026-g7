@@ -2,35 +2,37 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestResolucionNocturna {
 
     @Test
-    void siLaVictimaDeLaMafiaEstaProtegidaNoEsEliminada() {
+    void siLaVictimaDeLaMafiaEstaProtegidaNoHayVictima() {
         ResolucionNocturna resolucion = new ResolucionNocturna();
         Jugador victima = new Jugador("Ana", new Ciudadano());
 
         resolucion.registrarAtaque(victima);
         resolucion.registrarProteccion(victima);
-        resolucion.resolver();
 
+        assertTrue(resolucion.resolver().isEmpty());
         assertTrue(victima.estaVivo());
     }
 
     @Test
-    void siLaVictimaDeLaMafiaNoEstaProtegidaEsEliminada() {
+    void siLaVictimaDeLaMafiaNoEstaProtegidaEsLaVictimaResultante() {
         ResolucionNocturna resolucion = new ResolucionNocturna();
         Jugador victima = new Jugador("Ana", new Ciudadano());
 
         resolucion.registrarAtaque(victima);
-        resolucion.resolver();
 
-        assertFalse(victima.estaVivo());
+        assertEquals(Optional.of(victima), resolucion.resolver());
     }
 
     @Test
-    void siElMedicoProtegeAOtroJugadorLaVictimaMuere() {
+    void siElMedicoProtegeAOtroJugadorLaVictimaSigueSiendoElObjetivo() {
         Jugador victima = new Jugador("Ana", new Ciudadano());
         Jugador protegido = new Jugador("Beto", new Ciudadano());
 
@@ -38,9 +40,6 @@ class TestResolucionNocturna {
         resolucion.registrarAtaque(victima);
         resolucion.registrarProteccion(protegido);
 
-        resolucion.resolver();
-
-        assertFalse(victima.estaVivo());
-        assertTrue(protegido.estaVivo());
+        assertEquals(Optional.of(victima), resolucion.resolver());
     }
 }

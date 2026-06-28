@@ -35,4 +35,10 @@ public abstract class Fase {
     void elegirProteger(Jugador medico, Jugador objetivo) {
         throw new ProteccionInvalidaException("Solo se puede proteger durante la fase nocturna");
     }
+
+    // agrego para la  visualizacion del estado de la ronda actual.
+    public int numeroRonda() {return numeroRonda;}
+    public abstract String nombre();
+
+
 }

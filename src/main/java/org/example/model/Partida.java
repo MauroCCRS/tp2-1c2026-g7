@@ -52,7 +52,13 @@ public class Partida {
 
     public void resolverFaseActual() {
         registro.agregarRegistro(faseActual.resolver());
-        this.faseActual = faseActual.siguiente(this);
+        if (resultado().isEmpty()) {
+            this.faseActual = faseActual.siguiente(this);
+        }
+    }
+
+    public boolean terminada() {
+        return resultado().isPresent();
     }
 
     public FaseNocturna crearFaseNocturna(int numeroRonda) {
@@ -69,7 +75,13 @@ public class Partida {
                 .findFirst();
     }
 
+    public Optional<String> anuncio() {
+        return resultado().map(bando -> "Ganador: " + bando.nombre());
+    }
+
     public String resumen() {
         return registro.generarResumen();
     }
+    // agrego para la  visualizacion del estado de la ronda actual.
+    public Jugadores jugadores() {return jugadores;}
 }
