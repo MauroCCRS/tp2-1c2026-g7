@@ -46,7 +46,7 @@ class TestIntegrales{
 
         Partida partida = new Partida(jugadores);
         Logger.log("La mafia vota a Agus.");
-        partida.registrarVotoMafia(victima);
+        partida.registrarVotoMafia(mafioso,victima);
         partida.resolverFaseActual();
 
         assertTrue(mafioso.estaVivo());
@@ -70,13 +70,13 @@ class TestIntegrales{
         Logger.log("Roles repartidos.");
         List<Jugador> vivos = vivosDe(jugadores);
         Jugador victima = vivos.get(1);
-
+        Jugador mafioso = vivos.get(0);
         rolMedico.elegirProteger(victima);
         Logger.log("La mafia ataca a Agus.");
         Logger.log("El medico protege a Agus.");
         Partida partida = new Partida(jugadores);
 
-        partida.registrarVotoMafia(victima);
+        partida.registrarVotoMafia(mafioso,victima);
         partida.resolverFaseActual();
         Logger.log(partida.resumen());
         assertTrue(victima.estaVivo());
@@ -158,7 +158,7 @@ class TestIntegrales{
 
         Partida partida = new Partida(jugadores);
 
-        assertThrows(VotacionInvalidaException.class, () -> partida.registrarVotoMafia(mafioso2));
+        assertThrows(VotacionInvalidaException.class, () -> partida.registrarVotoMafia(mafioso1, mafioso2));
 
         assertTrue(mafioso1.estaVivo());
         assertTrue(mafioso2.estaVivo());
@@ -183,7 +183,7 @@ class TestIntegrales{
 
         Partida partida = new Partida(jugadores);
 
-        assertThrows(VotacionInvalidaException.class, () -> partida.registrarVotoMafia(ciudadanoEliminado));
+        assertThrows(VotacionInvalidaException.class, () -> partida.registrarVotoMafia(mafioso, ciudadanoEliminado));
 
         assertFalse(ciudadanoEliminado.estaVivo());
         Logger.log("La mafia intento atacar a un jugador ya eliminado.");
@@ -210,7 +210,7 @@ class TestIntegrales{
 
         Partida partida = new Partida(jugadores);
 
-        partida.registrarVotoMafia(Agus);
+        partida.registrarVotoMafia(mafioso, Agus);
         partida.resolverFaseActual();
         Logger.setEnabled(true);
         Logger.log("Durante la noche fue eliminado Agus.");
@@ -277,14 +277,14 @@ class TestIntegrales{
 
         Partida partida = new Partida(jugadores);
 
-        partida.registrarVotoMafia(medico);
+        partida.registrarVotoMafia(mafioso,medico);
         partida.resolverFaseActual();
 
         partida.resolverFaseActual();
 
         rolMedico.elegirProteger(ana);
 
-        partida.registrarVotoMafia(ana);
+        partida.registrarVotoMafia(mafioso,ana);
         partida.resolverFaseActual();
 
         assertFalse(medico.estaVivo());
@@ -341,7 +341,7 @@ class TestIntegrales{
         Partida partida = new Partida(jugadores);
 
         partida.elegirInvestigar(detective, mafioso);
-        partida.registrarVotoMafia(victima);
+        partida.registrarVotoMafia(mafioso,victima);
         partida.resolverFaseActual();
 
         assertFalse(victima.estaVivo());

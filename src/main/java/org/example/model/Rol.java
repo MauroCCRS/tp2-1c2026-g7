@@ -15,11 +15,18 @@ public abstract class Rol {
         throw new InvestigacionInvalidaException("Este rol no puede investigar");
     }
 
-    public void revelarse() {
+    public void revelarseComoSheriff() {
         throw new RevelacionInvalidaException("Solo el Sheriff puede revelarse");
     }
 
     public void elegirProteger(Jugador objetivo) {
         throw new ProteccionInvalidaException("Este rol no puede proteger");
+    }
+
+    public boolean estaRevelado(){
+        throw new RevelacionInvalidaException("Solo el Sheriff puede mostrar que esta revelado");
+    }
+    public  VotoMafia crearVotoMafia(Jugador objetivo) {
+        throw new VotacionInvalidaException("Solo el mafioso puede votar");
     }
 }

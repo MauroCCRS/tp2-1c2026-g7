@@ -12,7 +12,7 @@ public abstract class Fase {
 
     public abstract Fase siguiente(Partida partida);
 
-    void registrarVotoMafia(Jugador objetivo) {
+    void registrarVotoMafia(Jugador votante, Jugador objetivo) {
         throw new VotacionInvalidaException("La mafia solo puede votar durante la fase nocturna");
     }
 

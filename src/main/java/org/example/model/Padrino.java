@@ -8,4 +8,8 @@ public class Padrino extends Mafioso {
     public String nombre() {
         return "Padrino";
     }
+    @Override
+    public  VotoMafia crearVotoMafia(Jugador objetivo) {
+        return new VotoPadrino(objetivo);
+    }
 }

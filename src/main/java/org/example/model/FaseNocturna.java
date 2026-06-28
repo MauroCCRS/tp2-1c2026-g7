@@ -5,17 +5,18 @@ import java.util.Optional;
 public class FaseNocturna extends Fase {
 
     private final Jugadores jugadores;
-    private final VotacionMafia votacionMafia = new VotacionMafia();
+    private final VotacionMafia votacionMafia;
     private final ResolucionNocturna resolucion = new ResolucionNocturna();
 
-    public FaseNocturna(int numeroRonda, Jugadores jugadores) {
+    public FaseNocturna(int numeroRonda, Jugadores jugadores, CriterioConsenso criterioConsenso) {
         super(numeroRonda);
         this.jugadores = jugadores;
+        this.votacionMafia = new VotacionMafia(criterioConsenso);
     }
 
     @Override
-    void registrarVotoMafia(Jugador objetivo) {
-        this.votacionMafia.votar(objetivo);
+    void registrarVotoMafia(Jugador votante, Jugador objetivo) {
+        this.votacionMafia.votar(votante,objetivo);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class FaseNocturna extends Fase {
 
     @Override
     public RegistroRonda resolver() {
-        resolucion.registrarAtaque(votacionMafia.victimaElegida());
+        votacionMafia.victimaElegida().ifPresent(resolucion::registrarAtaque);
         jugadores.porCadaVivo(jugador -> jugador.actuarEnNoche(resolucion));
 
         Optional<Jugador> victima = resolucion.resolver();

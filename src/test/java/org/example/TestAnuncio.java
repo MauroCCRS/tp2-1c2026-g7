@@ -29,7 +29,7 @@ public class TestAnuncio {
         jugadores.agregar(ana);
 
         Partida partida = new Partida(jugadores);
-        partida.registrarVotoMafia(ana);
+        partida.registrarVotoMafia(mafioso, ana);
         partida.resolverFaseActual();
 
         assertTrue(partida.anuncio().isPresent());
