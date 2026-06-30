@@ -1,10 +1,13 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("fases")
+@Tag("integracion")
 public class TestFaseNocturna {
 
     private Jugadores conMafiosoY(Jugador... ciudadanos) {
@@ -33,6 +36,7 @@ public class TestFaseNocturna {
     }
 
     @Test
+    @Tag("medico")
     public void elMedicoAnulaLaEliminacionAlProtegerALaVictima() {
         Jugador ana = new Jugador("Ana", new Ciudadano());
         Jugador medico = new Jugador("Med", new Medico());

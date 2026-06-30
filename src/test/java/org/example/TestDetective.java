@@ -1,9 +1,11 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("detective")
 public class TestDetective {
 
     @Test
@@ -18,7 +20,6 @@ public class TestDetective {
         assertTrue(detective.resultadoInvestigacion().esMismoBando(new BandoCiudadano()));
     }
 
-
     @Test
     public void elDetectiveRecibeMafiaAlInvestigarAUnMafioso() {
         Detective detective = new Detective();
@@ -31,13 +32,11 @@ public class TestDetective {
         assertTrue(detective.resultadoInvestigacion().esMismoBando(new BandoMafia()));
     }
 
-
     @Test
+    @Tag("padrino")
     public void elDetectiveRecibeCiudadanoAlInvestigarAlPadrino() {
         Detective detective = new Detective();
-
         Jugador padrino = new Jugador("Padrino", new Padrino());
-
         ResolucionNocturna resolucion = new ResolucionNocturna();
 
         detective.elegirInvestigar(padrino);
@@ -61,17 +60,29 @@ public class TestDetective {
     }
 
     @Test
-    public void alInvestigarUnJugadorEliminadoDaError() {
-
+    public void elDetectivePuedeInvestigarAlMismoJugadorSiInvestigoAOtroEnLaNocheIntermedia() {
         Detective detective = new Detective();
+        Jugador ana = new Jugador("Ana", new Ciudadano());
+        Jugador beto = new Jugador("Beto", new Ciudadano());
 
+        detective.elegirInvestigar(ana);
+        detective.actuarEnNoche(new ResolucionNocturna());
+
+        detective.elegirInvestigar(beto);
+        detective.actuarEnNoche(new ResolucionNocturna());
+
+        assertDoesNotThrow(() -> detective.elegirInvestigar(ana));
+    }
+
+    @Test
+    public void alInvestigarUnJugadorEliminadoDaError() {
+        Detective detective = new Detective();
         Jugador jugadorEliminado = new Jugador("Jugador eliminado", new Ciudadano());
         jugadorEliminado.eliminar();
 
         assertThrows(InvestigacionInvalidaException.class, () -> {
             detective.elegirInvestigar(jugadorEliminado);
         });
-
     }
 
 }

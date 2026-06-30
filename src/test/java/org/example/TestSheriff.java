@@ -1,14 +1,11 @@
 package org.example;
 
-import org.example.model.BandoCiudadano;
-
-
-import org.example.model.Sheriff;
+import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("sheriff")
 public class TestSheriff {
 
     @Test
@@ -19,7 +16,7 @@ public class TestSheriff {
     }
 
     @Test
-    public void elSheriffPuedeRevelarseUnaVez() {
+    public void elSheriffQuedaReveladoLuegoDeRevelarse() {
         Sheriff sheriff = new Sheriff();
 
         sheriff.revelarse();

@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag("votacion")
+@Tag("dia")
 public class TestVotacionDiurna {
 
     private Jugador ciudadano(String nombre) {
@@ -144,5 +147,77 @@ public class TestVotacionDiurna {
         assertEquals(ana, resultado.get());
     }
 
+    @Test
+    @Tag("ballotage")
+    public void enEmpateElBallotageGeneraUnaSegundaVotacionEntreLosEmpatados() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
 
+        Optional<VotacionDiurna> segundaVuelta = votacion.generarBallotage();
+
+        assertTrue(segundaVuelta.isPresent());
+        assertEquals(2, segundaVuelta.get().obtenerNominados().size());
+        assertTrue(segundaVuelta.get().obtenerNominados().contains(ana));
+        assertTrue(segundaVuelta.get().obtenerNominados().contains(beto));
+    }
+
+    @Test
+    @Tag("ballotage")
+    public void laSegundaVueltaDelBallotageEliminaAlMasVotado() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        VotacionDiurna segundaVuelta = votacion.generarBallotage().get();
+        segundaVuelta.votar(ana, beto);
+        segundaVuelta.votar(caro, beto);
+        segundaVuelta.votar(beto, ana);
+
+        Optional<Jugador> eliminado = segundaVuelta.resolver();
+
+        assertTrue(eliminado.isPresent());
+        assertEquals(beto, eliminado.get());
+    }
+
+    @Test
+    @Tag("ballotage")
+    public void siLaSegundaVueltaVuelveAEmpatarNoSeEliminaANadie() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        VotacionDiurna segundaVuelta = votacion.generarBallotage().get();
+        segundaVuelta.votar(ana, beto);
+        segundaVuelta.votar(beto, ana);
+
+        assertFalse(segundaVuelta.resolver().isPresent());
+    }
+
+    @Test
+    @Tag("ballotage")
+    public void resolverConBallotageNoEliminaEnLaPrimeraVueltaAnteUnEmpate() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        assertFalse(votacion.resolver().isPresent());
+    }
 }

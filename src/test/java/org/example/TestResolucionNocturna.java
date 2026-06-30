@@ -1,12 +1,14 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("fases")
 class TestResolucionNocturna {
 
     @Test

@@ -1,10 +1,12 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@Tag("victoria")
 public class TestCondicionesDeVictoria {
 
     private Jugador mafioso(String nombre) {
@@ -78,6 +80,7 @@ public class TestCondicionesDeVictoria {
     }
 
     @Test
+    @Tag("padrino")
     public void elPadrinoCuentaComoMafiaParaLaCondicionDeVictoria() {
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(new Jugador("Padrino", new Padrino()));
@@ -89,6 +92,7 @@ public class TestCondicionesDeVictoria {
     }
 
     @Test
+    @Tag("padrino")
     public void losCiudadanosNoGananSiQuedaUnPadrinoVivo() {
         Jugadores jugadores = new Jugadores();
         jugadores.agregar(new Jugador("Padrino", new Padrino()));
@@ -100,6 +104,7 @@ public class TestCondicionesDeVictoria {
     }
 
     @Test
+    @Tag("padrino")
     public void losCiudadanosGananCuandoElPadrinoFueEliminado() {
         Jugadores jugadores = new Jugadores();
         Jugador padrino = new Jugador("Padrino", new Padrino());
@@ -128,6 +133,5 @@ public class TestCondicionesDeVictoria {
 
         assertFalse(gano);
     }
-
 
 }

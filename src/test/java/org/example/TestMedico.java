@@ -1,9 +1,11 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("medico")
 public class TestMedico {
 
     @Test
@@ -21,7 +23,6 @@ public class TestMedico {
     }
 
     @Test
-
     public void elMedicoNoPuedeProtegerAlMismoJugadorDosNochesSeguidas() {
         Medico medico = new Medico();
         Jugador jugadorVictima = new Jugador("Jugador victima", new Ciudadano());

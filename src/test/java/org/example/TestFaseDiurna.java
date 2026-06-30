@@ -1,10 +1,13 @@
 package org.example;
 
 import org.example.model.*;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("fases")
+@Tag("integracion")
 public class TestFaseDiurna {
 
     private Jugador ciudadano(String nombre) {
@@ -115,6 +118,7 @@ public class TestFaseDiurna {
     }
 
     @Test
+    @Tag("sheriff")
     public void elSheriffPuedeRevelarseDuranteLaFaseDiurna() {
         Jugador mafioso = new Jugador("Mafioso", new Mafioso());
         Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
@@ -139,6 +143,7 @@ public class TestFaseDiurna {
     }
 
     @Test
+    @Tag("sheriff")
     public void elSheriffNoPuedeRevelarseDuranteLaFaseNocturna() {
         Jugador mafioso = new Jugador("Mafioso", new Mafioso());
         Jugador ciudadano = new Jugador("Ana", new Ciudadano());
@@ -155,6 +160,7 @@ public class TestFaseDiurna {
     }
 
     @Test
+    @Tag("sheriff")
     public void unJugadorQueNoEsSheriffNoPuedeRevelarseComoSheriffDuranteLaFaseDiurna() {
         Jugador mafioso = new Jugador("Mafioso", new Mafioso());
         Jugador victimaNocturna = new Jugador("Ana", new Ciudadano());
@@ -173,42 +179,7 @@ public class TestFaseDiurna {
     }
 
     @Test
-    public void enBallotageSeRehaceLaVotacionYSeEliminaAlMasVotado() {
-        Jugador mafioso = new Jugador("M1", new Mafioso());
-        Jugador dummy = ciudadano("Dummy");
-        Jugador ana = ciudadano("Ana");
-        Jugador beto = ciudadano("Beto");
-        Jugador caro = ciudadano("Caro");
-        Jugador dani = ciudadano("Dani");
-        Jugadores jugadores = new Jugadores();
-        jugadores.agregar(mafioso);
-        jugadores.agregar(dummy);
-        jugadores.agregar(ana);
-        jugadores.agregar(beto);
-        jugadores.agregar(caro);
-        jugadores.agregar(dani);
-
-        Partida partida = new Partida(jugadores, new Ballotage(), new Mayoria());
-        partida.registrarVotoMafia(mafioso, dummy);
-        partida.resolverFaseActual();
-
-        partida.nominar(ana);
-        partida.nominar(beto);
-        partida.votar(ana, beto);
-        partida.votar(beto, ana);
-        partida.resolverFaseActual();
-
-        assertTrue(ana.estaVivo() && beto.estaVivo());
-
-        partida.votar(ana, beto);
-        partida.votar(caro, beto);
-        partida.votar(dani, beto);
-        partida.resolverFaseActual();
-
-        assertFalse(beto.estaVivo());
-    }
-
-    @Test
+    @Tag("ballotage")
     public void enEmpateConCriterioBallotageSeVuelveAVotarYSeEliminaAlMasVotado() {
         Jugador mafioso = new Jugador("M1", new Mafioso());
         Jugador victima = ciudadano("victima");
@@ -245,6 +216,7 @@ public class TestFaseDiurna {
     }
 
     @Test
+    @Tag("ballotage")
     public void siElBallotageTerminaEnEmpateNoSeEliminaANadie() {
         Jugador mafioso = new Jugador("M1", new Mafioso());
         Jugador victima = ciudadano("victima");
