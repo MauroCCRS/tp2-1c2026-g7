@@ -8,48 +8,126 @@ class Partida {
   - jugadores : Jugadores
   - registro : RegistroPartida
   - bandos : List<Bando>
+  - criterioEmpate : CriterioEmpate
+  - criterioConsenso : CriterioConsenso
   - faseActual : Fase
   + faseActual() : Fase
-  + registrarVotoMafia(objetivo : Jugador)
+  + registrarVotoMafia(votante : Jugador, objetivo : Jugador)
   + elegirInvestigar(detective : Jugador, objetivo : Jugador)
   + elegirProteger(medico : Jugador, objetivo : Jugador)
+  + revelarSheriff(sheriff : Jugador)
   + nominar(j : Jugador)
   + votar(votante : Jugador, objetivo : Jugador)
   + resolverFaseActual()
+  + terminada() : boolean
   + crearFaseNocturna(numeroRonda : int) : FaseNocturna
   + crearFaseDiurna(numeroRonda : int) : FaseDiurna
   + resultado() : Optional<Bando>
+  + anuncio() : Optional<String>
   + resumen() : String
+  + jugadores() : Jugadores
 }
 
 abstract class Fase {
   # numeroRonda : int
   + {abstract} resolver() : RegistroRonda
   + {abstract} siguiente(partida : Partida) : Fase
-  ~ registrarVotoMafia(objetivo : Jugador)
+  + {abstract} nombre() : String
+  + numeroRonda() : int
+  ~ registrarVotoMafia(votante : Jugador, objetivo : Jugador)
   ~ nominar(j : Jugador)
   ~ votar(votante : Jugador, objetivo : Jugador)
   ~ elegirInvestigar(detective : Jugador, objetivo : Jugador)
   ~ elegirProteger(medico : Jugador, objetivo : Jugador)
+  ~ revelarSheriff(sheriff : Jugador)
 }
 together {
   class FaseNocturna {
     - jugadores : Jugadores
     - votacionMafia : VotacionMafia
     - resolucion : ResolucionNocturna
-    ~ registrarVotoMafia(objetivo : Jugador)
+    ~ registrarVotoMafia(votante : Jugador, objetivo : Jugador)
     ~ elegirInvestigar(detective : Jugador, objetivo : Jugador)
     ~ elegirProteger(medico : Jugador, objetivo : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
+    + nombre() : String
   }
   class FaseDiurna {
     - votacion : VotacionDiurna
+    - revotacion : Optional<VotacionDiurna>
     ~ nominar(j : Jugador)
     ~ votar(votante : Jugador, objetivo : Jugador)
+    ~ revelarSheriff(sheriff : Jugador)
     + resolver() : RegistroRonda
     + siguiente(partida : Partida) : Fase
+    + nombre() : String
   }
+}
+
+class VotacionMafia {
+  - criterioConsenso : CriterioConsenso
+  - votos : List<VotoMafia>
+  + votar(votante : Jugador, objetivo : Jugador)
+  + victimaElegida() : Optional<Jugador>
+}
+interface VotoMafia {
+  + objetivo() : Jugador
+  + esPrioritario() : boolean
+}
+together {
+  class VotoNormal {
+    + objetivo() : Jugador
+    + esPrioritario() : boolean
+  }
+  class VotoPadrino {
+    + objetivo() : Jugador
+    + esPrioritario() : boolean
+  }
+}
+interface CriterioConsenso {
+  + evaluarConsenso(votos : List<VotoMafia>) : Optional<Jugador>
+}
+together {
+  class Mayoria {
+    + evaluarConsenso(votos : List<VotoMafia>) : Optional<Jugador>
+  }
+  class SinVictima {
+    + evaluarConsenso(votos : List<VotoMafia>) : Optional<Jugador>
+  }
+}
+
+class VotacionDiurna {
+  - criterio : CriterioEmpate
+  - nominados : Set<Jugador>
+  - votos : Map<Jugador, Jugador>
+  + nominar(j : Jugador)
+  + votar(votante : Jugador, objetivo : Jugador)
+  + masVotados() : List<Jugador>
+  + obtenerNominados() : List<Jugador>
+  + resolver() : Optional<Jugador>
+  + generarBallotage() : Optional<VotacionDiurna>
+}
+interface CriterioEmpate {
+  + desempatar(empatados : List<Jugador>) : List<Jugador>
+  + generarBallotage(empatados : List<Jugador>) : Optional<VotacionDiurna>
+}
+together {
+  class SinEliminacion {
+    + desempatar(empatados : List<Jugador>) : List<Jugador>
+  }
+  class Ballotage {
+    + desempatar(empatados : List<Jugador>) : List<Jugador>
+    + generarBallotage(empatados : List<Jugador>) : Optional<VotacionDiurna>
+  }
+}
+
+class ResolucionNocturna {
+  - atacado : Jugador
+  - protegidos : List<Jugador>
+  + registrarAtaque(objetivo : Jugador)
+  + registrarProteccion(objetivo : Jugador)
+  + resolver() : Optional<Jugador>
 }
 
 class RegistroPartida {
@@ -64,39 +142,23 @@ abstract class RegistroRonda {
 together {
   class RegistroNocturno {
     - victima : Jugador
+    + describir() : String
   }
-  class RegistroNocheTranquila
+  class RegistroNocheTranquila {
+    + describir() : String
+  }
   class RegistroDiurno {
     - eliminado : Jugador
+    + describir() : String
   }
-  class RegistroSinEliminacionDiurna
+  class RegistroSinEliminacionDiurna {
+    + describir() : String
+  }
+  class RegistroBallotage {
+    - empatados : List<Jugador>
+    + describir() : String
+  }
 }
-
-class ResolucionNocturna {
-  - atacado : Jugador
-  - protegidos : List<Jugador>
-  + registrarAtaque(objetivo : Jugador)
-  + registrarProteccion(objetivo : Jugador)
-  + resolver() : Optional<Jugador>
-}
-class VotacionMafia {
-  - victimaElegida : Jugador
-  + votar(objetivo : Jugador)
-  + victimaElegida() : Jugador
-}
-class VotacionDiurna {
-  - criterio : CriterioEmpate
-  - nominados : Set<Jugador>
-  - votos : Map<Jugador, Jugador>
-  + nominar(j : Jugador)
-  + votar(votante : Jugador, objetivo : Jugador)
-  + ganadoresPorMayoria() : List<Jugador>
-  + resolver() : Optional<Jugador>
-}
-interface CriterioEmpate {
-  + desempatar(empatados : List<Jugador>) : List<Jugador>
-}
-class SinEliminacion
 
 class Jugadores {
   - jugadores : List<Jugador>
@@ -107,6 +169,9 @@ class Jugadores {
 }
 class Jugador {
   - nombre : String
+  - rol : Rol
+  - carta : Carta
+  - estado : Estado
   + nombre() : String
   + estaVivo() : boolean
   + eliminar()
@@ -118,6 +183,9 @@ class Jugador {
   + elegirProteger(objetivo : Jugador)
   + actuarEnNoche(resolucion : ResolucionNocturna)
   ~ ejecutarAccionNocturna(resolucion : ResolucionNocturna)
+  + crearVotoMafia(objetivo : Jugador) : VotoMafia
+  + revelarseComoSheriff()
+  + estaRevelado() : boolean
   + cartaVistaPor(jugadorQuePregunta : Jugador) : Carta
   + descripcionDeCarta() : String
 }
@@ -127,17 +195,26 @@ abstract class Estado {
   + {abstract} actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
 }
 together {
-  class Vivo
-  class Eliminado
+  class Vivo {
+    + estaVivo() : boolean
+    + actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+  }
+  class Eliminado {
+    + estaVivo() : boolean
+    + actuarEnNoche(jugador : Jugador, resolucion : ResolucionNocturna)
+  }
 }
 
 abstract class Rol {
   + {abstract} bando() : Bando
   + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(resolucion : ResolucionNocturna)
   + elegirInvestigar(objetivo : Jugador)
   + elegirProteger(objetivo : Jugador)
-  + actuarEnNoche(resolucion : ResolucionNocturna)
+  + revelarseComoSheriff()
+  + estaRevelado() : boolean
+  + crearVotoMafia(objetivo : Jugador) : VotoMafia
 }
 
 class Carta {
@@ -146,14 +223,21 @@ class Carta {
 }
 
 interface Bando {
+  + nombre() : String
   + esMismoBando(otro : Bando) : boolean
   + esMismoBandoQueMafia(mafia : BandoMafia) : boolean
   + esMismoBandoQueCiudadano(ciudadano : BandoCiudadano) : boolean
   + ganoSegun(jugadores : Jugadores) : boolean
 }
 together {
-  class BandoMafia
-  class BandoCiudadano
+  class BandoMafia {
+    + nombre() : String
+    + ganoSegun(jugadores : Jugadores) : boolean
+  }
+  class BandoCiudadano {
+    + nombre() : String
+    + ganoSegun(jugadores : Jugadores) : boolean
+  }
 }
 
 class Configuracion {
@@ -161,6 +245,7 @@ class Configuracion {
   - tramos : List<Tramo>
   + armarRoles(cantidadJugadores : int) : List<Rol>
   - tramoPara(cantidadJugadores : int) : Tramo
+  - construirTramos() : List<Tramo>
 }
 class Tramo {
   - minimo : int
@@ -180,27 +265,47 @@ class RepartidorRoles {
 interface MezcladorDeRoles {
   + mezclar(roles : List<Rol>)
 }
-class MezcladorAleatorioRoles
+class MezcladorAleatorioRoles {
+  + mezclar(roles : List<Rol>)
+}
 
 Partida *-- Jugadores
 Partida *-- RegistroPartida
+Partida o-- "2" Bando : bandos
 Partida --> Fase : faseActual
+Partida --> CriterioEmpate : criterioEmpate
+Partida --> CriterioConsenso : criterioConsenso
 
 Fase <|-- FaseNocturna
 Fase <|-- FaseDiurna
 FaseNocturna *-- ResolucionNocturna
 FaseNocturna *-- VotacionMafia
-FaseNocturna ..> Jugador
-FaseDiurna *-- VotacionDiurna
+FaseNocturna --> Jugadores : jugadores
+FaseDiurna *-- VotacionDiurna : votacion
+
+VotacionMafia --> CriterioConsenso : criterioConsenso
+VotacionMafia o-- "0..*" VotoMafia : votos
+VotacionMafia ..> Jugador
+VotoMafia <|.. VotoNormal
+VotoMafia <|.. VotoPadrino
+CriterioConsenso <|.. Mayoria
+CriterioConsenso <|.. SinVictima
+Mayoria ..> VotoMafia
+
+VotacionDiurna --> CriterioEmpate : criterio
+VotacionDiurna ..> Jugador
+CriterioEmpate <|.. SinEliminacion
+CriterioEmpate <|.. Ballotage
+CriterioEmpate ..> VotacionDiurna
+Ballotage ..> SinEliminacion
 
 RegistroPartida *-- "0..*" RegistroRonda
 RegistroRonda <|-- RegistroNocturno
 RegistroRonda <|-- RegistroNocheTranquila
 RegistroRonda <|-- RegistroDiurno
 RegistroRonda <|-- RegistroSinEliminacionDiurna
+RegistroRonda <|-- RegistroBallotage
 
-VotacionDiurna --> CriterioEmpate : criterio
-CriterioEmpate <|.. SinEliminacion
 ResolucionNocturna o-- "0..*" Jugador
 
 Jugadores o-- "5..12" Jugador
@@ -211,6 +316,7 @@ Estado <|-- Vivo
 Estado <|-- Eliminado
 
 Rol ..> Bando
+Rol ..> VotoMafia
 Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 

@@ -8,15 +8,19 @@ abstract class Rol {
   + {abstract} bando() : Bando
   + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
+  + actuarEnNoche(resolucion : ResolucionNocturna)
   + elegirInvestigar(objetivo : Jugador)
   + elegirProteger(objetivo : Jugador)
-  + actuarEnNoche(resolucion : ResolucionNocturna)
+  + revelarseComoSheriff()
+  + estaRevelado() : boolean
+  + crearVotoMafia(objetivo : Jugador) : VotoMafia
 }
 
 together {
   class Mafioso {
     + bando() : Bando
     + nombre() : String
+    + crearVotoMafia(objetivo : Jugador) : VotoMafia
   }
   class Ciudadano {
     + bando() : Bando
@@ -25,6 +29,7 @@ together {
   class Padrino {
     + resultadoAlSerInvestigado() : Bando
     + nombre() : String
+    + crearVotoMafia(objetivo : Jugador) : VotoMafia
   }
   class Detective {
     - objetivoAInvestigar : Jugador
@@ -45,8 +50,27 @@ together {
     + actuarEnNoche(resolucion : ResolucionNocturna)
   }
   class Sheriff {
+    - revelado : boolean
     + bando() : Bando
     + nombre() : String
+    + revelarseComoSheriff()
+    + revelarse()
+    + estaRevelado() : boolean
+  }
+}
+
+interface VotoMafia {
+  + objetivo() : Jugador
+  + esPrioritario() : boolean
+}
+together {
+  class VotoNormal {
+    + objetivo() : Jugador
+    + esPrioritario() : boolean
+  }
+  class VotoPadrino {
+    + objetivo() : Jugador
+    + esPrioritario() : boolean
   }
 }
 
@@ -60,23 +84,41 @@ interface EstadoCarta {
   + describir(rol : Rol) : String
 }
 together {
-  class Oculta
-  class Revelada
+  class Oculta {
+    + describir(rol : Rol) : String
+  }
+  class Revelada {
+    + describir(rol : Rol) : String
+  }
 }
 
 interface Bando {
+  + nombre() : String
   + esMismoBando(otro : Bando) : boolean
   + esMismoBandoQueMafia(mafia : BandoMafia) : boolean
   + esMismoBandoQueCiudadano(ciudadano : BandoCiudadano) : boolean
   + ganoSegun(jugadores : Jugadores) : boolean
 }
 together {
-  class BandoMafia
-  class BandoCiudadano
+  class BandoMafia {
+    + nombre() : String
+    + ganoSegun(jugadores : Jugadores) : boolean
+  }
+  class BandoCiudadano {
+    + nombre() : String
+    + ganoSegun(jugadores : Jugadores) : boolean
+  }
 }
 
-class ResolucionNocturna
-class Jugador
+class ResolucionNocturna {
+  + registrarAtaque(objetivo : Jugador)
+  + registrarProteccion(objetivo : Jugador)
+  + resolver() : Optional<Jugador>
+}
+class Jugador {
+  + estaVivo() : boolean
+  + resultadoAlSerInvestigado() : Bando
+}
 
 Rol <|-- Mafioso
 Rol <|-- Ciudadano
@@ -85,16 +127,24 @@ Rol <|-- Detective
 Rol <|-- Medico
 Rol <|-- Sheriff
 
+VotoMafia <|.. VotoNormal
+VotoMafia <|.. VotoPadrino
+Mafioso ..> VotoNormal
+Padrino ..> VotoPadrino
+
 Carta o-- Rol
 Carta --> EstadoCarta : estado
 EstadoCarta <|.. Oculta
 EstadoCarta <|.. Revelada
+EstadoCarta ..> Rol
 
 Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 
 Rol ..> Bando
+Rol ..> VotoMafia
 Rol ..> ResolucionNocturna
 Rol ..> Jugador
 Detective ..> Jugador
+Medico ..> ResolucionNocturna
 @enduml
