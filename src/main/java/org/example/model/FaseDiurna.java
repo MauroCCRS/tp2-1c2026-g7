@@ -45,8 +45,8 @@ public RegistroRonda resolver() {
 }
 
     @Override
-    void revelarSheriff(Jugador sheriff) {
-        sheriff.revelarseComoSheriff();
+    void revelar(Jugador sheriff) {
+        sheriff.revelarse();
     }
 
 

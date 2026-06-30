@@ -135,7 +135,7 @@ public class TestFaseDiurna {
 
         partida.revelarSheriff(sheriff);
 
-        assertTrue(sheriff.estaRevelado());
+        assertEquals("Sheriff",sheriff.descripcionDeCarta());
     }
 
     @Test

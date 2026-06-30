@@ -1,12 +1,5 @@
 package org.example.model;
-public class Sheriff extends Rol {
-    private boolean revelado = false;
-
-
-    @Override
-    public Bando bando() {
-        return new BandoCiudadano();
-    }
+public class Sheriff extends Investigador {
 
     @Override
     public String nombre() {
@@ -14,16 +7,12 @@ public class Sheriff extends Rol {
     }
 
     @Override
-    public void revelarseComoSheriff() {
-        revelarse();
-    }
-
-
     public void revelarse() {
-        this.revelado = true;
     }
 
-    public boolean estaRevelado() {
-        return revelado;
+    public Jugador revelarJugadorInvestigado(){
+        return this.ultimoInvestigado;
     }
+
+
 }

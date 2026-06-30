@@ -26,4 +26,5 @@ public class ResolucionNocturna {
         }
         return Optional.of(atacado);
     }
+
 }

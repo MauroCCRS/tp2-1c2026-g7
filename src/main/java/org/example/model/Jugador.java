@@ -66,12 +66,9 @@ public class Jugador {
         return this.esMafioso() && otroJugador.esMafioso();
     }
 
-    public void revelarseComoSheriff() {
-        rol.revelarseComoSheriff();
-    }
-
-    public boolean estaRevelado() {
-        return rol.estaRevelado();
+    public void revelarse(){
+            rol.revelarse();
+            this.carta.revelar();
     }
 
     public boolean perteneceA(Bando otroBando) {
@@ -81,8 +78,11 @@ public class Jugador {
     public boolean esMafioso() {
         return bando().esMismoBando(new BandoMafia());
     }
-
     public VotoMafia crearVotoMafia(Jugador objetivo) {
         return this.rol.crearVotoMafia(objetivo);
+    }
+
+    public Jugador revelarJugador(){
+        return rol.revelarJugadorInvestigado();
     }
 }

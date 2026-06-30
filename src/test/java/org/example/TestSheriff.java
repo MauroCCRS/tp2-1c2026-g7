@@ -1,30 +1,58 @@
 package org.example;
 
-import org.example.model.BandoCiudadano;
+import org.example.model.*;
 
 
-import org.example.model.Sheriff;
 import org.junit.jupiter.api.Test;
 
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSheriff {
 
     @Test
+    public void elSheriffPuedeDevolverElJugadorInvestigado() {
+    Jugador sheriff = new Jugador("Sheriff", new Sheriff());
+    Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+
+    sheriff.elegirInvestigar(mafioso);
+
+    assertEquals(mafioso,sheriff.revelarJugador());
+    }
+
+
+    @Test
+    public void soloElSheriffPuedeDevolverElJugadorInvestigado() {
+        Jugador ciudadano = new Jugador("Ciudadano", new Ciudadano());
+        Detective detective = new Detective();
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+
+        detective.elegirInvestigar(ciudadano);
+        detective.actuarEnNoche(resolucion);
+
+        assertThrows(RevelacionInvalidaException.class, () -> ciudadano.revelarJugador());
+    }
+
+
+    @Test
     public void elSheriffPerteneceAlBandoCiudadano() {
-        Sheriff sheriff = new Sheriff();
+        Jugador sheriff = new Jugador("Sheriff", new Sheriff());
 
         assertTrue(sheriff.bando().esMismoBando(new BandoCiudadano()));
     }
 
     @Test
-    public void elSheriffPuedeRevelarseUnaVez() {
-        Sheriff sheriff = new Sheriff();
-
+    public void elSheriffPuedeRevelarse() {
+        Jugador sheriff = new Jugador("Sheriff", new Sheriff());
         sheriff.revelarse();
+        assertEquals("Sheriff",sheriff.descripcionDeCarta());
 
-        assertTrue(sheriff.estaRevelado());
     }
 
+
+    @Test
+    public void soloElSheriffPuedeRevelarse(){
+        Jugador ciudadano = new Jugador("Ciudadano", new Ciudadano());
+
+        assertThrows(RevelacionInvalidaException.class, ciudadano::revelarse);
+    }
 }
