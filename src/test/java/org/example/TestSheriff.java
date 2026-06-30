@@ -10,6 +10,35 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSheriff {
 
     @Test
+    public void elSheriffPuedeDevolverElJugadorInvestigado() {
+    Jugador sheriff = new Jugador("Sheriff", new Sheriff());
+    Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+
+
+    ResolucionNocturna resolucion = new ResolucionNocturna();
+
+    sheriff.elegirInvestigar(mafioso);
+    sheriff.actuarEnNoche(resolucion);
+
+
+    assertEquals(mafioso,sheriff.revelarJugador());
+    }
+
+
+    @Test
+    public void soloElSheriffPuedeDevolverElJugadorInvestigado() {
+        Jugador ciudadano = new Jugador("Ciudadano", new Ciudadano());
+        Detective detective = new Detective();
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+
+        detective.elegirInvestigar(ciudadano);
+        detective.actuarEnNoche(resolucion);
+
+        assertThrows(RevelacionInvalidaException.class, () -> ciudadano.revelarJugador());
+    }
+
+
+    @Test
     public void elSheriffPerteneceAlBandoCiudadano() {
         Jugador sheriff = new Jugador("Sheriff", new Sheriff());
 

@@ -1,8 +1,8 @@
 package org.example.model;
 
 public class Detective extends Rol {
-    private Jugador objetivoAInvestigar;
-    private Jugador ultimoInvestigado;
+    protected Jugador objetivoAInvestigar;
+    protected Jugador ultimoInvestigado;
     private Bando resultadoInvestigacion;
 
     @Override

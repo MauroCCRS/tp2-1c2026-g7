@@ -9,6 +9,7 @@ public class Mafioso extends Rol {
     public String nombre() {
         return "Mafioso";
     }
+
     @Override
     public  VotoMafia crearVotoMafia(Jugador objetivo) {
         return new VotoNormal(objetivo);

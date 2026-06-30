@@ -1,5 +1,5 @@
 package org.example.model;
-public class Sheriff extends Rol {
+public class Sheriff extends Detective {
 
 
     @Override
@@ -14,6 +14,11 @@ public class Sheriff extends Rol {
 
     @Override
     public void revelarse() {
-
     }
+
+    public Jugador revelarJugadorInvestigado(){
+        return this.ultimoInvestigado;
+    }
+
+
 }

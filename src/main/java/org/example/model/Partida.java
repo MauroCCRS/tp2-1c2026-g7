@@ -37,6 +37,7 @@ public class Partida {
     }
 
     public void revelarSheriff(Jugador sheriff) {
+
         faseActual.revelar(sheriff);
     }
 

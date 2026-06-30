@@ -78,8 +78,11 @@ public class Jugador {
     public boolean esMafioso() {
         return bando().esMismoBando(new BandoMafia());
     }
-
     public VotoMafia crearVotoMafia(Jugador objetivo) {
         return this.rol.crearVotoMafia(objetivo);
+    }
+
+    public Jugador revelarJugador(){
+        return rol.revelarJugadorInvestigado();
     }
 }
