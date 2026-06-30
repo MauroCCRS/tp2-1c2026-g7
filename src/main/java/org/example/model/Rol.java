@@ -22,4 +22,11 @@ public abstract class Rol {
     public void elegirProteger(Jugador objetivo) {
         throw new ProteccionInvalidaException("Este rol no puede proteger");
     }
+
+    public boolean estaRevelado(){
+        throw new RevelacionInvalidaException("Solo el Sheriff puede mostrar que esta revelado");
+    }
+    public  VotoMafia crearVotoMafia(Jugador objetivo) {
+        throw new VotacionInvalidaException("Solo el mafioso puede votar");
+    }
 }
