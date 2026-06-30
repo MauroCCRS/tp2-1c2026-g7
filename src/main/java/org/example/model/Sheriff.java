@@ -1,11 +1,5 @@
 package org.example.model;
-public class Sheriff extends Detective {
-
-
-    @Override
-    public Bando bando() {
-        return new BandoCiudadano();
-    }
+public class Sheriff extends Investigador {
 
     @Override
     public String nombre() {

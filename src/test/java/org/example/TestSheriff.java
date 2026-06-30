@@ -14,12 +14,7 @@ public class TestSheriff {
     Jugador sheriff = new Jugador("Sheriff", new Sheriff());
     Jugador mafioso = new Jugador("Mafioso", new Mafioso());
 
-
-    ResolucionNocturna resolucion = new ResolucionNocturna();
-
     sheriff.elegirInvestigar(mafioso);
-    sheriff.actuarEnNoche(resolucion);
-
 
     assertEquals(mafioso,sheriff.revelarJugador());
     }

@@ -21,7 +21,7 @@ public class VotacionMafia {
             throw new VotacionInvalidaException("La victima no puede ser mafioso");
         }
         VotoMafia voto = votante.crearVotoMafia(objetivo);
-        this.votos.add(voto);
+        this.votos.add(voto); 
     }
 
     public Optional<Jugador> victimaElegida() {
