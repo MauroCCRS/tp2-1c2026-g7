@@ -66,12 +66,9 @@ public class Jugador {
         return this.esMafioso() && otroJugador.esMafioso();
     }
 
-    public void revelarseComoSheriff() {
-        rol.revelarseComoSheriff();
-    }
-
-    public boolean estaRevelado() {
-        return rol.estaRevelado();
+    public void revelarse(){
+            rol.revelarse();
+            this.carta.revelar();
     }
 
     public boolean perteneceA(Bando otroBando) {

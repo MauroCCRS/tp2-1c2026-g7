@@ -1,6 +1,5 @@
 package org.example.model;
 public class Sheriff extends Rol {
-    private boolean revelado = false;
 
 
     @Override
@@ -14,16 +13,7 @@ public class Sheriff extends Rol {
     }
 
     @Override
-    public void revelarseComoSheriff() {
-        revelarse();
-    }
-
-
     public void revelarse() {
-        this.revelado = true;
-    }
 
-    public boolean estaRevelado() {
-        return revelado;
     }
 }

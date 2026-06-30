@@ -28,7 +28,7 @@ public abstract class Fase {
         throw new InvestigacionInvalidaException("Solo se puede investigar durante la fase nocturna");
     }
 
-    void revelarSheriff(Jugador sheriff) {
+    void revelar(Jugador sheriff) {
         throw new RevelacionInvalidaException("El Sheriff solo puede revelarse durante la fase diurna");
     }
 
