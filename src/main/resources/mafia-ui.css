@@ -1,0 +1,341 @@
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #f5f7fb;
+}
+
+.screen, .screen-day {
+    -fx-background-color: linear-gradient(to bottom right, #08003b 0%, #0f1d57 48%, #f5f7fb 48.3%, #ffffff 100%);
+}
+
+.screen-night {
+    -fx-background-color: linear-gradient(to bottom right, #050014 0%, #12071f 42%, #23111a 68%, #08000e 100%);
+}
+
+.hero-title {
+    -fx-font-size: 88px;
+    -fx-font-weight: 900;
+    -fx-fill: #ffffff;
+}
+
+.page-title {
+    -fx-font-size: 38px;
+    -fx-font-weight: 900;
+    -fx-fill: #ffffff;
+}
+
+.hero-copy {
+    -fx-font-size: 20px;
+    -fx-fill: #e9ecff;
+}
+
+.muted-copy {
+    -fx-font-size: 20px;
+    -fx-fill: #27345f;
+}
+
+.panel, .poster-panel, .role-reveal-panel {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dce2f0;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(8, 0, 59, 0.14), 20, 0.16, 0, 8);
+}
+
+.poster-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+}
+
+.role-reveal-panel {
+    -fx-background-color: #ffffff;
+}
+
+.panel-title, .action-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #08003b;
+}
+
+.role-title {
+    -fx-font-size: 44px;
+    -fx-font-weight: 900;
+    -fx-fill: #b83232;
+}
+
+.field-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #14245f;
+    -fx-fill: #14245f;
+}
+
+.primary-button, .secondary-button {
+    -fx-cursor: hand;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-padding: 12 18 12 18;
+}
+
+.primary-button {
+    -fx-background-color: #08003b;
+    -fx-text-fill: white;
+}
+
+.primary-button:hover {
+    -fx-background-color: #172a73;
+}
+
+.primary-button:disabled, .secondary-button:disabled {
+    -fx-opacity: 0.45;
+}
+
+.secondary-button {
+    -fx-background-color: #eef2ff;
+    -fx-border-color: #cfd8ef;
+    -fx-text-fill: #08003b;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #dfe7ff;
+}
+
+.combo, .text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #cfd8ef;
+    -fx-font-size: 15px;
+    -fx-padding: 8;
+}
+
+.text-field {
+    -fx-text-fill: #08003b;
+    -fx-prompt-text-fill: #7781a6;
+}
+
+.phase-night, .phase-day {
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+    -fx-background-radius: 999;
+    -fx-padding: 8 14 8 14;
+}
+
+.phase-night {
+    -fx-background-color: #08003b;
+    -fx-text-fill: #ffffff;
+}
+
+.phase-day {
+    -fx-background-color: #f3c95c;
+    -fx-text-fill: #08003b;
+}
+
+.info-label, .muted-label, .winner-label, .error-label, .alive-label, .dead-label, .count-label {
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+.info-label {
+    -fx-text-fill: #27345f;
+}
+
+.muted-label {
+    -fx-text-fill: #66708f;
+}
+
+.winner-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #b83232;
+}
+
+.error-label {
+    -fx-text-fill: #b83232;
+    -fx-font-weight: 900;
+}
+
+.count-label {
+    -fx-text-fill: #08003b;
+    -fx-font-weight: 900;
+}
+
+.history-area {
+    -fx-control-inner-background: #f7f9ff;
+    -fx-text-fill: #14245f;
+    -fx-highlight-fill: #b9c7ef;
+    -fx-font-size: 13px;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #dce2f0;
+}
+
+.player-card, .player-card-dead, .action-card, .count-box {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.player-card {
+    -fx-background-color: #f7f9ff;
+    -fx-border-color: #dce2f0;
+}
+
+.player-card-dead {
+    -fx-background-color: #fff2f2;
+    -fx-border-color: #f0c6c6;
+}
+
+.player-name {
+    -fx-font-size: 17px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #08003b;
+}
+
+.alive-label {
+    -fx-text-fill: #16834b;
+    -fx-font-weight: 900;
+}
+
+.dead-label {
+    -fx-text-fill: #b83232;
+    -fx-font-weight: 900;
+}
+
+.action-card, .count-box {
+    -fx-background-color: #f7f9ff;
+    -fx-border-color: #dce2f0;
+    -fx-padding: 14;
+}
+
+.transparent-scroll, .transparent-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.actions-panel {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+    -fx-padding: 0 0 0 2;
+}
+
+.actions-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 0 0 2 2;
+}
+
+.actions-list {
+    -fx-background-color: transparent;
+    -fx-padding: 0 2 0 2;
+}
+
+.actions-scroll,
+.actions-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.actions-scroll {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.actions-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.actions-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(8, 0, 59, 0.22);
+    -fx-background-radius: 999;
+}
+.field-label-light {
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-fill: #ffffff;
+}
+
+.timer-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: 900;
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-text-fill: #08003b;
+    -fx-background-radius: 999;
+    -fx-padding: 8 14 8 14;
+}
+
+.chat-area {
+    -fx-control-inner-background: #f7f9ff;
+    -fx-text-fill: #14245f;
+    -fx-highlight-fill: #b9c7ef;
+    -fx-font-size: 13px;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #dce2f0;
+}
+
+.screen-night .panel,
+.screen-night .poster-panel,
+.screen-night .role-reveal-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.94);
+    -fx-border-color: rgba(255, 255, 255, 0.18);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 22, 0.20, 0, 10);
+}
+
+.screen-night .actions-title {
+    -fx-text-fill: #f8f0e8;
+}
+
+.screen-night .action-card,
+.screen-night .count-box {
+    -fx-background-color: #fff8f2;
+    -fx-border-color: #ead8cc;
+}
+
+.screen-night .secondary-button {
+    -fx-background-color: #2d1220;
+    -fx-border-color: #4a2231;
+    -fx-text-fill: #fff8f2;
+}
+
+.screen-night .secondary-button:hover {
+    -fx-background-color: #4a1c30;
+}
+.panel-page-title {
+    -fx-font-size: 38px;
+    -fx-font-weight: 900;
+    -fx-fill: #08003b;
+}
+
+.panel-copy {
+    -fx-font-size: 18px;
+    -fx-fill: #27345f;
+}
+
+.role-reveal-panel .text {
+    -fx-fill: #27345f;
+}
+.primary-button, .primary-button .text {
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
+
+.secondary-button, .secondary-button .text {
+    -fx-text-fill: #08003b;
+    -fx-fill: #08003b;
+}
+
+.screen-night .secondary-button, .screen-night .secondary-button .text {
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
+
+.role-reveal-panel .role-title {
+    -fx-fill: #b83232;
+}
+
+.combo .list-cell {
+    -fx-text-fill: #08003b;
+}

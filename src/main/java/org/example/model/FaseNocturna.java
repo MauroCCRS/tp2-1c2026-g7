@@ -1,5 +1,6 @@
 package org.example.model;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class FaseNocturna extends Fase {
@@ -16,7 +17,7 @@ public class FaseNocturna extends Fase {
 
     @Override
     void registrarVotoMafia(Jugador votante, Jugador objetivo) {
-        this.votacionMafia.votar(votante,objetivo);
+        this.votacionMafia.votar(votante, objetivo);
     }
 
     @Override
@@ -47,7 +48,18 @@ public class FaseNocturna extends Fase {
         return partida.crearFaseDiurna(numeroRonda);
     }
 
-    // agrego para la  visualizacion del estado de la ronda actual.
     @Override
-    public String nombre() {return "Nocturna";}
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return votacionMafia.votosRegistrados();
+    }
+
+    @Override
+    public Map<Jugador, Long> conteoVotos() {
+        return votacionMafia.conteoPorObjetivo();
+    }
+
+    @Override
+    public String nombre() {
+        return "Nocturna";
+    }
 }

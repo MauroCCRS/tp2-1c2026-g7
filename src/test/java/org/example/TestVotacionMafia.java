@@ -45,4 +45,17 @@ class TestVotacionMafia {
 
         assertThrows(VotacionInvalidaException.class, () -> votacion.votar(mafioso, padrino));
     }
+    @Test
+    void unMafiosoNoPuedeVotarDosVecesEnLaMismaNoche() {
+        Jugador mafioso = new Jugador("Caro", new Mafioso());
+        Jugador ana = new Jugador("Ana", new Ciudadano());
+        Jugador beto = new Jugador("Beto", new Ciudadano());
+        VotacionMafia votacion = new VotacionMafia(new Mayoria());
+
+        votacion.votar(mafioso, ana);
+
+        assertThrows(VotacionInvalidaException.class, () -> votacion.votar(mafioso, beto));
+        assertEquals(1L, votacion.conteoPorObjetivo().get(ana));
+    }
 }
+

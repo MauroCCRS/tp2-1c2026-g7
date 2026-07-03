@@ -2,6 +2,7 @@ package org.example.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class Partida {
@@ -11,6 +12,7 @@ public class Partida {
     private final List<Bando> bandos = Arrays.asList(new BandoMafia(), new BandoCiudadano());
     private final CriterioEmpate criterioEmpate;
     private final CriterioConsenso criterioConsenso;
+    private Jugador sheriffRevelado;
     private Fase faseActual;
 
     public Partida(Jugadores jugadores) {
@@ -37,8 +39,8 @@ public class Partida {
     }
 
     public void revelarSheriff(Jugador sheriff) {
-
         faseActual.revelar(sheriff);
+        this.sheriffRevelado = sheriff;
     }
 
     public void elegirProteger(Jugador medico, Jugador objetivo) {
@@ -64,6 +66,10 @@ public class Partida {
         return resultado().isPresent();
     }
 
+    public boolean sheriffRevelado(Jugador jugador) {
+        return sheriffRevelado == jugador;
+    }
+
     public FaseNocturna crearFaseNocturna(int numeroRonda) {
         return new FaseNocturna(numeroRonda, jugadores, criterioConsenso);
     }
@@ -85,6 +91,20 @@ public class Partida {
     public String resumen() {
         return registro.generarResumen();
     }
-    // agrego para la  visualizacion del estado de la ronda actual.
-    public Jugadores jugadores() {return jugadores;}
+
+    public Jugadores jugadores() {
+        return jugadores;
+    }
+
+    public List<Jugador> nominados() {
+        return faseActual.nominados();
+    }
+
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return faseActual.votosRegistrados();
+    }
+
+    public Map<Jugador, Long> conteoVotos() {
+        return faseActual.conteoVotos();
+    }
 }

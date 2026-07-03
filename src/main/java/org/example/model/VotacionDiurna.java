@@ -2,7 +2,7 @@ package org.example.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class VotacionDiurna {
     private final CriterioEmpate criterio;
     private final Set<Jugador> nominados = new LinkedHashSet<>();
-    private final Map<Jugador, Jugador> votos = new HashMap<>();
+    private final Map<Jugador, Jugador> votos = new LinkedHashMap<>();
 
     public VotacionDiurna(CriterioEmpate criterio) {
         this.criterio = criterio;
@@ -34,6 +34,9 @@ public class VotacionDiurna {
     public void votar(Jugador votante, Jugador objetivo) {
         if (!votante.estaVivo()) {
             throw new VotacionInvalidaException("El votante debe ser un jugador vivo");
+        }
+        if (votos.containsKey(votante)) {
+            throw new VotacionInvalidaException("Este jugador ya voto en esta fase");
         }
         if (!nominados.contains(objetivo)) {
             throw new VotacionInvalidaException("El objetivo debe ser nominado.");
@@ -59,6 +62,17 @@ public class VotacionDiurna {
 
     public List<Jugador> obtenerNominados() {
         return new ArrayList<>(nominados);
+    }
+
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return new LinkedHashMap<>(votos);
+    }
+
+    public Map<Jugador, Long> conteoPorNominado() {
+        Map<Jugador, Long> conteo = new LinkedHashMap<>();
+        nominados.forEach(nominado -> conteo.put(nominado, 0L));
+        votos.values().forEach(objetivo -> conteo.put(objetivo, conteo.getOrDefault(objetivo, 0L) + 1));
+        return conteo;
     }
 
     public Optional<Jugador> resolver() {

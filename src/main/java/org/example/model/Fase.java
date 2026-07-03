@@ -1,5 +1,9 @@
 package org.example.model;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 public abstract class Fase {
 
     protected final int numeroRonda;
@@ -36,9 +40,21 @@ public abstract class Fase {
         throw new ProteccionInvalidaException("Solo se puede proteger durante la fase nocturna");
     }
 
-    // agrego para la  visualizacion del estado de la ronda actual.
-    public int numeroRonda() {return numeroRonda;}
+    public List<Jugador> nominados() {
+        return Collections.emptyList();
+    }
+
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return Collections.emptyMap();
+    }
+
+    public Map<Jugador, Long> conteoVotos() {
+        return Collections.emptyMap();
+    }
+
+    public int numeroRonda() {
+        return numeroRonda;
+    }
+
     public abstract String nombre();
-
-
 }

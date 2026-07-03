@@ -1,8 +1,8 @@
 package org.example.model;
 
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class FaseDiurna extends Fase {
 
@@ -28,27 +28,26 @@ public class FaseDiurna extends Fase {
         this.votacion.votar(votante, objetivo);
     }
 
-@Override
-public RegistroRonda resolver() {
-    Optional<Jugador> resultado = votacion.resolver();
-    if (resultado.isPresent()) {
-        Jugador eliminado = resultado.get();
-        eliminado.eliminar();
-        return new RegistroDiurno(numeroRonda, eliminado);
+    @Override
+    public RegistroRonda resolver() {
+        Optional<Jugador> resultado = votacion.resolver();
+        if (resultado.isPresent()) {
+            Jugador eliminado = resultado.get();
+            eliminado.eliminar();
+            return new RegistroDiurno(numeroRonda, eliminado);
+        }
+        this.revotacion = votacion.generarBallotage();
+        if (revotacion.isPresent()) {
+            List<Jugador> nominadosARevotar = revotacion.get().obtenerNominados();
+            return new RegistroBallotage(numeroRonda, nominadosARevotar);
+        }
+        return new RegistroSinEliminacionDiurna(numeroRonda);
     }
-    this.revotacion = votacion.generarBallotage();
-    if (revotacion.isPresent()) {
-        List<Jugador> nominadosARevotar = revotacion.get().obtenerNominados();
-        return new RegistroBallotage(numeroRonda, nominadosARevotar);
-    }
-    return new RegistroSinEliminacionDiurna(numeroRonda);
-}
 
     @Override
     void revelar(Jugador sheriff) {
         sheriff.revelarse();
     }
-
 
     @Override
     public Fase siguiente(Partida partida) {
@@ -57,8 +56,23 @@ public RegistroRonda resolver() {
                 .orElseGet(() -> partida.crearFaseNocturna(numeroRonda + 1));
     }
 
-    // agrego para la  visualizacion del estado de la ronda actual.
     @Override
-    public String nombre() {return "Diurna";}
+    public List<Jugador> nominados() {
+        return votacion.obtenerNominados();
+    }
 
+    @Override
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return votacion.votosRegistrados();
+    }
+
+    @Override
+    public Map<Jugador, Long> conteoVotos() {
+        return votacion.conteoPorNominado();
+    }
+
+    @Override
+    public String nombre() {
+        return "Diurna";
+    }
 }
