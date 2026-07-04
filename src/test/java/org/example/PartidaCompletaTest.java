@@ -8,17 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PartidaCompletaTest {
 
-    private void pausa(long milisegundos) {
-        try {
-            Thread.sleep(milisegundos);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
     private void narrar(String mensaje) {
         Logger.log(mensaje);
-        pausa(600);
     }
 
     private void banner(String titulo) {
@@ -27,7 +18,6 @@ class PartidaCompletaTest {
         Logger.log("###  " + titulo);
         Logger.log("################################################################");
         Logger.log("");
-        pausa(1200);
     }
 
     @BeforeEach

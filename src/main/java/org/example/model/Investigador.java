@@ -1,6 +1,6 @@
 package org.example.model;
 
-public abstract class Investigador extends Rol{
+public abstract class Investigador extends Rol implements PuedeInvestigar {
     protected Jugador objetivoAInvestigar;
     protected Jugador ultimoInvestigado;
     protected Bando resultadoInvestigacion;
@@ -26,4 +26,10 @@ public abstract class Investigador extends Rol{
     public Bando resultadoInvestigacion() {
         return resultadoInvestigacion;
     }
+
+    @Override
+    public void ejecutar(AccionDeRol accion) {
+        accion.ejecutarPara(this);
+    }
+
 }

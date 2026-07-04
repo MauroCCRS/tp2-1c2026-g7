@@ -17,7 +17,7 @@ class TestRolesMafiaEspeciales {
         VotoPadrino voto = new VotoPadrino(objetivo);
 
         assertSame(objetivo, voto.objetivo());
-        assertTrue(voto.esPrioritario());
+        assertEquals(Optional.of(objetivo), voto.victimaPrioritaria());
     }
 
     @Test
@@ -26,7 +26,7 @@ class TestRolesMafiaEspeciales {
         VotoMafia voto = new Padrino().crearVotoMafia(objetivo);
 
         assertSame(objetivo, voto.objetivo());
-        assertTrue(voto.esPrioritario());
+        assertEquals(Optional.of(objetivo), voto.victimaPrioritaria());
     }
 
     @Test

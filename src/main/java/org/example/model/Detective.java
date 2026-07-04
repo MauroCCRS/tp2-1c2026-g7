@@ -1,6 +1,6 @@
 package org.example.model;
 
-public class Detective extends Investigador {
+public class Detective extends Investigador implements AccionNocturna {
 
 
     @Override
@@ -15,5 +15,10 @@ public class Detective extends Investigador {
     @Override
     public String nombre() {
         return "Detective";
+    }
+
+    @Override
+    public void ejecutar(AccionDeRol accion) {
+        accion.ejecutarPara(this);
     }
 }

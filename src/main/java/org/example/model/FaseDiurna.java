@@ -3,8 +3,10 @@ package org.example.model;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class FaseDiurna extends Fase {
+public class FaseDiurna extends Fase implements AccionesDiurnas {
 
     private final VotacionDiurna votacion;
     private Optional<VotacionDiurna> revotacion = Optional.empty();
@@ -19,13 +21,23 @@ public class FaseDiurna extends Fase {
     }
 
     @Override
-    void nominar(Jugador jugador) {
-        this.votacion.nominar(jugador);
+    public void ejecutar(AccionDePartida accion, Partida partida) {
+        accion.ejecutarEn(this, partida);
     }
 
     @Override
-    void votar(Jugador votante, Jugador objetivo) {
-        this.votacion.votar(votante, objetivo);
+    public void ejecutarAccionDiurna(Consumer<AccionesDiurnas> accion, Supplier<RuntimeException> excepcion) {
+        accion.accept(this);
+    }
+
+    @Override
+    public void registrar(AccionNominar accion) {
+        accion.registrarEn(votacion);
+    }
+
+    @Override
+    public void registrar(AccionVotar accion) {
+        accion.registrarEn(votacion);
     }
 
     @Override
@@ -45,8 +57,8 @@ public class FaseDiurna extends Fase {
     }
 
     @Override
-    void revelar(Jugador sheriff) {
-        sheriff.revelarse();
+    public void registrar(AccionRevelarSheriff accion, Partida partida) {
+        accion.registrarEn(partida);
     }
 
     @Override

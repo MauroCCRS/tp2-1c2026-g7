@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
-import org.example.model.FaseNocturna;
+import org.example.model.AccionesPorFase;
 import org.example.model.Jugador;
 import org.example.model.Partida;
 
@@ -41,7 +41,7 @@ public class VistaEstadoPartida {
 
     public Scene crearEscena() {
         BorderPane root = new BorderPane();
-        root.getStyleClass().add(esNoche() ? "screen-night" : "screen-day");
+        root.getStyleClass().add(partida.estiloPantallaFase());
         root.setTop(crearHeader());
         root.setCenter(crearContenido());
 
@@ -55,7 +55,7 @@ public class VistaEstadoPartida {
         titulo.getStyleClass().add("page-title");
 
         Label fase = new Label(partida.faseActual().nombre() + " - Ronda " + partida.faseActual().numeroRonda());
-        fase.getStyleClass().add(esNoche() ? "phase-night" : "phase-day");
+        fase.getStyleClass().add(partida.estiloEtiquetaFase());
 
         Label tiempo = new Label();
         tiempo.getStyleClass().add("timer-label");
@@ -120,15 +120,15 @@ public class VistaEstadoPartida {
         VBox caja = new VBox(8);
         caja.getStyleClass().add("count-box");
 
-        Label titulo = new Label(esNoche() ? "Votos de mafia" : "Conteo diurno");
+        Label titulo = new Label(partida.tituloConteo());
         titulo.getStyleClass().add("action-title");
         caja.getChildren().add(titulo);
 
-        if (!esNoche() && partida.nominados().isEmpty()) {
-            Label vacio = new Label("Todavia no hay nominados.");
+        partida.avisoConteo().ifPresent(aviso -> {
+            Label vacio = new Label(aviso);
             vacio.getStyleClass().add("muted-label");
             caja.getChildren().add(vacio);
-        }
+        });
 
         if (partida.conteoVotos().isEmpty()) {
             Label sinVotos = new Label("Sin votos registrados.");
@@ -158,9 +158,9 @@ public class VistaEstadoPartida {
     private VBox crearChat() {
         VBox caja = new VBox(8);
         caja.getStyleClass().add("count-box");
-        Label titulo = new Label(esNoche() ? "Chat nocturno" : "Chat del dia");
+        Label titulo = new Label(partida.tituloChat());
         titulo.getStyleClass().add("action-title");
-        Label ayuda = new Label(esNoche() ? "Solo mafiosos pueden leer y escribir durante la noche." : "Todos los jugadores vivos pueden participar durante el dia.");
+        Label ayuda = new Label(partida.ayudaChat());
         ayuda.getStyleClass().add("muted-label");
         ayuda.setWrapText(true);
 
@@ -170,7 +170,7 @@ public class VistaEstadoPartida {
         mensajes.getStyleClass().add("chat-area");
         mensajes.setPrefHeight(95);
 
-        ComboBox<Jugador> autor = comboJugadores(esNoche() ? mafiososVivos() : vivos());
+        ComboBox<Jugador> autor = comboJugadores(partida.autoresChat());
         TextField texto = new TextField();
         texto.setPromptText("Mensaje");
         texto.getStyleClass().add("text-field");
@@ -222,13 +222,13 @@ public class VistaEstadoPartida {
 
         Label nombre = new Label(jugador.nombre());
         nombre.getStyleClass().add("player-name");
-        if (debeMostrarIconoDeRol(jugador)) {
-            ImageView icono = new ImageView(new Image(App.recurso(rutaImagenPara(rolDe(jugador)))));
+        partida.rutaImagenVisiblePara(jugador).ifPresent(rutaImagen -> {
+            ImageView icono = new ImageView(new Image(App.recurso(rutaImagen)));
             icono.setFitWidth(42);
             icono.setFitHeight(42);
             icono.setPreserveRatio(true);
             fila.getChildren().add(icono);
-        }
+        });
         fila.getChildren().add(nombre);
 
         Label estado = new Label(jugador.estaVivo() ? estadoVotoDe(jugador) : "Eliminado - " + rolDe(jugador));
@@ -237,9 +237,6 @@ public class VistaEstadoPartida {
         return tarjeta;
     }
 
-    private boolean debeMostrarIconoDeRol(Jugador jugador) {
-        return (esNoche() && jugador.estaVivo() && esMafioso(jugador)) || partida.sheriffRevelado(jugador);
-    }
     private String estadoVotoDe(Jugador jugador) {
         if (partida.votosRegistrados().containsKey(jugador)) {
             return "Ya voto";
@@ -264,10 +261,18 @@ public class VistaEstadoPartida {
             Label finalizada = new Label("No hay mas acciones disponibles.");
             finalizada.getStyleClass().add("muted-label");
             lista.getChildren().add(finalizada);
-        } else if (esNoche()) {
-            lista.getChildren().addAll(crearAccionMafia(), crearAccionInvestigacion(), crearAccionProteccion());
         } else {
-            lista.getChildren().addAll(crearAccionNominacion(), crearAccionVotoDiurno(), crearAccionSheriff());
+            partida.agregarAccionesDeFase(new AccionesPorFase() {
+                @Override
+                public void agregarAccionesNocturnas() {
+                    lista.getChildren().addAll(crearAccionMafia(), crearAccionInvestigacion(), crearAccionProteccion());
+                }
+
+                @Override
+                public void agregarAccionesDiurnas() {
+                    lista.getChildren().addAll(crearAccionNominacion(), crearAccionVotoDiurno(), crearAccionSheriff());
+                }
+            });
         }
 
         ScrollPane scroll = new ScrollPane(lista);
@@ -279,8 +284,8 @@ public class VistaEstadoPartida {
     }
 
     private VBox crearAccionMafia() {
-        ComboBox<Jugador> votante = comboJugadores(mafiososVivosQueNoVotaron());
-        ComboBox<Jugador> objetivo = comboJugadores(vivosNoMafiosos());
+        ComboBox<Jugador> votante = comboJugadores(partida.mafiososVivosQueNoVotaron());
+        ComboBox<Jugador> objetivo = comboJugadores(partida.victimasDisponiblesParaMafia());
         Button boton = botonAccion("Registrar ataque");
         boton.setOnAction(e -> ejecutarConSeleccion("Elegi mafioso y victima.", true, () -> {
             partida.registrarVotoMafia(votante.getValue(), objetivo.getValue());
@@ -290,8 +295,8 @@ public class VistaEstadoPartida {
     }
 
     private VBox crearAccionInvestigacion() {
-        ComboBox<Jugador> detective = comboJugadores(investigadoresVivos());
-        ComboBox<Jugador> objetivo = comboJugadores(vivos());
+        ComboBox<Jugador> detective = comboJugadores(partida.investigadoresDisponibles());
+        ComboBox<Jugador> objetivo = comboJugadores(partida.jugadoresVivos());
         Button boton = botonAccion("Investigar");
         boton.setOnAction(e -> ejecutarConSeleccion("Elegi investigador y objetivo.", false, () -> {
             partida.elegirInvestigar(detective.getValue(), objetivo.getValue());
@@ -301,8 +306,8 @@ public class VistaEstadoPartida {
     }
 
     private VBox crearAccionProteccion() {
-        ComboBox<Jugador> medico = comboJugadores(medicosVivos());
-        ComboBox<Jugador> objetivo = comboJugadores(vivos());
+        ComboBox<Jugador> medico = comboJugadores(partida.protectoresDisponibles());
+        ComboBox<Jugador> objetivo = comboJugadores(partida.jugadoresVivos());
         Button boton = botonAccion("Proteger");
         boton.setOnAction(e -> ejecutarConSeleccion("Elegi medico y objetivo.", false, () -> {
             partida.elegirProteger(medico.getValue(), objetivo.getValue());
@@ -312,7 +317,7 @@ public class VistaEstadoPartida {
     }
 
     private VBox crearAccionNominacion() {
-        ComboBox<Jugador> nominado = comboJugadores(vivos());
+        ComboBox<Jugador> nominado = comboJugadores(partida.jugadoresVivos());
         Button boton = botonAccion("Nominar");
         boton.setOnAction(e -> ejecutarConSeleccion("Elegi a quien nominar.", true, () -> {
             partida.nominar(nominado.getValue());
@@ -322,7 +327,7 @@ public class VistaEstadoPartida {
     }
 
     private VBox crearAccionVotoDiurno() {
-        ComboBox<Jugador> votante = comboJugadores(vivosQueNoVotaron());
+        ComboBox<Jugador> votante = comboJugadores(partida.jugadoresVivosQueNoVotaron());
         ComboBox<Jugador> objetivo = comboJugadores(partida.nominados());
         Button boton = botonAccion("Votar");
         boton.setDisable(partida.nominados().isEmpty());
@@ -334,7 +339,7 @@ public class VistaEstadoPartida {
     }
 
     private VBox crearAccionSheriff() {
-        ComboBox<Jugador> sheriff = comboJugadores(sheriffsVivos());
+        ComboBox<Jugador> sheriff = comboJugadores(partida.jugadoresQuePuedenRevelarse());
         Button boton = botonAccion("Revelarse");
         boton.setOnAction(e -> ejecutarConSeleccion("Elegi al Sheriff.", true, () -> {
             partida.revelarSheriff(sheriff.getValue());
@@ -396,63 +401,8 @@ public class VistaEstadoPartida {
         return boton;
     }
 
-    private List<Jugador> vivos() {
-        return partida.jugadores().todos().stream().filter(Jugador::estaVivo).toList();
-    }
-
-    private List<Jugador> vivosQueNoVotaron() {
-        Map<Jugador, Jugador> votos = partida.votosRegistrados();
-        return vivos().stream().filter(jugador -> !votos.containsKey(jugador)).toList();
-    }
-
-    private List<Jugador> mafiososVivosQueNoVotaron() {
-        Map<Jugador, Jugador> votos = partida.votosRegistrados();
-        return mafiososVivos().stream().filter(jugador -> !votos.containsKey(jugador)).toList();
-    }
-
-    private List<Jugador> mafiososVivos() {
-        return vivos().stream().filter(this::esMafioso).toList();
-    }
-
-    private List<Jugador> vivosNoMafiosos() {
-        return vivos().stream().filter(jugador -> !esMafioso(jugador)).toList();
-    }
-
-    private List<Jugador> investigadoresVivos() {
-        return vivos().stream().filter(jugador -> rolDe(jugador).equals("Detective") || rolDe(jugador).equals("Sheriff")).toList();
-    }
-
-    private List<Jugador> medicosVivos() {
-        return vivos().stream().filter(jugador -> rolDe(jugador).equals("Medico") || rolDe(jugador).equals("Médico") || rolDe(jugador).equals("MÃ©dico")).toList();
-    }
-
-    private List<Jugador> sheriffsVivos() {
-        return vivos().stream().filter(jugador -> rolDe(jugador).equals("Sheriff")).toList();
-    }
-
-    private boolean esMafioso(Jugador jugador) {
-        String rol = rolDe(jugador);
-        return rol.equals("Mafioso") || rol.equals("Padrino");
-    }
-
-    private boolean esNoche() {
-        return partida.faseActual() instanceof FaseNocturna;
-    }
-
     private String rolDe(Jugador jugador) {
         return jugador.cartaVistaPor(jugador).descripcion();
-    }
-
-    private String rutaImagenPara(String rol) {
-        return switch (rol) {
-            case "Ciudadano" -> "/ciudadano.png";
-            case "Mafioso" -> "/mafioso.png";
-            case "Detective" -> "/detective.png";
-            case "Medico", "Médico", "MÃ©dico" -> "/medico.png";
-            case "Padrino" -> "/padrino.png";
-            case "Sheriff" -> "/sheriff.png";
-            default -> "/ciudadano.png";
-        };
     }
 
     private void iniciarTimer(Label tiempo) {
@@ -528,4 +478,3 @@ public class VistaEstadoPartida {
         String ejecutar();
     }
 }
-

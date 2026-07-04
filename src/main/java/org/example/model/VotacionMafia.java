@@ -37,14 +37,12 @@ public class VotacionMafia {
             return Optional.empty();
         }
 
-        Optional<VotoMafia> votoPrioritario = votos.values().stream()
-                .filter(VotoMafia::esPrioritario)
-                .findFirst();
+        VotoMafia votoElegido = votos.values().stream()
+                .reduce((elegido, candidato) -> candidato.elegirSobre(elegido))
+                .orElseThrow();
 
-        if (votoPrioritario.isPresent()) {
-            return Optional.of(votoPrioritario.get().objetivo());
-        }
-        return criterioConsenso.evaluarConsenso(new ArrayList<>(votos.values()));
+        return votoElegido.victimaPrioritaria()
+                .or(() -> criterioConsenso.evaluarConsenso(new ArrayList<>(votos.values())));
     }
 
     public Map<Jugador, Jugador> votosRegistrados() {

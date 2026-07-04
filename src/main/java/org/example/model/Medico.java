@@ -1,6 +1,6 @@
 package org.example.model;
 
-public class Medico extends Rol {
+public class Medico extends Rol implements PuedeProteger, AccionNocturna {
 
     private Jugador objetivoAProteger;
     private Jugador ultimoProtegido;
@@ -34,4 +34,10 @@ public class Medico extends Rol {
     public String nombre() {
         return "Medico";
     }
+
+    @Override
+    public void ejecutar(AccionDeRol accion) {
+        accion.ejecutarPara(this);
+    }
+
 }

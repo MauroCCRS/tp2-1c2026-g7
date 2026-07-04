@@ -133,21 +133,10 @@ public class VistaRepartoRoles {
         titulo.setText(jugador.nombre());
         subtitulo.setText("Recuerda tu rol y oculta la pantalla antes de pasar al siguiente jugador.");
         rol.setText(descripcion);
-        imagenRol.setImage(new Image(App.recurso(rutaImagenPara(descripcion))));
+        imagenRol.setImage(new Image(App.recurso(jugador.rutaImagenRol())));
         imagenRol.setVisible(true);
         imagenRol.setOpacity(1);
         accion.setText(indiceActual == jugadores.size() - 1 ? "Ir al tablero" : "Ocultar y continuar");
     }
 
-    private String rutaImagenPara(String rol) {
-        return switch (rol) {
-            case "Ciudadano" -> "/ciudadano.png";
-            case "Mafioso" -> "/mafioso.png";
-            case "Detective" -> "/detective.png";
-            case "Medico", "MÃƒÆ’Ã‚Â©dico", "MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dico" -> "/medico.png";
-            case "Padrino" -> "/padrino.png";
-            case "Sheriff" -> "/sheriff.png";
-            default -> "/ciudadano.png";
-        };
-    }
 }

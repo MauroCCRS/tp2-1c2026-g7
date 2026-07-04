@@ -1,5 +1,6 @@
 package org.example.model;
-public class Sheriff extends Investigador {
+
+public class Sheriff extends Investigador implements PuedeRevelarse {
 
     @Override
     public String nombre() {
@@ -14,5 +15,9 @@ public class Sheriff extends Investigador {
         return this.ultimoInvestigado;
     }
 
+    @Override
+    public void ejecutar(AccionDeRol accion) {
+        accion.ejecutarPara(this);
+    }
 
 }

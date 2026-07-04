@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.model.*;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -24,7 +25,7 @@ public class TestPartida {
 
         Partida partida = new Partida(jugadores);
 
-        assertTrue(partida.faseActual() instanceof FaseNocturna);
+        assertEquals("Nocturna", partida.faseActual().nombre());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class TestPartida {
         partida.registrarVotoMafia(m1,c1);
         partida.resolverFaseActual();
 
-        assertTrue(partida.faseActual() instanceof FaseDiurna);
+        assertEquals("Diurna", partida.faseActual().nombre());
     }
 
     @Test
