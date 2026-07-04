@@ -100,4 +100,53 @@ class TestJugadores {
 
         assertTrue(jugadores.complicesMafiososDe(mafioso).isEmpty());
     }
+
+    @Test
+    void devuelveLosVivosSeparadosPorBandoMafioso() {
+        Jugador mafioso = new Jugador("Mafioso", new Mafioso());
+        Jugador ciudadano = new Jugador("Ana", new Ciudadano());
+        Jugador eliminado = new Jugador("Beto", new Ciudadano());
+        eliminado.eliminar();
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(mafioso);
+        jugadores.agregar(ciudadano);
+        jugadores.agregar(eliminado);
+
+        assertEquals(List.of(mafioso, ciudadano), jugadores.vivos());
+        assertEquals(List.of(mafioso), jugadores.mafiososVivos());
+        assertEquals(List.of(ciudadano), jugadores.vivosNoMafiosos());
+    }
+
+    @Test
+    void devuelveSoloJugadoresVivosConCapacidadDeInvestigarProtegerORevelarse() {
+        Jugador detective = new Jugador("Detective", new Detective());
+        Jugador sheriff = new Jugador("Sheriff", new Sheriff());
+        Jugador medico = new Jugador("Medico", new Medico());
+        Jugador detectiveEliminado = new Jugador("Detective eliminado", new Detective());
+        detectiveEliminado.eliminar();
+
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(detective);
+        jugadores.agregar(sheriff);
+        jugadores.agregar(medico);
+        jugadores.agregar(new Jugador("Ciudadano", new Ciudadano()));
+        jugadores.agregar(detectiveEliminado);
+
+        assertEquals(List.of(detective, sheriff), jugadores.investigadoresVivos());
+        assertEquals(List.of(medico), jugadores.protectoresVivos());
+        assertEquals(List.of(sheriff), jugadores.revelablesVivos());
+    }
+
+    @Test
+    void todosDevuelveUnaCopiaDeLaListaInterna() {
+        Jugador jugador = new Jugador("Ana", new Ciudadano());
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(jugador);
+
+        List<Jugador> copia = jugadores.todos();
+        copia.clear();
+
+        assertEquals(List.of(jugador), jugadores.todos());
+    }
 }
