@@ -15,7 +15,7 @@ public class TestAnuncio {
         jugadores.agregar(new Jugador("Beto", new Ciudadano()));
         jugadores.agregar(new Jugador("Caro", new Ciudadano()));
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertTrue(partida.anuncio().isEmpty());
     }
@@ -28,7 +28,7 @@ public class TestAnuncio {
         jugadores.agregar(mafioso);
         jugadores.agregar(ana);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(mafioso, ana);
         partida.resolverFaseActual();
 

@@ -1,4 +1,8 @@
 package org.example.model;
+
+import java.util.List;
+import java.util.Optional;
+
 public class Jugador {
     private final String nombre;
     private final Rol rol;
@@ -38,11 +42,11 @@ public class Jugador {
     }
 
     public void elegirInvestigar(Jugador objetivo) {
-        rol.elegirInvestigar(objetivo);
+        rol.ejecutar(new AccionRolInvestigar(objetivo));
     }
 
     public void elegirProteger(Jugador objetivo) {
-        rol.elegirProteger(objetivo);
+        rol.ejecutar(new AccionRolProteger(objetivo));
     }
 
     public void actuarEnNoche(ResolucionNocturna resolucion) {
@@ -50,7 +54,7 @@ public class Jugador {
     }
 
     void ejecutarAccionNocturna(ResolucionNocturna resolucion) {
-        rol.actuarEnNoche(resolucion);
+        rol.ejecutar(new AccionRolNocturna(resolucion));
     }
 
     public Carta cartaVistaPor(Jugador jugadorQuePregunta) {
@@ -67,8 +71,8 @@ public class Jugador {
     }
 
     public void revelarse(){
-            rol.revelarse();
-            this.carta.revelar();
+        rol.ejecutar(new AccionRolRevelarse());
+        this.carta.revelar();
     }
 
     public boolean perteneceA(Bando otroBando) {
@@ -78,11 +82,47 @@ public class Jugador {
     public boolean esMafioso() {
         return bando().esMismoBando(new BandoMafia());
     }
+
+    public String rutaImagenRol() {
+        return rol.rutaImagen();
+    }
+
+    public Optional<String> rutaImagenNocturnaVisible() {
+        List<String> rutas = new java.util.ArrayList<>();
+        estado.siEstaVivo(this, jugador -> {
+            if (jugador.esMafioso()) {
+                rutas.add(jugador.rutaImagenRol());
+            }
+        });
+        return rutas.stream().findFirst();
+    }
+
+    public void agregarSiPuedeInvestigar(List<Jugador> candidatos) {
+        estado.siEstaVivo(this, jugador -> rol.ejecutar(new AccionRolAgregarInvestigador(jugador, candidatos)));
+    }
+
+    public void agregarSiPuedeProteger(List<Jugador> candidatos) {
+        estado.siEstaVivo(this, jugador -> rol.ejecutar(new AccionRolAgregarProtector(jugador, candidatos)));
+    }
+
+    public void agregarSiPuedeRevelarse(List<Jugador> candidatos) {
+        estado.siEstaVivo(this, jugador -> rol.ejecutar(new AccionRolAgregarRevelable(jugador, candidatos)));
+    }
+
     public VotoMafia crearVotoMafia(Jugador objetivo) {
-        return this.rol.crearVotoMafia(objetivo);
+        AccionRolVotoMafia accion = new AccionRolVotoMafia(objetivo);
+        rol.ejecutar(accion);
+        return accion.voto();
     }
 
     public Jugador revelarJugador(){
-        return rol.revelarJugadorInvestigado();
+        AccionRolRevelarInvestigado accion = new AccionRolRevelarInvestigado();
+        rol.ejecutar(accion);
+        return accion.investigado();
+    }
+    public Bando resultadoInvestigacion() {
+        AccionRolResultadoInvestigacion accion = new AccionRolResultadoInvestigacion();
+        rol.ejecutar(accion);
+        return accion.resultado();
     }
 }

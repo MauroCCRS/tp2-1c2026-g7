@@ -44,7 +44,7 @@ class TestIntegrales{
         Jugador medico = vivos.get(2);
 
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         Logger.log("La mafia vota a Agus.");
         partida.registrarVotoMafia(mafioso,victima);
         partida.resolverFaseActual();
@@ -74,7 +74,7 @@ class TestIntegrales{
         rolMedico.elegirProteger(victima);
         Logger.log("La mafia ataca a Agus.");
         Logger.log("El medico protege a Agus.");
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         partida.registrarVotoMafia(mafioso,victima);
         partida.resolverFaseActual();
@@ -156,7 +156,7 @@ class TestIntegrales{
         jugadores.agregar(mafioso2);
         jugadores.agregar(ciudadano);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertThrows(VotacionInvalidaException.class, () -> partida.registrarVotoMafia(mafioso1, mafioso2));
 
@@ -181,7 +181,7 @@ class TestIntegrales{
         jugadores.agregar(mafioso);
         jugadores.agregar(ciudadanoEliminado);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertThrows(VotacionInvalidaException.class, () -> partida.registrarVotoMafia(mafioso, ciudadanoEliminado));
 
@@ -208,7 +208,7 @@ class TestIntegrales{
         jugadores.agregar(Jose);
         jugadores.agregar(Ricardo);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         partida.registrarVotoMafia(mafioso, Agus);
         partida.resolverFaseActual();
@@ -244,7 +244,7 @@ class TestIntegrales{
         jugadores.agregar(ciudadano);
         jugadores.agregar(medico);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         partida.resolverFaseActual();
 
@@ -275,7 +275,7 @@ class TestIntegrales{
         jugadores.agregar(ana);
         jugadores.agregar(cami);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         partida.registrarVotoMafia(mafioso,medico);
         partida.resolverFaseActual();
@@ -307,7 +307,7 @@ class TestIntegrales{
         jugadores.agregar(ana);
         jugadores.agregar(rich);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         partida.resolverFaseActual();
 
@@ -338,7 +338,7 @@ class TestIntegrales{
         jugadores.agregar(detective);
         jugadores.agregar(victima);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         partida.elegirInvestigar(detective, mafioso);
         partida.registrarVotoMafia(mafioso,victima);
@@ -374,7 +374,7 @@ class TestIntegrales{
         jugadores.agregar(mafioso);
         jugadores.agregar(ciudadano);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertThrows(NominacionInvalidaException.class, () -> partida.nominar(ciudadano));
         Logger.log("Se intento nominar a un jugador durante la noche.");
@@ -392,7 +392,7 @@ class TestIntegrales{
         jugadores.agregar(mafioso);
         jugadores.agregar(ciudadano);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertThrows(VotacionInvalidaException.class, () -> partida.votar(mafioso, ciudadano));
         Logger.log("Se intento realizar una votacion diurna durante la noche.");

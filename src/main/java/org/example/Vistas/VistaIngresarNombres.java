@@ -2,104 +2,158 @@ package org.example.Vistas;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.example.model.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class VistaIngresarNombres {
+    private static final List<String> NOMBRES_PREDETERMINADOS = List.of(
+            "Bruno", "Valentina", "Mateo", "Camila", "Santiago",
+            "Lucia", "Tomas", "Martina", "Nicolas", "Sofia",
+            "Emilia", "Thiago", "Julieta", "Benicio", "Renata",
+            "Joaquin", "Emma", "Dante", "Catalina", "Lautaro"
+    );
 
-    private App app;
-    private int cantidadJugadores;
-    private List<TextField> camposNombre;
+    private final App app;
+    private final int cantidadJugadores;
+    private final int duracionFaseSegundos;
+    private final List<TextField> camposNombre = new ArrayList<>();
 
-    public VistaIngresarNombres(App app, int cantidadJugadores) {
+    public VistaIngresarNombres(App app, int cantidadJugadores, int duracionFaseSegundos) {
         this.app = app;
         this.cantidadJugadores = cantidadJugadores;
-        this.camposNombre = new ArrayList<>();
+        this.duracionFaseSegundos = duracionFaseSegundos;
     }
 
     public Scene crearEscena() {
-        Text titulo = new Text("Ingresa los nombres de los jugadores: ");
-        titulo.setFont(Font.font("System", FontWeight.BOLD, 40));
-        titulo.setFill(Color.web("#9b2f2f"));
+        StackPane pantalla = new StackPane();
+        pantalla.getStyleClass().add("start-screen-root");
 
-        VBox campos = new VBox(10);
-        campos.setAlignment(Pos.CENTER);
+        Region fondo = new Region();
+        fondo.getStyleClass().add("start-background");
+        Region overlay = new Region();
+        overlay.getStyleClass().add("start-overlay");
 
+        BorderPane root = new BorderPane();
+        root.getStyleClass().add("start-content-root");
+
+        VBox header = new VBox(8);
+        header.setPadding(new Insets(34, 44, 14, 44));
+        Text titulo = new Text("Jugadores");
+        titulo.getStyleClass().add("page-title");
+        Text ayuda = new Text("Carga nombres unicos. Cada fase durara " + duracionFaseSegundos + " segundos.");
+        ayuda.getStyleClass().add("hero-copy");
+        header.getChildren().addAll(titulo, ayuda);
+
+        GridPane grilla = new GridPane();
+        grilla.setHgap(12);
+        grilla.setVgap(14);
+        grilla.setPadding(new Insets(24));
+        grilla.getStyleClass().add("player-name-panel");
+
+        List<String> nombresSugeridos = nombresSugeridos();
         for (int i = 1; i <= cantidadJugadores; i++) {
-            TextField campo = new TextField();
-            campo.setPromptText("Nombre del jugador " + i);
-            campo.setMaxWidth(300);
+            Label etiqueta = new Label("Jugador " + i);
+            etiqueta.getStyleClass().add("field-label");
+            etiqueta.setMinWidth(86);
+            etiqueta.setPrefWidth(86);
+            TextField campo = new TextField(nombresSugeridos.get(i - 1));
+            campo.setPromptText("Nombre");
+            campo.getStyleClass().add("text-field");
+            campo.setPrefWidth(280);
             camposNombre.add(campo);
-            campos.getChildren().add(campo);
+
+            int fila = (i - 1) / 2;
+            int columna = ((i - 1) % 2) * 2;
+            grilla.add(etiqueta, columna, fila);
+            grilla.add(campo, columna + 1, fila);
         }
 
-        Label error = new Label("");
-        error.setTextFill(Color.web("#ff6b6b"));
+        Label error = new Label();
+        error.getStyleClass().add("error-label");
 
-        Button botonContinuar = new Button("Continuar");
-        botonContinuar.setCursor(Cursor.HAND);
-        botonContinuar.setStyle(
-                "-fx-background-color: #8b1e1e;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-size: 16px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-background-radius: 12;"
-        );
-
-        botonContinuar.setOnAction(e -> {
-            List<String> nombres = obtenerNombres();
-
-            if (hayNombresVacios(nombres)) {
-                error.setText("Todos los jugadores deben tener nombre.");
-                return;
-            }
-//            MezcladorDeRoles mezclador = new MezcladorAleatorioRoles();
-//            Configuracion configuracion = new Configuracion(mezclador);
-//
-//            List<Rol> roles = configuracion.armarRoles(nombres.size());
-//
-//            RepartidorRoles repartidor = new RepartidorRoles(mezclador);
-//            Jugadores jugadores = repartidor.repartir(nombres, roles);
-
-            app.crearPartida(nombres);
-
-            /*
-            System.out.println("Jugadores: " + nombres);
-            app.mostrarVistaRepartoRoles(nombres);
-             */
+        Button volver = new Button("Volver");
+        volver.getStyleClass().add("secondary-button");
+        volver.setOnAction(e -> {
+            SonidosJuego.click();
+            app.mostrarVistaInicio();
         });
 
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(30));
-        layout.setStyle("-fx-background-color: black;");
-        layout.getChildren().addAll(titulo, campos, error, botonContinuar);
+        Button continuar = new Button("Repartir roles");
+        continuar.getStyleClass().add("primary-button");
+        continuar.setOnAction(e -> {
+            List<String> nombres = obtenerNombres();
+            String validacion = validar(nombres);
+            if (!validacion.isEmpty()) {
+                SonidosJuego.error();
+                error.setText(validacion);
+                return;
+            }
+            SonidosJuego.ok();
+            app.crearPartida(nombres);
+        });
 
-        return new Scene(layout, 800, 600);
+        HBox acciones = new HBox(12, volver, continuar);
+        acciones.setAlignment(Pos.CENTER_RIGHT);
+
+        VBox centro = new VBox(18, grilla, error, acciones);
+        centro.setPadding(new Insets(12, 44, 44, 44));
+        centro.setMaxWidth(880);
+        centro.setAlignment(Pos.CENTER);
+
+        ScrollPane scroll = new ScrollPane(centro);
+        scroll.setFitToWidth(true);
+        scroll.getStyleClass().add("transparent-scroll");
+
+        root.setTop(header);
+        root.setCenter(scroll);
+        pantalla.getChildren().addAll(fondo, overlay, root);
+
+        Scene scene = new Scene(pantalla, 1200, 760);
+        scene.getStylesheets().add(App.recurso("/mafia-ui.css"));
+        return scene;
     }
 
-    private List<String> obtenerNombres() {
-        List<String> nombres = new ArrayList<>();
-
-        for (TextField campo : camposNombre) {
-            nombres.add(campo.getText().trim());
+    private List<String> nombresSugeridos() {
+        List<String> nombres = new ArrayList<>(NOMBRES_PREDETERMINADOS);
+        Collections.shuffle(nombres);
+        while (nombres.size() < cantidadJugadores) {
+            nombres.add("Jugador " + (nombres.size() + 1));
         }
-
         return nombres;
     }
 
-    private boolean hayNombresVacios(List<String> nombres) {
-        return nombres.stream().anyMatch(String::isEmpty);
+    private List<String> obtenerNombres() {
+        return camposNombre.stream()
+                .map(campo -> campo.getText().trim())
+                .toList();
+    }
+
+    private String validar(List<String> nombres) {
+        if (nombres.stream().anyMatch(String::isEmpty)) {
+            return "Todos los jugadores deben tener nombre.";
+        }
+        Set<String> unicos = new HashSet<>();
+        for (String nombre : nombres) {
+            if (!unicos.add(nombre.toLowerCase())) {
+                return "Los nombres no pueden repetirse.";
+            }
+        }
+        return "";
     }
 }

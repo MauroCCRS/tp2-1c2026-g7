@@ -1,0 +1,530 @@
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #f5f7fb;
+}
+
+.screen {
+    -fx-background-color: #f6f1e5;
+}
+
+.screen-day {
+    -fx-background-color: #f2ebe9;
+}
+
+.screen-night {
+    -fx-background-color: #000b0e;
+}
+
+.hero-title {
+    -fx-font-size: 88px;
+    -fx-font-weight: 900;
+    -fx-fill: #ffffff;
+}
+
+.page-title {
+    -fx-font-size: 38px;
+    -fx-font-weight: 900;
+    -fx-fill: #ffffff;
+}
+
+.hero-copy {
+    -fx-font-size: 20px;
+    -fx-fill: #e9ecff;
+}
+
+.muted-copy {
+    -fx-font-size: 20px;
+    -fx-fill: #27345f;
+}
+
+.panel, .poster-panel, .role-reveal-panel {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dce2f0;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(8, 0, 59, 0.14), 20, 0.16, 0, 8);
+}
+
+.poster-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+}
+
+.role-reveal-panel {
+    -fx-background-color: #ffffff;
+}
+
+.panel-title, .action-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #08003b;
+}
+
+.role-title {
+    -fx-font-size: 44px;
+    -fx-font-weight: 900;
+    -fx-fill: #b83232;
+}
+
+.field-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #14245f;
+    -fx-fill: #14245f;
+}
+
+.primary-button, .secondary-button {
+    -fx-cursor: hand;
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-padding: 12 18 12 18;
+}
+
+.primary-button {
+    -fx-background-color: #08003b;
+    -fx-text-fill: white;
+}
+
+.primary-button:hover {
+    -fx-background-color: #172a73;
+}
+
+.primary-button:disabled, .secondary-button:disabled {
+    -fx-opacity: 0.45;
+}
+
+.secondary-button {
+    -fx-background-color: #eef2ff;
+    -fx-border-color: #cfd8ef;
+    -fx-text-fill: #08003b;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #dfe7ff;
+}
+
+.combo, .text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #cfd8ef;
+    -fx-font-size: 15px;
+    -fx-padding: 8;
+}
+
+.text-field {
+    -fx-text-fill: #08003b;
+    -fx-prompt-text-fill: #7781a6;
+}
+
+.phase-night, .phase-day {
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+    -fx-background-radius: 999;
+    -fx-padding: 8 14 8 14;
+}
+
+.phase-night {
+    -fx-background-color: #08003b;
+    -fx-text-fill: #ffffff;
+}
+
+.phase-day {
+    -fx-background-color: #f3c95c;
+    -fx-text-fill: #08003b;
+}
+
+.info-label, .muted-label, .winner-label, .error-label, .alive-label, .dead-label, .count-label {
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+.info-label {
+    -fx-text-fill: #27345f;
+}
+
+.muted-label {
+    -fx-text-fill: #66708f;
+}
+
+.winner-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #b83232;
+}
+
+.error-label {
+    -fx-text-fill: #b83232;
+    -fx-font-weight: 900;
+}
+
+.count-label {
+    -fx-text-fill: #08003b;
+    -fx-font-weight: 900;
+}
+
+.history-area {
+    -fx-control-inner-background: #f7f9ff;
+    -fx-text-fill: #14245f;
+    -fx-highlight-fill: #b9c7ef;
+    -fx-font-size: 13px;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #dce2f0;
+}
+
+.player-card, .player-card-dead, .action-card, .count-box {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.player-card {
+    -fx-background-color: #f7f9ff;
+    -fx-border-color: #dce2f0;
+}
+
+.player-card-dead {
+    -fx-background-color: #fff2f2;
+    -fx-border-color: #f0c6c6;
+}
+
+.player-name {
+    -fx-font-size: 17px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #08003b;
+}
+
+.alive-label {
+    -fx-text-fill: #16834b;
+    -fx-font-weight: 900;
+}
+
+.dead-label {
+    -fx-text-fill: #b83232;
+    -fx-font-weight: 900;
+}
+
+.action-card, .count-box {
+    -fx-background-color: #f7f9ff;
+    -fx-border-color: #dce2f0;
+    -fx-padding: 14;
+}
+
+.transparent-scroll, .transparent-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.actions-panel {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+    -fx-padding: 0 0 0 2;
+}
+
+.actions-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 0 0 2 2;
+}
+
+.actions-list {
+    -fx-background-color: transparent;
+    -fx-padding: 0 2 0 2;
+}
+
+.actions-scroll,
+.actions-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.actions-scroll {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.actions-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.actions-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(8, 0, 59, 0.22);
+    -fx-background-radius: 999;
+}
+.field-label-light {
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-fill: #ffffff;
+}
+
+.timer-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: 900;
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-text-fill: #08003b;
+    -fx-background-radius: 999;
+    -fx-padding: 8 14 8 14;
+}
+
+.chat-area {
+    -fx-control-inner-background: #f7f9ff;
+    -fx-text-fill: #14245f;
+    -fx-highlight-fill: #b9c7ef;
+    -fx-font-size: 13px;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-border-color: #dce2f0;
+}
+
+
+.screen-day .page-title,
+.screen-day .actions-title {
+    -fx-fill: #24150e;
+    -fx-text-fill: #24150e;
+}
+
+.screen-day .panel,
+.screen-day .poster-panel,
+.screen-day .role-reveal-panel {
+    -fx-background-color: #f2ebe9;
+    -fx-border-color: #8e6248;
+    -fx-effect: none;
+}
+
+.screen-day .action-card,
+.screen-day .count-box,
+.screen-day .player-card {
+    -fx-background-color: #eaded8;
+    -fx-border-color: #8e6248;
+}
+
+.screen-day .player-card-dead {
+    -fx-background-color: #8c7462;
+    -fx-border-color: #8c7462;
+}
+
+.screen-day .secondary-button {
+    -fx-background-color: #f2ebe9;
+    -fx-border-color: #8e6248;
+    -fx-text-fill: #24150e;
+}
+
+.screen-day .secondary-button:hover {
+    -fx-background-color: #f2ebe9;
+}
+
+.screen-day .timer-label {
+    -fx-background-color: #f2ebe9;
+    -fx-text-fill: #24150e;
+}
+.screen-night .panel,
+.screen-night .poster-panel,
+.screen-night .role-reveal-panel {
+    -fx-background-color: #082a3b;
+    -fx-border-color: #137fa8;
+    -fx-effect: none;
+}
+
+.screen-night .actions-title,
+.screen-night .page-title {
+    -fx-text-fill: #d8ecff;
+    -fx-fill: #d8ecff;
+}
+
+.screen-night .action-card,
+.screen-night .count-box {
+    -fx-background-color: #0b405c;
+    -fx-border-color: #b9d4ed;
+}
+
+.screen-night .secondary-button {
+    -fx-background-color: #137fa8;
+    -fx-border-color: #b9d4ed;
+    -fx-text-fill: #edf7ff;
+}
+
+.screen-night .secondary-button:hover {
+    -fx-background-color: #b9d4ed;
+}
+.panel-page-title {
+    -fx-font-size: 38px;
+    -fx-font-weight: 900;
+    -fx-fill: #08003b;
+}
+
+.panel-copy {
+    -fx-font-size: 18px;
+    -fx-fill: #27345f;
+}
+
+.role-reveal-panel .text {
+    -fx-fill: #27345f;
+}
+.primary-button, .primary-button .text {
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
+
+.secondary-button, .secondary-button .text {
+    -fx-text-fill: #08003b;
+    -fx-fill: #08003b;
+}
+
+.screen-night .secondary-button, .screen-night .secondary-button .text {
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
+
+.role-reveal-panel .role-title {
+    -fx-fill: #b83232;
+}
+
+.combo .list-cell {
+    -fx-text-fill: #08003b;
+}
+
+.start-screen-root {
+    -fx-background-color: #050014;
+}
+
+.start-background {
+    -fx-background-image: url("inicio-mafia.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+
+.start-overlay {
+    -fx-background-color: linear-gradient(to right, rgba(5, 0, 20, 0.92) 0%, rgba(8, 0, 59, 0.72) 42%, rgba(5, 0, 20, 0.32) 68%, rgba(5, 0, 20, 0.50) 100%);
+}
+
+.start-content-root {
+    -fx-background-color: transparent;
+}
+
+.start-content-root .combo {
+    -fx-background-color: rgba(255, 255, 255, 0.96);
+}
+.start-content-root .role-reveal-panel {
+    -fx-background-color: rgba(5, 0, 20, 0.62);
+    -fx-border-color: rgba(255, 255, 255, 0.18);
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.42), 28, 0.20, 0, 12);
+}
+
+.start-content-root .role-reveal-panel .panel-page-title,
+.start-content-root .role-reveal-panel .panel-copy {
+    -fx-fill: #ffffff;
+}
+
+.start-content-root .role-reveal-panel .panel-copy {
+    -fx-fill: #e5e9ff;
+}
+.start-content-root .player-name-panel {
+    -fx-background-color: rgba(5, 0, 20, 0.58);
+    -fx-border-color: rgba(255, 255, 255, 0.18);
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.38), 26, 0.18, 0, 10);
+}
+
+.start-content-root .player-name-panel .field-label {
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
+
+.start-content-root .player-name-panel .text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-border-color: rgba(255, 255, 255, 0.38);
+}
+.screen-day .primary-button {
+    -fx-background-color: #24150e;
+    -fx-text-fill: #ffffff;
+}
+
+.screen-day .primary-button:hover {
+    -fx-background-color: #3f2a1d;
+}
+
+.screen-day .phase-day {
+    -fx-background-color: #8e6248;
+    -fx-text-fill: #ffffff;
+}
+
+.screen-day .panel-title,
+.screen-day .action-title,
+.screen-day .player-name,
+.screen-day .count-label {
+    -fx-text-fill: #24150e;
+}
+
+.screen-day .info-label,
+.screen-day .muted-label {
+    -fx-text-fill: #3f2a1d;
+}
+
+.screen-day .alive-label {
+    -fx-text-fill: #2b7a3d;
+}
+.screen-night .primary-button {
+    -fx-background-color: #b9d4ed;
+    -fx-text-fill: #000b0e;
+}
+
+.screen-night .primary-button:hover {
+    -fx-background-color: #5eb0d4;
+}
+
+.screen-night .phase-night {
+    -fx-background-color: #137fa8;
+    -fx-text-fill: #edf7ff;
+}
+
+.screen-night .timer-label {
+    -fx-background-color: #d8ecff;
+    -fx-text-fill: #000b0e;
+}
+
+.screen-night .panel-title,
+.screen-night .action-title,
+.screen-night .player-name,
+.screen-night .count-label {
+    -fx-text-fill: #d8ecff;
+}
+
+.screen-night .info-label,
+.screen-night .muted-label {
+    -fx-text-fill: #b9d4ed;
+}
+
+.screen-night .player-card {
+    -fx-background-color: #092f44;
+    -fx-border-color: #137fa8;
+}
+
+.screen-night .player-card-dead {
+    -fx-background-color: #123b4a;
+    -fx-border-color: #5eb0d4;
+}
+
+.screen-night .chat-area,
+.screen-night .history-area {
+    -fx-control-inner-background: #021b25;
+    -fx-text-fill: #edf7ff;
+    -fx-highlight-fill: #137fa8;
+    -fx-border-color: #137fa8;
+}
+
+.screen-night .combo,
+.screen-night .text-field {
+    -fx-background-color: #edf7ff;
+    -fx-border-color: #b9d4ed;
+    -fx-text-fill: #000b0e;
+}

@@ -25,7 +25,7 @@ public class TestFaseDiurna {
         jugadores.agregar(beto);
         jugadores.agregar(caro);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(mafioso, descartable);
         partida.resolverFaseActual();
 
@@ -52,7 +52,7 @@ public class TestFaseDiurna {
         jugadores.agregar(ana);
         jugadores.agregar(beto);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(mafioso, descartable);
         partida.resolverFaseActual();
 
@@ -80,7 +80,7 @@ public class TestFaseDiurna {
         jugadores.agregar(beto);
 
         CriterioEmpate eliminaAlPrimero = empatados -> java.util.List.of(empatados.get(0));
-        Partida partida = new Partida(jugadores, eliminaAlPrimero, new Mayoria());
+        Partida partida = new Partidas().conReglas(jugadores, eliminaAlPrimero, new Mayoria());
         partida.registrarVotoMafia(mafioso, descartable);
         partida.resolverFaseActual();
 
@@ -105,7 +105,7 @@ public class TestFaseDiurna {
         jugadores.agregar(ana);
         jugadores.agregar(beto);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(mafioso, descartable);
         partida.resolverFaseActual();
 
@@ -129,7 +129,7 @@ public class TestFaseDiurna {
         jugadores.agregar(relleno1);
         jugadores.agregar(relleno2);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(mafioso, victimaNocturna);
         partida.resolverFaseActual();
 
@@ -149,7 +149,7 @@ public class TestFaseDiurna {
         jugadores.agregar(ciudadano);
         jugadores.agregar(sheriff);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertThrows(RevelacionInvalidaException.class, () -> partida.revelarSheriff(sheriff));
     }
@@ -165,7 +165,7 @@ public class TestFaseDiurna {
         jugadores.agregar(victimaNocturna);
         jugadores.agregar(ciudadano);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(mafioso, victimaNocturna);
         partida.resolverFaseActual();
 
@@ -188,7 +188,7 @@ public class TestFaseDiurna {
         jugadores.agregar(caro);
         jugadores.agregar(dani);
 
-        Partida partida = new Partida(jugadores, new Ballotage(), new Mayoria());
+        Partida partida = new Partidas().conReglas(jugadores, new Ballotage(), new Mayoria());
         partida.registrarVotoMafia(mafioso, dummy);
         partida.resolverFaseActual();
 
@@ -222,7 +222,7 @@ public class TestFaseDiurna {
         jugadores.agregar(beto);
         jugadores.agregar(caro);
 
-        Partida partida = new Partida(jugadores, new Ballotage(), new Mayoria());
+        Partida partida = new Partidas().conReglas(jugadores, new Ballotage(), new Mayoria());
         partida.registrarVotoMafia(mafioso, victima);
         partida.resolverFaseActual();
 
@@ -256,7 +256,7 @@ public class TestFaseDiurna {
         jugadores.agregar(ana);
         jugadores.agregar(beto);
 
-        Partida partida = new Partida(jugadores, new Ballotage(), new Mayoria());
+        Partida partida = new Partidas().conReglas(jugadores, new Ballotage(), new Mayoria());
         partida.registrarVotoMafia(mafioso, victima);
         partida.resolverFaseActual();
 

@@ -8,17 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PartidaCompletaTest {
 
-    private void pausa(long milisegundos) {
-        try {
-            Thread.sleep(milisegundos);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
     private void narrar(String mensaje) {
         Logger.log(mensaje);
-        pausa(600);
     }
 
     private void banner(String titulo) {
@@ -27,7 +18,6 @@ class PartidaCompletaTest {
         Logger.log("###  " + titulo);
         Logger.log("################################################################");
         Logger.log("");
-        pausa(1200);
     }
 
     @BeforeEach
@@ -52,7 +42,7 @@ class PartidaCompletaTest {
         jugadores.agregar(ana);
         jugadores.agregar(beto);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         narrar("Noche 1: Dino investiga a Vito, Mica protege a Ana, la Mafia ataca a Beto.");
         partida.elegirInvestigar(detective, mafioso);
@@ -95,7 +85,7 @@ class PartidaCompletaTest {
         jugadores.agregar(beto);
         jugadores.agregar(caro);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         narrar("Noche 1: Mica protege a Caro, la Mafia ataca a Beto.");
         partida.elegirProteger(medico, caro);

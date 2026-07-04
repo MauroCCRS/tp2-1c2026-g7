@@ -143,6 +143,20 @@ public class TestVotacionDiurna {
         assertTrue(resultado.isPresent());
         assertEquals(ana, resultado.get());
     }
+    @Test
+    public void unJugadorNoPuedeVotarDosVecesEnLaMismaVotacion() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
 
+        votacion.nominar(beto);
+        votacion.nominar(caro);
+        votacion.votar(ana, beto);
 
+        assertThrows(VotacionInvalidaException.class, () -> votacion.votar(ana, caro));
+        assertEquals(1L, votacion.conteoPorNominado().get(beto));
+        assertEquals(0L, votacion.conteoPorNominado().get(caro));
+    }
 }
+

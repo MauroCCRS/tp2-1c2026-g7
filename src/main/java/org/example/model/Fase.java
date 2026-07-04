@@ -1,5 +1,10 @@
 package org.example.model;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 public abstract class Fase {
 
     protected final int numeroRonda;
@@ -10,35 +15,73 @@ public abstract class Fase {
 
     public abstract RegistroRonda resolver();
 
-    public abstract Fase siguiente(Partida partida);
+    public abstract Fase siguiente(FabricaFases fabricaFases);
 
-    void registrarVotoMafia(Jugador votante, Jugador objetivo) {
-        throw new VotacionInvalidaException("La mafia solo puede votar durante la fase nocturna");
+    public void ejecutar(AccionDePartida accion, Partida partida) {
+        accion.ejecutarEn(accionesDisponibles(), partida);
     }
 
-    void nominar(Jugador jugador) {
-        throw new NominacionInvalidaException("Solo se puede nominar durante la fase diurna");
+    protected abstract AccionesDisponibles accionesDisponibles();
+
+    public List<Jugador> nominados() {
+        return Collections.emptyList();
     }
 
-    void votar(Jugador votante, Jugador objetivo) {
-        throw new VotacionInvalidaException("Solo se puede votar durante la fase diurna");
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return Collections.emptyMap();
     }
 
-    void elegirInvestigar(Jugador detective, Jugador objetivo) {
-        throw new InvestigacionInvalidaException("Solo se puede investigar durante la fase nocturna");
+    public Map<Jugador, Long> conteoVotos() {
+        return Collections.emptyMap();
     }
 
-    void revelar(Jugador sheriff) {
-        throw new RevelacionInvalidaException("El Sheriff solo puede revelarse durante la fase diurna");
+    public String clave() {
+        return nombre() + "-" + numeroRonda;
     }
 
-    void elegirProteger(Jugador medico, Jugador objetivo) {
-        throw new ProteccionInvalidaException("Solo se puede proteger durante la fase nocturna");
+    public String descripcion() {
+        return nombre() + " - Ronda " + numeroRonda;
     }
 
-    // agrego para la  visualizacion del estado de la ronda actual.
-    public int numeroRonda() {return numeroRonda;}
+    public String estiloPantalla() {
+        return "screen-day";
+    }
+
+    public String estiloEtiqueta() {
+        return "phase-day";
+    }
+
+    public String tituloConteo() {
+        return "Conteo diurno";
+    }
+
+    public Optional<String> avisoConteo() {
+        if (nominados().isEmpty()) {
+            return Optional.of("Todavia no hay nominados.");
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> rutaImagenVisiblePara(Jugador jugador) {
+        return Optional.empty();
+    }
+
+    public String tituloChat() {
+        return "Chat del dia";
+    }
+
+    public String ayudaChat() {
+        return "Todos los jugadores vivos pueden participar durante el dia.";
+    }
+
+    public List<Jugador> autoresChat(Jugadores jugadores) {
+        return jugadores.vivos();
+    }
+
+    public void agregarAcciones(AccionesPorFase acciones) {
+        acciones.agregarAccionesDiurnas();
+    }
+
     public abstract String nombre();
-
-
 }
+

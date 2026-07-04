@@ -1,8 +1,9 @@
 package org.example.model;
 
+import java.util.Map;
 import java.util.Optional;
 
-public class FaseNocturna extends Fase {
+public class FaseNocturna extends Fase implements AccionesNocturnas {
 
     private final Jugadores jugadores;
     private final VotacionMafia votacionMafia;
@@ -15,18 +16,23 @@ public class FaseNocturna extends Fase {
     }
 
     @Override
-    void registrarVotoMafia(Jugador votante, Jugador objetivo) {
-        this.votacionMafia.votar(votante,objetivo);
+    protected AccionesDisponibles accionesDisponibles() {
+        return new AccionesDisponiblesNocturnas(this);
     }
 
     @Override
-    void elegirInvestigar(Jugador detective, Jugador objetivo) {
-        detective.elegirInvestigar(objetivo);
+    public void registrar(AccionVotoMafia accion) {
+        accion.registrarEn(votacionMafia);
     }
 
     @Override
-    void elegirProteger(Jugador medico, Jugador objetivo) {
-        medico.elegirProteger(objetivo);
+    public void registrar(AccionInvestigar accion) {
+        accion.registrar();
+    }
+
+    @Override
+    public void registrar(AccionProteger accion) {
+        accion.registrar();
     }
 
     @Override
@@ -43,11 +49,68 @@ public class FaseNocturna extends Fase {
     }
 
     @Override
-    public Fase siguiente(Partida partida) {
-        return partida.crearFaseDiurna(numeroRonda);
+    public Fase siguiente(FabricaFases fabricaFases) {
+        return fabricaFases.crearFaseDiurna(numeroRonda);
     }
 
-    // agrego para la  visualizacion del estado de la ronda actual.
     @Override
-    public String nombre() {return "Nocturna";}
+    public Map<Jugador, Jugador> votosRegistrados() {
+        return votacionMafia.votosRegistrados();
+    }
+
+    @Override
+    public Map<Jugador, Long> conteoVotos() {
+        return votacionMafia.conteoPorObjetivo();
+    }
+
+    @Override
+    public String nombre() {
+        return "Nocturna";
+    }
+
+    @Override
+    public String estiloPantalla() {
+        return "screen-night";
+    }
+
+    @Override
+    public String estiloEtiqueta() {
+        return "phase-night";
+    }
+
+    @Override
+    public String tituloConteo() {
+        return "Votos de mafia";
+    }
+
+    @Override
+    public java.util.Optional<String> avisoConteo() {
+        return java.util.Optional.empty();
+    }
+
+    @Override
+    public java.util.Optional<String> rutaImagenVisiblePara(Jugador jugador) {
+        return jugador.rutaImagenNocturnaVisible();
+    }
+
+    @Override
+    public String tituloChat() {
+        return "Chat nocturno";
+    }
+
+    @Override
+    public String ayudaChat() {
+        return "Solo mafiosos pueden leer y escribir durante la noche.";
+    }
+
+    @Override
+    public java.util.List<Jugador> autoresChat(Jugadores jugadores) {
+        return jugadores.mafiososVivos();
+    }
+
+    @Override
+    public void agregarAcciones(AccionesPorFase acciones) {
+        acciones.agregarAccionesNocturnas();
+    }
 }
+

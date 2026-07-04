@@ -1,7 +1,15 @@
 package org.example.model;
 
-public interface VotoMafia {
-    public Jugador objetivo();
-    public boolean esPrioritario();
-}
+import java.util.Optional;
 
+public interface VotoMafia {
+    Jugador objetivo();
+
+    default VotoMafia elegirSobre(VotoMafia otroVoto) {
+        return otroVoto;
+    }
+
+    default Optional<Jugador> victimaPrioritaria() {
+        return Optional.empty();
+    }
+}
