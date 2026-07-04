@@ -8,8 +8,8 @@ public class AccionNominar implements AccionDePartida {
     }
 
     @Override
-    public void ejecutarEn(Fase fase, Partida partida) {
-        fase.ejecutarAccionDiurna(
+    public void ejecutarEn(AccionesDisponibles accionesDisponibles, Partida partida) {
+        accionesDisponibles.ejecutarAccionDiurna(
                 acciones -> acciones.registrar(this),
                 () -> new NominacionInvalidaException("Solo se puede nominar durante la fase diurna"));
     }
@@ -18,3 +18,4 @@ public class AccionNominar implements AccionDePartida {
         votacion.nominar(jugador);
     }
 }
+

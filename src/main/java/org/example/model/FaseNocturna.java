@@ -2,8 +2,6 @@ package org.example.model;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class FaseNocturna extends Fase implements AccionesNocturnas {
 
@@ -18,13 +16,8 @@ public class FaseNocturna extends Fase implements AccionesNocturnas {
     }
 
     @Override
-    public void ejecutar(AccionDePartida accion, Partida partida) {
-        accion.ejecutarEn(this, partida);
-    }
-
-    @Override
-    public void ejecutarAccionNocturna(Consumer<AccionesNocturnas> accion, Supplier<RuntimeException> excepcion) {
-        accion.accept(this);
+    protected AccionesDisponibles accionesDisponibles() {
+        return new AccionesDisponiblesNocturnas(this);
     }
 
     @Override
@@ -56,8 +49,8 @@ public class FaseNocturna extends Fase implements AccionesNocturnas {
     }
 
     @Override
-    public Fase siguiente(Partida partida) {
-        return partida.crearFaseDiurna(numeroRonda);
+    public Fase siguiente(FabricaFases fabricaFases) {
+        return fabricaFases.crearFaseDiurna(numeroRonda);
     }
 
     @Override
@@ -120,3 +113,4 @@ public class FaseNocturna extends Fase implements AccionesNocturnas {
         acciones.agregarAccionesNocturnas();
     }
 }
+

@@ -10,8 +10,8 @@ public class AccionProteger implements AccionDePartida {
     }
 
     @Override
-    public void ejecutarEn(Fase fase, Partida partida) {
-        fase.ejecutarAccionNocturna(
+    public void ejecutarEn(AccionesDisponibles accionesDisponibles, Partida partida) {
+        accionesDisponibles.ejecutarAccionNocturna(
                 acciones -> acciones.registrar(this),
                 () -> new ProteccionInvalidaException("Solo se puede proteger durante la fase nocturna"));
     }
@@ -20,3 +20,4 @@ public class AccionProteger implements AccionDePartida {
         protector.elegirProteger(objetivo);
     }
 }
+

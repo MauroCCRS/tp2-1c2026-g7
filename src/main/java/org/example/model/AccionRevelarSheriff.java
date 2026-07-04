@@ -8,8 +8,8 @@ public class AccionRevelarSheriff implements AccionDePartida {
     }
 
     @Override
-    public void ejecutarEn(Fase fase, Partida partida) {
-        fase.ejecutarAccionDiurna(
+    public void ejecutarEn(AccionesDisponibles accionesDisponibles, Partida partida) {
+        accionesDisponibles.ejecutarAccionDiurna(
                 acciones -> acciones.registrar(this, partida),
                 () -> new RevelacionInvalidaException("El Sheriff solo puede revelarse durante la fase diurna"));
     }
@@ -19,3 +19,4 @@ public class AccionRevelarSheriff implements AccionDePartida {
         partida.registrarSheriffRevelado(sheriff);
     }
 }
+

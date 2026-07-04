@@ -10,8 +10,8 @@ public class AccionInvestigar implements AccionDePartida {
     }
 
     @Override
-    public void ejecutarEn(Fase fase, Partida partida) {
-        fase.ejecutarAccionNocturna(
+    public void ejecutarEn(AccionesDisponibles accionesDisponibles, Partida partida) {
+        accionesDisponibles.ejecutarAccionNocturna(
                 acciones -> acciones.registrar(this),
                 () -> new InvestigacionInvalidaException("Solo se puede investigar durante la fase nocturna"));
     }
@@ -20,3 +20,4 @@ public class AccionInvestigar implements AccionDePartida {
         investigador.elegirInvestigar(objetivo);
     }
 }
+

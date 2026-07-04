@@ -42,7 +42,7 @@ class PartidaCompletaTest {
         jugadores.agregar(ana);
         jugadores.agregar(beto);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         narrar("Noche 1: Dino investiga a Vito, Mica protege a Ana, la Mafia ataca a Beto.");
         partida.elegirInvestigar(detective, mafioso);
@@ -85,7 +85,7 @@ class PartidaCompletaTest {
         jugadores.agregar(beto);
         jugadores.agregar(caro);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         narrar("Noche 1: Mica protege a Caro, la Mafia ataca a Beto.");
         partida.elegirProteger(medico, caro);

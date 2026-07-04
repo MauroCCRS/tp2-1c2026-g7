@@ -10,8 +10,8 @@ public class AccionVotoMafia implements AccionDePartida {
     }
 
     @Override
-    public void ejecutarEn(Fase fase, Partida partida) {
-        fase.ejecutarAccionNocturna(
+    public void ejecutarEn(AccionesDisponibles accionesDisponibles, Partida partida) {
+        accionesDisponibles.ejecutarAccionNocturna(
                 acciones -> acciones.registrar(this),
                 () -> new VotacionInvalidaException("La mafia solo puede votar durante la fase nocturna"));
     }
@@ -20,3 +20,4 @@ public class AccionVotoMafia implements AccionDePartida {
         votacionMafia.votar(votante, objetivo);
     }
 }
+

@@ -82,7 +82,7 @@ class TestRolesMafiaEspeciales {
         Jugadores jugadores = new RepartidorRoles(rolesOrdenados -> { }).repartir(nombres, roles);
         Jugador detective = jugadorConRol(jugadores, "Detective");
         Jugador padrino = jugadorConRol(jugadores, "Padrino");
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertTrue(padrino.perteneceA(new BandoMafia()));
 

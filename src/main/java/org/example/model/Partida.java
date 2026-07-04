@@ -1,6 +1,5 @@
 package org.example.model;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,21 +8,19 @@ public class Partida {
 
     private final Jugadores jugadores;
     private final RegistroPartida registro = new RegistroPartida();
-    private final List<Bando> bandos = Arrays.asList(new BandoMafia(), new BandoCiudadano());
-    private final CriterioEmpate criterioEmpate;
-    private final CriterioConsenso criterioConsenso;
+    private final FabricaFases fabricaFases;
+    private final EvaluadorGanador evaluadorGanador;
+    private final AnunciadorGanador anunciadorGanador;
     private Jugador sheriffRevelado;
     private Fase faseActual;
 
-    public Partida(Jugadores jugadores) {
-        this(jugadores, new SinEliminacion(), new Mayoria());
-    }
-
-    public Partida(Jugadores jugadores, CriterioEmpate criterioEmpate, CriterioConsenso criterioConsenso) {
+    public Partida(Jugadores jugadores, FabricaFases fabricaFases, EvaluadorGanador evaluadorGanador,
+            AnunciadorGanador anunciadorGanador) {
         this.jugadores = jugadores;
-        this.criterioEmpate = criterioEmpate;
-        this.criterioConsenso = criterioConsenso;
-        this.faseActual = crearFaseNocturna(1);
+        this.fabricaFases = fabricaFases;
+        this.evaluadorGanador = evaluadorGanador;
+        this.anunciadorGanador = anunciadorGanador;
+        this.faseActual = fabricaFases.crearFaseNocturna(1);
     }
 
     public Fase faseActual() {
@@ -65,7 +62,7 @@ public class Partida {
     public void resolverFaseActual() {
         registro.agregarRegistro(faseActual.resolver());
         if (resultado().isEmpty()) {
-            this.faseActual = faseActual.siguiente(this);
+            this.faseActual = faseActual.siguiente(fabricaFases);
         }
     }
 
@@ -116,30 +113,35 @@ public class Partida {
         faseActual.agregarAcciones(acciones);
     }
 
-    public FaseNocturna crearFaseNocturna(int numeroRonda) {
-        return new FaseNocturna(numeroRonda, jugadores, criterioConsenso);
-    }
-
-    public FaseDiurna crearFaseDiurna(int numeroRonda) {
-        return new FaseDiurna(numeroRonda, criterioEmpate);
-    }
-
     public Optional<Bando> resultado() {
-        return bandos.stream()
-                .filter(bando -> bando.ganoSegun(jugadores))
-                .findFirst();
+        return evaluadorGanador.evaluar(jugadores);
     }
 
     public Optional<String> anuncio() {
-        return resultado().map(bando -> "Ganador: " + bando.nombre());
+        return anunciadorGanador.anunciar(resultado());
     }
 
     public String resumen() {
         return registro.generarResumen();
     }
 
-    public Jugadores jugadores() {
-        return jugadores;
+    public String claveFaseActual() {
+        return faseActual.clave();
+    }
+
+    public String descripcionFaseActual() {
+        return faseActual.descripcion();
+    }
+
+    public List<DatosJugador> jugadoresEnMesa() {
+        return jugadores.todos().stream()
+                .map(jugador -> new DatosJugador(
+                        jugador.nombre(),
+                        jugador.estaVivo(),
+                        jugador.cartaVistaPor(jugador).descripcion(),
+                        votosRegistrados().containsKey(jugador),
+                        rutaImagenVisiblePara(jugador)))
+                .toList();
     }
 
     public List<Jugador> jugadoresVivos() {

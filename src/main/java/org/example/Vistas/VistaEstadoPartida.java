@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.example.model.AccionesPorFase;
+import org.example.model.DatosJugador;
 import org.example.model.Jugador;
 import org.example.model.Partida;
 
@@ -54,7 +55,7 @@ public class VistaEstadoPartida {
         Text titulo = new Text("Mesa de partida");
         titulo.getStyleClass().add("page-title");
 
-        Label fase = new Label(partida.faseActual().nombre() + " - Ronda " + partida.faseActual().numeroRonda());
+        Label fase = new Label(partida.descripcionFaseActual());
         fase.getStyleClass().add(partida.estiloEtiquetaFase());
 
         Label tiempo = new Label();
@@ -197,7 +198,7 @@ public class VistaEstadoPartida {
         grilla.setHgap(14);
         grilla.setVgap(14);
 
-        List<Jugador> todos = partida.jugadores().todos();
+        List<DatosJugador> todos = partida.jugadoresEnMesa();
         for (int i = 0; i < todos.size(); i++) {
             grilla.add(crearTarjetaJugador(todos.get(i)), i % 2, i / 2);
         }
@@ -211,9 +212,9 @@ public class VistaEstadoPartida {
         return panel;
     }
 
-    private VBox crearTarjetaJugador(Jugador jugador) {
+    private VBox crearTarjetaJugador(DatosJugador jugador) {
         VBox tarjeta = new VBox(8);
-        tarjeta.getStyleClass().add(jugador.estaVivo() ? "player-card" : "player-card-dead");
+        tarjeta.getStyleClass().add(jugador.vivo() ? "player-card" : "player-card-dead");
         tarjeta.setPadding(new Insets(14));
         tarjeta.setPrefWidth(215);
 
@@ -222,7 +223,7 @@ public class VistaEstadoPartida {
 
         Label nombre = new Label(jugador.nombre());
         nombre.getStyleClass().add("player-name");
-        partida.rutaImagenVisiblePara(jugador).ifPresent(rutaImagen -> {
+        jugador.rutaImagenVisible().ifPresent(rutaImagen -> {
             ImageView icono = new ImageView(new Image(App.recurso(rutaImagen)));
             icono.setFitWidth(42);
             icono.setFitHeight(42);
@@ -231,17 +232,17 @@ public class VistaEstadoPartida {
         });
         fila.getChildren().add(nombre);
 
-        Label estado = new Label(jugador.estaVivo() ? estadoVotoDe(jugador) : "Eliminado - " + rolDe(jugador));
-        estado.getStyleClass().add(jugador.estaVivo() ? "alive-label" : "dead-label");
+        Label estado = new Label(jugador.vivo() ? estadoVotoDe(jugador) : "Eliminado - " + jugador.descripcionCarta());
+        estado.getStyleClass().add(jugador.vivo() ? "alive-label" : "dead-label");
         tarjeta.getChildren().addAll(fila, estado);
         return tarjeta;
     }
 
-    private String estadoVotoDe(Jugador jugador) {
-        if (partida.votosRegistrados().containsKey(jugador)) {
+    private String estadoVotoDe(DatosJugador jugador) {
+        if (jugador.yaVoto()) {
             return "Ya voto";
         }
-        return rolDe(jugador).equals("Carta oculta") ? "Vivo" : "Vivo";
+        return "Vivo";
     }
 
     private VBox crearPanelAcciones() {
@@ -399,10 +400,6 @@ public class VistaEstadoPartida {
         boton.getStyleClass().add("secondary-button");
         boton.setMaxWidth(Double.MAX_VALUE);
         return boton;
-    }
-
-    private String rolDe(Jugador jugador) {
-        return jugador.cartaVistaPor(jugador).descripcion();
     }
 
     private void iniciarTimer(Label tiempo) {

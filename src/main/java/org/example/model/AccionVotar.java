@@ -10,8 +10,8 @@ public class AccionVotar implements AccionDePartida {
     }
 
     @Override
-    public void ejecutarEn(Fase fase, Partida partida) {
-        fase.ejecutarAccionDiurna(
+    public void ejecutarEn(AccionesDisponibles accionesDisponibles, Partida partida) {
+        accionesDisponibles.ejecutarAccionDiurna(
                 acciones -> acciones.registrar(this),
                 () -> new VotacionInvalidaException("Solo se puede votar durante la fase diurna"));
     }
@@ -20,3 +20,4 @@ public class AccionVotar implements AccionDePartida {
         votacion.votar(votante, objetivo);
     }
 }
+

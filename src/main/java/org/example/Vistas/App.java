@@ -12,6 +12,7 @@ import org.example.model.Jugadores;
 import org.example.model.MezcladorAleatorioRoles;
 import org.example.model.MezcladorDeRoles;
 import org.example.model.Partida;
+import org.example.model.Partidas;
 import org.example.model.RepartidorRoles;
 import org.example.model.Rol;
 
@@ -57,7 +58,7 @@ public class App extends Application {
         Configuracion configuracion = new Configuracion(mezclador);
         List<Rol> roles = configuracion.armarRoles(nombres.size());
         this.jugadores = new RepartidorRoles(mezclador).repartir(nombres, roles);
-        this.partida = new Partida(jugadores);
+        this.partida = new Partidas().clasica(jugadores);
         this.mensajesPorFase.clear();
         this.claveTimer = "";
         mostrarVistaRepartoRoles();
@@ -150,7 +151,7 @@ public class App extends Application {
         if (partida == null) {
             return "sin-partida";
         }
-        return partida.faseActual().nombre() + "-" + partida.faseActual().numeroRonda();
+        return partida.claveFaseActual();
     }
 
     public static String recurso(String ruta) {

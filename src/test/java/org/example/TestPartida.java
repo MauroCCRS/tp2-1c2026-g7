@@ -23,7 +23,7 @@ public class TestPartida {
         jugadores.agregar(ciudadano("C1"));
         jugadores.agregar(ciudadano("C2"));
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertEquals("Nocturna", partida.faseActual().nombre());
     }
@@ -38,7 +38,7 @@ public class TestPartida {
         jugadores.agregar(ciudadano("C2"));
         jugadores.agregar(ciudadano("C3"));
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(m1,c1);
         partida.resolverFaseActual();
 
@@ -53,7 +53,7 @@ public class TestPartida {
         jugadores.agregar(ciudadano("C2"));
         jugadores.agregar(ciudadano("C3"));
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
 
         assertFalse(partida.resultado().isPresent());
     }
@@ -68,7 +68,7 @@ public class TestPartida {
         jugadores.agregar(c1);
         jugadores.agregar(c2);
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(m1,c1);
         partida.resolverFaseActual();
 
@@ -86,7 +86,7 @@ public class TestPartida {
         jugadores.agregar(ciudadano("C2"));
         jugadores.agregar(ciudadano("C3"));
 
-        Partida partida = new Partida(jugadores);
+        Partida partida = new Partidas().clasica(jugadores);
         partida.registrarVotoMafia(m1,victima);
         partida.resolverFaseActual();
 

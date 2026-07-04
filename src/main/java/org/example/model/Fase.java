@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public abstract class Fase {
 
@@ -17,17 +15,13 @@ public abstract class Fase {
 
     public abstract RegistroRonda resolver();
 
-    public abstract Fase siguiente(Partida partida);
+    public abstract Fase siguiente(FabricaFases fabricaFases);
 
-    public abstract void ejecutar(AccionDePartida accion, Partida partida);
-
-    public void ejecutarAccionNocturna(Consumer<AccionesNocturnas> accion, Supplier<RuntimeException> excepcion) {
-        throw excepcion.get();
+    public void ejecutar(AccionDePartida accion, Partida partida) {
+        accion.ejecutarEn(accionesDisponibles(), partida);
     }
 
-    public void ejecutarAccionDiurna(Consumer<AccionesDiurnas> accion, Supplier<RuntimeException> excepcion) {
-        throw excepcion.get();
-    }
+    protected abstract AccionesDisponibles accionesDisponibles();
 
     public List<Jugador> nominados() {
         return Collections.emptyList();
@@ -41,8 +35,12 @@ public abstract class Fase {
         return Collections.emptyMap();
     }
 
-    public int numeroRonda() {
-        return numeroRonda;
+    public String clave() {
+        return nombre() + "-" + numeroRonda;
+    }
+
+    public String descripcion() {
+        return nombre() + " - Ronda " + numeroRonda;
     }
 
     public String estiloPantalla() {
@@ -86,3 +84,4 @@ public abstract class Fase {
 
     public abstract String nombre();
 }
+
