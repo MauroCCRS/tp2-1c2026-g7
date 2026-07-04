@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -33,8 +34,16 @@ public class VistaRepartoRoles {
     }
 
     public Scene crearEscena() {
+        StackPane pantalla = new StackPane();
+        pantalla.getStyleClass().add("start-screen-root");
+
+        Region fondo = new Region();
+        fondo.getStyleClass().add("start-background");
+        Region overlay = new Region();
+        overlay.getStyleClass().add("start-overlay");
+
         BorderPane root = new BorderPane();
-        root.getStyleClass().add("screen-day");
+        root.getStyleClass().add("start-content-root");
 
         VBox tarjeta = new VBox(20);
         tarjeta.setAlignment(Pos.CENTER);
@@ -70,12 +79,14 @@ public class VistaRepartoRoles {
         progreso.setAlignment(Pos.CENTER);
         progreso.setPadding(new Insets(0, 0, 30, 0));
         Text paso = new Text("Reparto privado de roles");
-        paso.getStyleClass().add("field-label");
+        paso.getStyleClass().add("field-label-light");
         progreso.getChildren().add(paso);
         root.setBottom(progreso);
 
         prepararOculto();
-        Scene scene = new Scene(root, 1200, 760);
+        pantalla.getChildren().addAll(fondo, overlay, root);
+
+        Scene scene = new Scene(pantalla, 1200, 760);
         scene.getStylesheets().add(App.recurso("/mafia-ui.css"));
         return scene;
     }
@@ -133,12 +144,10 @@ public class VistaRepartoRoles {
             case "Ciudadano" -> "/ciudadano.png";
             case "Mafioso" -> "/mafioso.png";
             case "Detective" -> "/detective.png";
-            case "Medico", "Médico", "MÃ©dico" -> "/medico.png";
+            case "Medico", "MÃƒÆ’Ã‚Â©dico", "MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dico" -> "/medico.png";
             case "Padrino" -> "/padrino.png";
             case "Sheriff" -> "/sheriff.png";
             default -> "/ciudadano.png";
         };
     }
 }
-
-

@@ -85,4 +85,7 @@ public class Jugador {
     public Jugador revelarJugador(){
         return rol.revelarJugadorInvestigado();
     }
+    public Bando resultadoInvestigacion() {
+        return rol.resultadoInvestigacion();
+    }
 }

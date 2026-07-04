@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -39,22 +41,30 @@ public class VistaIngresarNombres {
     }
 
     public Scene crearEscena() {
+        StackPane pantalla = new StackPane();
+        pantalla.getStyleClass().add("start-screen-root");
+
+        Region fondo = new Region();
+        fondo.getStyleClass().add("start-background");
+        Region overlay = new Region();
+        overlay.getStyleClass().add("start-overlay");
+
         BorderPane root = new BorderPane();
-        root.getStyleClass().add("screen-day");
+        root.getStyleClass().add("start-content-root");
 
         VBox header = new VBox(8);
         header.setPadding(new Insets(34, 44, 14, 44));
         Text titulo = new Text("Jugadores");
         titulo.getStyleClass().add("page-title");
         Text ayuda = new Text("Carga nombres unicos. Cada fase durara " + duracionFaseSegundos + " segundos.");
-        ayuda.getStyleClass().add("muted-copy");
+        ayuda.getStyleClass().add("hero-copy");
         header.getChildren().addAll(titulo, ayuda);
 
         GridPane grilla = new GridPane();
         grilla.setHgap(12);
         grilla.setVgap(14);
         grilla.setPadding(new Insets(24));
-        grilla.getStyleClass().add("panel");
+        grilla.getStyleClass().add("player-name-panel");
 
         List<String> nombresSugeridos = nombresSugeridos();
         for (int i = 1; i <= cantidadJugadores; i++) {
@@ -112,7 +122,9 @@ public class VistaIngresarNombres {
 
         root.setTop(header);
         root.setCenter(scroll);
-        Scene scene = new Scene(root, 1200, 760);
+        pantalla.getChildren().addAll(fondo, overlay, root);
+
+        Scene scene = new Scene(pantalla, 1200, 760);
         scene.getStylesheets().add(App.recurso("/mafia-ui.css"));
         return scene;
     }

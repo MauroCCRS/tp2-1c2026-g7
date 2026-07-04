@@ -31,4 +31,7 @@ public abstract class Rol {
     public  VotoMafia crearVotoMafia(Jugador objetivo) {
         throw new VotacionInvalidaException("Solo el mafioso puede votar");
     }
+    public Bando resultadoInvestigacion() {
+        throw new InvestigacionInvalidaException("Este rol no puede investigar");
+    }
 }
