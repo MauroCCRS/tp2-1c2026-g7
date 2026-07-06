@@ -90,4 +90,22 @@ public class VotacionDiurna {
         }
         return Optional.empty();
     }
+
+    public ResultadoVotacion analizarResultado() {
+        List<Jugador> masVotados = masVotados();
+
+        if (masVotados.size() == 1) {
+            return new ResultadoEliminacion(masVotados.get(0));
+        }
+
+        return generarBallotage()
+                .map(ballotage -> (ResultadoVotacion) new ResultadoBallotage(ballotage))
+                .orElseGet(() -> {
+                    List<Jugador> desempatados = criterio.desempatar(masVotados);
+                    if (desempatados.size() == 1) {
+                        return new ResultadoEliminacion(desempatados.get(0));
+                    }
+                    return new ResultadoSinEliminacion();
+                });
+    }
 }

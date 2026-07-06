@@ -186,5 +186,70 @@ public class TestVotacionDiurna {
         assertTrue(nominadosBallotage.contains(c1), "Ana debería estar en el ballotage.");
         assertTrue(nominadosBallotage.contains(c2), "Beto debería estar en el ballotage.");
     }
+
+    @Test
+    public void analizarResultadoEliminaAlJugadorCuandoHayUnGanadorDeterminado() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+
+        votacion.votar(ana, beto);
+        votacion.votar(beto, beto);
+        votacion.votar(caro, ana);
+
+        ResultadoVotacion resultado = votacion.analizarResultado();
+        resultado.generarRegistro(1);
+
+        assertFalse(beto.estaVivo(), "Beto deberia ser eliminado.");
+        assertTrue(ana.estaVivo(), "Ana deberia seguir viva.");
+    }
+
+    @Test
+    public void analizarResultadoGeneraNuevaVotacionCuandoHayEmpateYElCriterioEsBallotage() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        ResultadoVotacion resultado = votacion.analizarResultado();
+
+        VotacionDiurna nuevaVotacion = resultado.obtenerSiguienteRonda()
+                .orElseThrow(() -> new AssertionError("Debe generar una nueva ronda de ballotage."));
+
+        List<Jugador> nominadosBallotage = nuevaVotacion.obtenerNominados();
+        assertEquals(2, nominadosBallotage.size(), "El ballotage debe tener 2 nominados.");
+        assertTrue(nominadosBallotage.contains(ana), "Ana debe estar en el ballotage.");
+        assertTrue(nominadosBallotage.contains(beto), "Beto debe estar en el ballotage.");
+    }
+
+    @Test
+    public void analizarResultadoNoEliminaANadieCuandoHayEmpateClaro() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        ResultadoVotacion resultado = votacion.analizarResultado();
+        resultado.generarRegistro(1);
+
+        assertTrue(ana.estaVivo(), "Ana sigue viva.");
+        assertTrue(beto.estaVivo(), "Beto sigue vivo.");
+
+        assertTrue(resultado.obtenerSiguienteRonda().isEmpty(), "No debería generarse un ballotage.");
+    }
 }
 
