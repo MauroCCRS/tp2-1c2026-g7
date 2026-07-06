@@ -158,5 +158,33 @@ public class TestVotacionDiurna {
         assertEquals(1L, votacion.conteoPorNominado().get(beto));
         assertEquals(0L, votacion.conteoPorNominado().get(caro));
     }
+
+    @Test
+    public void crearUnBallotageCuandoHayEmpate() {
+        Jugador c1 = ciudadano("Ana");
+        Jugador c2 = ciudadano("Beto");
+        Jugador c3 = ciudadano("Caro");
+        Jugador c4 = ciudadano("Dan");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+
+        votacion.nominar(c1);
+        votacion.nominar(c2);
+
+        votacion.votar(c1, c2);
+        votacion.votar(c2, c1);
+        votacion.votar(c3, c1);
+        votacion.votar(c4, c2);
+
+        Optional<VotacionDiurna> posibleBallotage = votacion.generarBallotage();
+
+        assertTrue(posibleBallotage.isPresent(), "Se debería haber generado un ballotage debido al empate.");
+
+        VotacionDiurna votacion2 = posibleBallotage.get();
+        List<Jugador> nominadosBallotage = votacion2.obtenerNominados();
+
+        assertEquals(2, nominadosBallotage.size(), "El ballotage debe tener exactamente 2 nominados.");
+        assertTrue(nominadosBallotage.contains(c1), "Ana debería estar en el ballotage.");
+        assertTrue(nominadosBallotage.contains(c2), "Beto debería estar en el ballotage.");
+    }
 }
 
