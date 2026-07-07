@@ -1,0 +1,43 @@
+@startuml ModeloMafiaExcepciones
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 65
+
+abstract class RuntimeException {
+}
+together{
+class InvestigacionInvalidaException{
+  + InvestigacionInvalidaException(String message)
+}
+
+class JugadoresException{
+  + JugadoresException(String message)
+}
+class NominacionInvalidaException{
+  + NominacionInvalidaException(String message)
+}
+class ProteccionInvalidaException{
+  + ProteccionInvalidaException(String message)
+}
+class RepartoRolesInvalidoException{
+  + RepartoRolesInvalidoException(String message)
+}
+class RevelacionInvalidaException{
+  + RevelacionInvalidaException(String message)
+}
+class VotacionInvalidaException{
+  + VotacionInvalidaException(String message)
+}
+}
+
+RuntimeException <|-- InvestigacionInvalidaException
+RuntimeException <|-- JugadoresException
+RuntimeException <|-- NominacionInvalidaException
+RuntimeException <|-- ProteccionInvalidaException
+RuntimeException <|-- RepartoRolesInvalidoException
+RuntimeException <|-- RevelacionInvalidaException
+RuntimeException <|-- VotacionInvalidaException
+
+@enduml

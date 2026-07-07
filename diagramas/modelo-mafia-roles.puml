@@ -8,12 +8,7 @@ abstract class Rol {
   + {abstract} bando() : Bando
   + {abstract} nombre() : String
   + resultadoAlSerInvestigado() : Bando
-  + actuarEnNoche(resolucion : ResolucionNocturna)
-  + elegirInvestigar(objetivo : Jugador)
-  + elegirProteger(objetivo : Jugador)
-  + revelarseComoSheriff()
-  + estaRevelado() : boolean
-  + crearVotoMafia(objetivo : Jugador) : VotoMafia
+
 }
 
 together {
@@ -32,14 +27,9 @@ together {
     + crearVotoMafia(objetivo : Jugador) : VotoMafia
   }
   class Detective {
-    - objetivoAInvestigar : Jugador
-    - ultimoInvestigado : Jugador
-    - resultadoInvestigacion : Bando
     + bando() : Bando
     + nombre() : String
-    + elegirInvestigar(objetivo : Jugador)
     + actuarEnNoche(resolucion : ResolucionNocturna)
-    + resultadoInvestigacion() : Bando
   }
   class Medico {
     - objetivoAProteger : Jugador
@@ -53,9 +43,8 @@ together {
     - revelado : boolean
     + bando() : Bando
     + nombre() : String
-    + revelarseComoSheriff()
+    + revelarJugadorInvestigado()
     + revelarse()
-    + estaRevelado() : boolean
   }
 }
 
@@ -77,6 +66,7 @@ together {
 class Carta {
   - rol : Rol
   - estado : EstadoCarta
+  + Carta(rol : Rol)
   + revelar()
   + descripcion() : String
 }
@@ -111,6 +101,8 @@ together {
 }
 
 class ResolucionNocturna {
+  - atacado: Jugador
+  - protegido: List<Jugador>
   + registrarAtaque(objetivo : Jugador)
   + registrarProteccion(objetivo : Jugador)
   + resolver() : Optional<Jugador>
@@ -119,13 +111,36 @@ class Jugador {
   + estaVivo() : boolean
   + resultadoAlSerInvestigado() : Bando
 }
+class Investigador{
+  # objetivoAInvestigar: Jugador
+  # ultimoInvestigado: Jugador
+  # resultadoInvestigacion: Bando
 
+  + bando() : Bando
+  + elegirInvestigar(objetivo : Jugador)
+  + resultadoInvestigacion() : Bando
+
+}
+interface PuedeInvertigar{
+    + elegirInvestigar(objetivo : Jugador)
+    + resultadoInvestigacion(): Bando
+}
+
+interface PuedeProteger{
+    + elegirProteger(Jugador objetivo)
+}
+interface PuedeRevelarse{
+    + revelarse()
+    + revelarJugadorInvestigado(): Jugador
+}
 Rol <|-- Mafioso
 Rol <|-- Ciudadano
 Mafioso <|-- Padrino
-Rol <|-- Detective
 Rol <|-- Medico
-Rol <|-- Sheriff
+Rol <|-- Investigador
+
+Investigador <|-- Detective
+Investigador <|-- Sheriff
 
 VotoMafia <|.. VotoNormal
 VotoMafia <|.. VotoPadrino
@@ -141,6 +156,11 @@ EstadoCarta ..> Rol
 Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 
+PuedeInvestigar <|..Investigador
+PuedeInvestigar <|..Detective
+PuedeInvestigar <|..Sheriff
+PuedeProteger <|..Medico
+PuedeRevelarse <|..Sheriff
 Rol ..> Bando
 Rol ..> VotoMafia
 Rol ..> ResolucionNocturna
