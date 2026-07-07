@@ -7,10 +7,13 @@ skinparam ranksep 60
 class Partida {
   - jugadores : Jugadores
   - registro : RegistroPartida
-  - bandos : List<Bando>
-  - criterioEmpate : CriterioEmpate
-  - criterioConsenso : CriterioConsenso
+  - fabricaFases: FabricaFases
+  - anunciadorGanador: AnunciadorGanador
+  - evaluadorGanador: EvaluadorGanador
+  - sheriffRevelado: Jugador
   - faseActual : Fase
+
+  + Partida(Jugadores, FabricaFases, AnunciadorGanador, EvaluadorGanador)
   + faseActual() : Fase
   + registrarVotoMafia(votante : Jugador, objetivo : Jugador)
   + elegirInvestigar(detective : Jugador, objetivo : Jugador)
@@ -20,8 +23,6 @@ class Partida {
   + votar(votante : Jugador, objetivo : Jugador)
   + resolverFaseActual()
   + terminada() : boolean
-  + crearFaseNocturna(numeroRonda : int) : FaseNocturna
-  + crearFaseDiurna(numeroRonda : int) : FaseDiurna
   + resultado() : Optional<Bando>
   + anuncio() : Optional<String>
   + resumen() : String
@@ -63,6 +64,15 @@ together {
     + siguiente(partida : Partida) : Fase
     + nombre() : String
   }
+}
+
+class FabricaFases {
+  - jugadores : Jugadores
+  - criterioEmpate : CriterioEmpate
+  - criterioConsenso : CriterioConsenso
+  + FabricaFases(jugadores : Jugadores, criterioEmpate : CriterioEmpate, criterioConsenso : CriterioConsenso)
+  + crearFaseNocturna(numeroRonda : int) : FaseNocturna
+  + crearFaseDiurna(numeroRonda : int) : FaseDiurna
 }
 
 class VotacionMafia {
@@ -275,6 +285,12 @@ Partida o-- "2" Bando : bandos
 Partida --> Fase : faseActual
 Partida --> CriterioEmpate : criterioEmpate
 Partida --> CriterioConsenso : criterioConsenso
+
+FabricaFases --> Jugadores : jugadores
+FabricaFases --> CriterioEmpate : criterioEmpate
+FabricaFases --> CriterioConsenso : criterioConsenso
+FabricaFases ..> FaseNocturna : "crea"
+FabricaFases ..> FaseDiurna : "crea"
 
 Fase <|-- FaseNocturna
 Fase <|-- FaseDiurna
