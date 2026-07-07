@@ -177,14 +177,14 @@ public class TestVotacionDiurna {
 
         Optional<VotacionDiurna> posibleBallotage = votacion.generarBallotage();
 
-        assertTrue(posibleBallotage.isPresent(), "Se debería haber generado un ballotage debido al empate.");
+        assertTrue(posibleBallotage.isPresent());
 
         VotacionDiurna votacion2 = posibleBallotage.get();
         List<Jugador> nominadosBallotage = votacion2.obtenerNominados();
 
-        assertEquals(2, nominadosBallotage.size(), "El ballotage debe tener exactamente 2 nominados.");
-        assertTrue(nominadosBallotage.contains(c1), "Ana debería estar en el ballotage.");
-        assertTrue(nominadosBallotage.contains(c2), "Beto debería estar en el ballotage.");
+        assertEquals(2, nominadosBallotage.size());
+        assertTrue(nominadosBallotage.contains(c1));
+        assertTrue(nominadosBallotage.contains(c2));
     }
 
     @Test
@@ -204,8 +204,8 @@ public class TestVotacionDiurna {
         ResultadoVotacion resultado = votacion.analizarResultado();
         resultado.generarRegistro(1);
 
-        assertFalse(beto.estaVivo(), "Beto deberia ser eliminado.");
-        assertTrue(ana.estaVivo(), "Ana deberia seguir viva.");
+        assertFalse(beto.estaVivo());
+        assertTrue(ana.estaVivo());
     }
 
     @Test
@@ -226,9 +226,9 @@ public class TestVotacionDiurna {
                 .orElseThrow(() -> new AssertionError("Debe generar una nueva ronda de ballotage."));
 
         List<Jugador> nominadosBallotage = nuevaVotacion.obtenerNominados();
-        assertEquals(2, nominadosBallotage.size(), "El ballotage debe tener 2 nominados.");
-        assertTrue(nominadosBallotage.contains(ana), "Ana debe estar en el ballotage.");
-        assertTrue(nominadosBallotage.contains(beto), "Beto debe estar en el ballotage.");
+        assertEquals(2, nominadosBallotage.size());
+        assertTrue(nominadosBallotage.contains(ana));
+        assertTrue(nominadosBallotage.contains(beto));
     }
 
     @Test
@@ -246,10 +246,10 @@ public class TestVotacionDiurna {
         ResultadoVotacion resultado = votacion.analizarResultado();
         resultado.generarRegistro(1);
 
-        assertTrue(ana.estaVivo(), "Ana sigue viva.");
-        assertTrue(beto.estaVivo(), "Beto sigue vivo.");
+        assertTrue(ana.estaVivo());
+        assertTrue(beto.estaVivo());
 
-        assertTrue(resultado.obtenerSiguienteRonda().isEmpty(), "No debería generarse un ballotage.");
+        assertTrue(resultado.obtenerSiguienteRonda().isEmpty());
     }
 }
 

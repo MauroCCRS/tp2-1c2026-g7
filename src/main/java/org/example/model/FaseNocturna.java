@@ -40,12 +40,12 @@ public class FaseNocturna extends Fase implements AccionesNocturnas {
         votacionMafia.victimaElegida().ifPresent(resolucion::registrarAtaque);
         jugadores.porCadaVivo(jugador -> jugador.actuarEnNoche(resolucion));
 
-        Optional<Jugador> victima = resolucion.resolver();
-        if (victima.isPresent()) {
-            victima.get().eliminar();
-            return new RegistroNocturno(numeroRonda, victima.get());
-        }
-        return new RegistroNocheTranquila(numeroRonda);
+        return resolucion.resolver()
+                .map(victima -> {
+                    victima.eliminar(); // Efecto secundario
+                    return (RegistroRonda) new RegistroNocturno(numeroRonda, victima);
+                })
+                .orElseGet(() -> new RegistroNocheTranquila(numeroRonda));
     }
 
     @Override
