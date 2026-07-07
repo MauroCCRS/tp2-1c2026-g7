@@ -8,7 +8,7 @@
 }
 
 .screen-day {
-    -fx-background-color: #f2ebe9;
+    -fx-background-color: #e7dfd7;
 }
 
 .screen-night {
@@ -290,36 +290,36 @@
 .screen-day .panel,
 .screen-day .poster-panel,
 .screen-day .role-reveal-panel {
-    -fx-background-color: #f2ebe9;
-    -fx-border-color: #8e6248;
+    -fx-background-color: #e9e1d8;
+    -fx-border-color: #7a6659;
     -fx-effect: none;
 }
 
 .screen-day .action-card,
 .screen-day .count-box,
 .screen-day .player-card {
-    -fx-background-color: #eaded8;
-    -fx-border-color: #8e6248;
+    -fx-background-color: #ded3c9;
+    -fx-border-color: #827064;
 }
 
 .screen-day .player-card-dead {
-    -fx-background-color: #8c7462;
-    -fx-border-color: #8c7462;
+    -fx-background-color: #7e7168;
+    -fx-border-color: #7e7168;
 }
 
 .screen-day .secondary-button {
-    -fx-background-color: #f2ebe9;
-    -fx-border-color: #8e6248;
-    -fx-text-fill: #24150e;
+    -fx-background-color: #ddd4cb;
+    -fx-border-color: #827064;
+    -fx-text-fill: #2f2621;
 }
 
 .screen-day .secondary-button:hover {
-    -fx-background-color: #f2ebe9;
+    -fx-background-color: #d3c7bc;
 }
 
 .screen-day .timer-label {
-    -fx-background-color: #f2ebe9;
-    -fx-text-fill: #24150e;
+    -fx-background-color: #ddd4cb;
+    -fx-text-fill: #2f2621;
 }
 .screen-night .panel,
 .screen-night .poster-panel,
@@ -445,16 +445,16 @@
     -fx-border-color: rgba(255, 255, 255, 0.38);
 }
 .screen-day .primary-button {
-    -fx-background-color: #24150e;
+    -fx-background-color: #3a302b;
     -fx-text-fill: #ffffff;
 }
 
 .screen-day .primary-button:hover {
-    -fx-background-color: #3f2a1d;
+    -fx-background-color: #51443d;
 }
 
 .screen-day .phase-day {
-    -fx-background-color: #8e6248;
+    -fx-background-color: #766355;
     -fx-text-fill: #ffffff;
 }
 
@@ -462,16 +462,16 @@
 .screen-day .action-title,
 .screen-day .player-name,
 .screen-day .count-label {
-    -fx-text-fill: #24150e;
+    -fx-text-fill: #2f2621;
 }
 
 .screen-day .info-label,
 .screen-day .muted-label {
-    -fx-text-fill: #3f2a1d;
+    -fx-text-fill: #51443d;
 }
 
 .screen-day .alive-label {
-    -fx-text-fill: #2b7a3d;
+    -fx-text-fill: #356b42;
 }
 .screen-night .primary-button {
     -fx-background-color: #b9d4ed;

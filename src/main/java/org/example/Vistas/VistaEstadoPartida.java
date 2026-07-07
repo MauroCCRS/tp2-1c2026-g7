@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -17,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -96,6 +98,10 @@ public class VistaEstadoPartida {
         mensaje = new Label(partida.terminada() ? "La partida termino." : "Registra acciones y resuelve la fase cuando este lista.");
         mensaje.getStyleClass().add("info-label");
         mensaje.setWrapText(true);
+        mensaje.setTextOverrun(OverrunStyle.CLIP);
+        mensaje.setMinHeight(Region.USE_PREF_SIZE);
+        mensaje.prefWidthProperty().bind(panel.widthProperty().subtract(36));
+        mensaje.maxWidthProperty().bind(panel.widthProperty().subtract(36));
 
         VBox conteo = crearPanelConteo();
         VBox chat = crearChat();
