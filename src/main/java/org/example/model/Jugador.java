@@ -41,6 +41,10 @@ public class Jugador {
         return rol.resultadoAlSerInvestigado();
     }
 
+    public String descripcionAlSerInvestigado() {
+        return rol.descripcionAlSerInvestigado();
+    }
+
     public void elegirInvestigar(Jugador objetivo) {
         rol.ejecutar(new AccionRolInvestigar(objetivo));
     }

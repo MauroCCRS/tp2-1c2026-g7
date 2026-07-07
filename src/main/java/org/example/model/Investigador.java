@@ -13,6 +13,9 @@ public abstract class Investigador extends Rol implements PuedeInvestigar {
 
     @Override
     public void elegirInvestigar(Jugador objetivo) {
+        if (objetivoAInvestigar != null) {
+            throw new InvestigacionInvalidaException("Ya investigo durante esta noche");
+        }
         if (objetivo == ultimoInvestigado) {
             throw new InvestigacionInvalidaException("No puede investigar al mismo jugador dos noches seguidas");
         }

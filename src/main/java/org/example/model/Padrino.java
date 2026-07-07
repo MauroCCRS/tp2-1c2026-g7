@@ -9,6 +9,10 @@ public class Padrino extends Mafioso {
         return "Padrino";
     }
     @Override
+    public String descripcionAlSerInvestigado() {
+        return "Ciudadano";
+    }
+    @Override
     public  VotoMafia crearVotoMafia(Jugador objetivo) {
         return new VotoPadrino(objetivo);
     }

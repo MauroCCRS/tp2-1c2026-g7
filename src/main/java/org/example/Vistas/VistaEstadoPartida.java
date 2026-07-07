@@ -300,8 +300,11 @@ public class VistaEstadoPartida {
         ComboBox<Jugador> objetivo = comboJugadores(partida.jugadoresVivos());
         Button boton = botonAccion("Investigar");
         boton.setOnAction(e -> ejecutarConSeleccion("Elegi investigador y objetivo.", false, () -> {
-            partida.elegirInvestigar(detective.getValue(), objetivo.getValue());
-            return "Investigacion registrada.";
+            Jugador investigadorElegido = detective.getValue();
+            Jugador objetivoElegido = objetivo.getValue();
+            partida.elegirInvestigar(investigadorElegido, objetivoElegido);
+            return investigadorElegido.nombre() + " investigo a " + objetivoElegido.nombre()
+                    + ": figura como " + objetivoElegido.descripcionAlSerInvestigado() + ".";
         }, detective, objetivo));
         return accion("Investigacion", "Solo Detective o Sheriff pueden investigar.", detective, objetivo, boton);
     }

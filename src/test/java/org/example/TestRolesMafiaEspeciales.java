@@ -38,6 +38,13 @@ class TestRolesMafiaEspeciales {
     }
 
     @Test
+    void elPadrinoFiguraComoCiudadanoEnLaDescripcionVisibleDeInvestigacion() {
+        Jugador padrino = new Jugador("Don", new Padrino());
+
+        assertEquals("Ciudadano", padrino.descripcionAlSerInvestigado());
+    }
+
+    @Test
     void elVotoDelPadrinoDefineLaVictimaAunqueOtroMafiosoVoteDistinto() {
         Jugador padrino = new Jugador("Don", new Padrino());
         Jugador mafioso = new Jugador("Caro", new Mafioso());

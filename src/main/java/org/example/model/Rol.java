@@ -13,6 +13,10 @@ public abstract class Rol {
         return bando();
     }
 
+    public String descripcionAlSerInvestigado() {
+        return nombre();
+    }
+
     public void ejecutar(AccionDeRol accion) {
         accion.ejecutarPara(this);
     }

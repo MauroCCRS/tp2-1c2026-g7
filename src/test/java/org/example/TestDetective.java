@@ -31,6 +31,35 @@ public class TestDetective {
         assertTrue(detective.resultadoInvestigacion().esMismoBando(new BandoMafia()));
     }
 
+    @Test
+    public void unInvestigadorNoPuedeElegirDosObjetivosEnLaMismaNoche() {
+        Detective detective = new Detective();
+        Jugador primerObjetivo = new Jugador("Ana", new Ciudadano());
+        Jugador segundoObjetivo = new Jugador("Beto", new Mafioso());
+
+        detective.elegirInvestigar(primerObjetivo);
+
+        assertThrows(InvestigacionInvalidaException.class, () -> {
+            detective.elegirInvestigar(segundoObjetivo);
+        });
+    }
+
+    @Test
+    public void unInvestigadorPuedeVolverAInvestigarEnOtraNocheAUnObjetivoDistinto() {
+        Detective detective = new Detective();
+        Jugador primerObjetivo = new Jugador("Ana", new Ciudadano());
+        Jugador segundoObjetivo = new Jugador("Beto", new Mafioso());
+        ResolucionNocturna resolucion = new ResolucionNocturna();
+
+        detective.elegirInvestigar(primerObjetivo);
+        detective.actuarEnNoche(resolucion);
+        detective.elegirInvestigar(segundoObjetivo);
+
+        detective.actuarEnNoche(resolucion);
+
+        assertTrue(detective.resultadoInvestigacion().esMismoBando(new BandoMafia()));
+    }
+
 
     @Test
     public void elDetectiveRecibeCiudadanoAlInvestigarAlPadrino() {
