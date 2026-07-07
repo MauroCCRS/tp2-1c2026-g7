@@ -158,5 +158,98 @@ public class TestVotacionDiurna {
         assertEquals(1L, votacion.conteoPorNominado().get(beto));
         assertEquals(0L, votacion.conteoPorNominado().get(caro));
     }
+
+    @Test
+    public void crearUnBallotageCuandoHayEmpate() {
+        Jugador c1 = ciudadano("Ana");
+        Jugador c2 = ciudadano("Beto");
+        Jugador c3 = ciudadano("Caro");
+        Jugador c4 = ciudadano("Dan");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+
+        votacion.nominar(c1);
+        votacion.nominar(c2);
+
+        votacion.votar(c1, c2);
+        votacion.votar(c2, c1);
+        votacion.votar(c3, c1);
+        votacion.votar(c4, c2);
+
+        Optional<VotacionDiurna> posibleBallotage = votacion.generarBallotage();
+
+        assertTrue(posibleBallotage.isPresent());
+
+        VotacionDiurna votacion2 = posibleBallotage.get();
+        List<Jugador> nominadosBallotage = votacion2.obtenerNominados();
+
+        assertEquals(2, nominadosBallotage.size());
+        assertTrue(nominadosBallotage.contains(c1));
+        assertTrue(nominadosBallotage.contains(c2));
+    }
+
+    @Test
+    public void analizarResultadoEliminaAlJugadorCuandoHayUnGanadorDeterminado() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        Jugador caro = ciudadano("Caro");
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+
+        votacion.votar(ana, beto);
+        votacion.votar(beto, beto);
+        votacion.votar(caro, ana);
+
+        ResultadoVotacion resultado = votacion.analizarResultado();
+        resultado.generarRegistro(1);
+
+        assertFalse(beto.estaVivo());
+        assertTrue(ana.estaVivo());
+    }
+
+    @Test
+    public void analizarResultadoGeneraNuevaVotacionCuandoHayEmpateYElCriterioEsBallotage() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new Ballotage());
+
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        ResultadoVotacion resultado = votacion.analizarResultado();
+
+        VotacionDiurna nuevaVotacion = resultado.obtenerSiguienteRonda()
+                .orElseThrow(() -> new AssertionError("Debe generar una nueva ronda de ballotage."));
+
+        List<Jugador> nominadosBallotage = nuevaVotacion.obtenerNominados();
+        assertEquals(2, nominadosBallotage.size());
+        assertTrue(nominadosBallotage.contains(ana));
+        assertTrue(nominadosBallotage.contains(beto));
+    }
+
+    @Test
+    public void analizarResultadoNoEliminaANadieCuandoHayEmpateClaro() {
+        Jugador ana = ciudadano("Ana");
+        Jugador beto = ciudadano("Beto");
+        VotacionDiurna votacion = new VotacionDiurna(new SinEliminacion());
+
+        votacion.nominar(ana);
+        votacion.nominar(beto);
+
+        votacion.votar(ana, beto);
+        votacion.votar(beto, ana);
+
+        ResultadoVotacion resultado = votacion.analizarResultado();
+        resultado.generarRegistro(1);
+
+        assertTrue(ana.estaVivo());
+        assertTrue(beto.estaVivo());
+
+        assertTrue(resultado.obtenerSiguienteRonda().isEmpty());
+    }
 }
 

@@ -35,18 +35,11 @@ public class FaseDiurna extends Fase implements AccionesDiurnas {
 
     @Override
     public RegistroRonda resolver() {
-        Optional<Jugador> resultado = votacion.resolver();
-        if (resultado.isPresent()) {
-            Jugador eliminado = resultado.get();
-            eliminado.eliminar();
-            return new RegistroDiurno(numeroRonda, eliminado);
-        }
-        this.revotacion = votacion.generarBallotage();
-        if (revotacion.isPresent()) {
-            List<Jugador> nominadosARevotar = revotacion.get().obtenerNominados();
-            return new RegistroBallotage(numeroRonda, nominadosARevotar);
-        }
-        return new RegistroSinEliminacionDiurna(numeroRonda);
+        ResultadoVotacion resultado = votacion.analizarResultado();
+
+        this.revotacion = resultado.obtenerSiguienteRonda();
+
+        return resultado.generarRegistro(numeroRonda);
     }
 
     @Override

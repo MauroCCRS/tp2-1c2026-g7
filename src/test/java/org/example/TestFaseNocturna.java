@@ -49,4 +49,41 @@ public class TestFaseNocturna {
 
         assertTrue(ana.estaVivo());
     }
+
+    @Test
+    public void resolverDevuelveRegistroNocturnoCuandoAlguienEsEliminado() {
+        Jugador ana = new Jugador("Ana", new Ciudadano());
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(ana);
+        jugadores.agregar(mafioso);
+
+        FaseNocturna fase = new FaseNocturna(1, jugadores, new Mayoria());
+
+        fase.registrar(new AccionVotoMafia(mafioso, ana));
+        RegistroRonda registro = fase.resolver();
+
+        assertFalse(ana.estaVivo());
+    }
+
+    @Test
+    public void resolverDevuelveRegistroNocheTranquilaCuandoElMedicoProtege() {
+        Jugador ana = new Jugador("Ana", new Ciudadano());
+        Jugador medico = new Jugador("Med", new Medico());
+        Jugador mafioso = new Jugador("M1", new Mafioso());
+        Jugadores jugadores = new Jugadores();
+        jugadores.agregar(ana);
+        jugadores.agregar(medico);
+        jugadores.agregar(mafioso);
+
+        FaseNocturna fase = new FaseNocturna(1, jugadores, new Mayoria());
+
+        fase.registrar(new AccionProteger(medico, ana));
+        fase.registrar(new AccionVotoMafia(mafioso, ana));
+
+
+        RegistroRonda registro = fase.resolver();
+
+        assertTrue(ana.estaVivo());
+    }
 }
