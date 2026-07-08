@@ -7,8 +7,10 @@ skinparam ranksep 65
 abstract class Rol {
   + {abstract} bando() : Bando
   + {abstract} nombre() : String
+  + rutaImagen() : String
   + resultadoAlSerInvestigado() : Bando
-
+  + descripcionAlSerInvestigado() : String
+  + ejecutar(accion : AccionDeRol)
 }
 
 together {
@@ -23,13 +25,14 @@ together {
   }
   class Padrino {
     + resultadoAlSerInvestigado() : Bando
+    + descripcionAlSerInvestigado() : String
     + nombre() : String
     + crearVotoMafia(objetivo : Jugador) : VotoMafia
   }
   class Detective {
-    + bando() : Bando
     + nombre() : String
     + actuarEnNoche(resolucion : ResolucionNocturna)
+    + ejecutar(accion : AccionDeRol)
   }
   class Medico {
     - objetivoAProteger : Jugador
@@ -40,11 +43,10 @@ together {
     + actuarEnNoche(resolucion : ResolucionNocturna)
   }
   class Sheriff {
-    - revelado : boolean
-    + bando() : Bando
     + nombre() : String
-    + revelarJugadorInvestigado()
+    + revelarJugadorInvestigado() : Jugador
     + revelarse()
+    + ejecutar(accion : AccionDeRol)
   }
 }
 
@@ -110,8 +112,15 @@ class ResolucionNocturna {
 class Jugador {
   + estaVivo() : boolean
   + resultadoAlSerInvestigado() : Bando
+  + descripcionAlSerInvestigado() : String
+  + elegirInvestigar(objetivo : Jugador)
+  + elegirProteger(objetivo : Jugador)
+  + crearVotoMafia(objetivo : Jugador) : VotoMafia
+  + revelarse()
+  + revelarJugador() : Jugador
+  + resultadoInvestigacion() : Bando
 }
-class Investigador{
+abstract class Investigador{
   # objetivoAInvestigar: Jugador
   # ultimoInvestigado: Jugador
   # resultadoInvestigacion: Bando
@@ -119,9 +128,9 @@ class Investigador{
   + bando() : Bando
   + elegirInvestigar(objetivo : Jugador)
   + resultadoInvestigacion() : Bando
-
+  + ejecutar(accion : AccionDeRol)
 }
-interface PuedeInvertigar{
+interface PuedeInvestigar{
     + elegirInvestigar(objetivo : Jugador)
     + resultadoInvestigacion(): Bando
 }
@@ -133,6 +142,31 @@ interface PuedeRevelarse{
     + revelarse()
     + revelarJugadorInvestigado(): Jugador
 }
+interface VotanteMafia{
+    + crearVotoMafia(objetivo : Jugador) : VotoMafia
+}
+interface AccionNocturna{
+    + actuarEnNoche(resolucion : ResolucionNocturna)
+}
+interface AccionDeRol {
+  + ejecutarPara(rol : Rol)
+  + ejecutarPara(investigador : Investigador)
+  + ejecutarPara(detective : Detective)
+  + ejecutarPara(medico : Medico)
+  + ejecutarPara(mafioso : Mafioso)
+  + ejecutarPara(padrino : Padrino)
+  + ejecutarPara(sheriff : Sheriff)
+}
+class AccionRolInvestigar
+class AccionRolProteger
+class AccionRolVotoMafia
+class AccionRolNocturna
+class AccionRolResultadoInvestigacion
+class AccionRolRevelarInvestigado
+class AccionRolRevelarse
+class AccionRolAgregarInvestigador
+class AccionRolAgregarProtector
+class AccionRolAgregarRevelable
 Rol <|-- Mafioso
 Rol <|-- Ciudadano
 Mafioso <|-- Padrino
@@ -157,12 +191,29 @@ Bando <|.. BandoMafia
 Bando <|.. BandoCiudadano
 
 PuedeInvestigar <|..Investigador
-PuedeInvestigar <|..Detective
-PuedeInvestigar <|..Sheriff
 PuedeProteger <|..Medico
 PuedeRevelarse <|..Sheriff
+VotanteMafia <|..Mafioso
+AccionNocturna <|..Detective
+AccionNocturna <|..Medico
+AccionDeRol <|.. AccionRolInvestigar
+AccionDeRol <|.. AccionRolProteger
+AccionDeRol <|.. AccionRolVotoMafia
+AccionDeRol <|.. AccionRolNocturna
+AccionDeRol <|.. AccionRolResultadoInvestigacion
+AccionDeRol <|.. AccionRolRevelarInvestigado
+AccionDeRol <|.. AccionRolRevelarse
+AccionDeRol <|.. AccionRolAgregarInvestigador
+AccionDeRol <|.. AccionRolAgregarProtector
+AccionDeRol <|.. AccionRolAgregarRevelable
+AccionRolInvestigar ..> PuedeInvestigar
+AccionRolProteger ..> PuedeProteger
+AccionRolVotoMafia ..> VotanteMafia
+AccionRolNocturna ..> AccionNocturna
+AccionRolRevelarse ..> PuedeRevelarse
 Rol ..> Bando
 Rol ..> VotoMafia
+Rol ..> AccionDeRol
 Rol ..> ResolucionNocturna
 Rol ..> Jugador
 Detective ..> Jugador

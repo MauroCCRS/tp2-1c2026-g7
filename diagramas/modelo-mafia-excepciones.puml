@@ -11,6 +11,9 @@ together{
 class InvestigacionInvalidaException{
   + InvestigacionInvalidaException(String message)
 }
+class CantidadDeJugadoresInvalidaException{
+  + CantidadDeJugadoresInvalidaException(int cantidad)
+}
 
 class JugadoresException{
   + JugadoresException(String message)
@@ -33,6 +36,7 @@ class VotacionInvalidaException{
 }
 
 RuntimeException <|-- InvestigacionInvalidaException
+RuntimeException <|-- CantidadDeJugadoresInvalidaException
 RuntimeException <|-- JugadoresException
 RuntimeException <|-- NominacionInvalidaException
 RuntimeException <|-- ProteccionInvalidaException
